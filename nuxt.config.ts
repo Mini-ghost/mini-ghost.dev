@@ -6,9 +6,7 @@ const description =
 
 export default defineNuxtConfig({
   modules: ['@nuxt/content', '@unocss/nuxt'],
-  content: {
-    documentDriven: true,
-  },
+  content: {},
 
   app: {
     head: {

@@ -1,5 +1,13 @@
 <script setup lang="ts">
-const { page } = useContent();
+const { data: page } = await useAsyncData('HOME', () =>
+  queryContent()
+    .where({
+      _path: {
+        $eq: '/',
+      },
+    })
+    .findOne()
+);
 </script>
 
 <template>
