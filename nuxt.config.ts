@@ -6,7 +6,14 @@ const description =
 
 export default defineNuxtConfig({
   modules: ['@nuxt/content', '@unocss/nuxt', '@nuxtjs/color-mode'],
-  content: {},
+  content: {
+    highlight: {
+      theme: {
+        dark: 'github-dark-dimmed',
+        default: 'github-light',
+      },
+    },
+  },
 
   app: {
     head: {
