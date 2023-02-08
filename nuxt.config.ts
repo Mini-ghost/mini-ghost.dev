@@ -5,7 +5,7 @@ const description =
   'Front-end Web Developer from Taiwan | Work with Vue, Nuxt and React | Author of Vorms | Super fan for TypeScript';
 
 export default defineNuxtConfig({
-  modules: ['@nuxt/content', '@unocss/nuxt'],
+  modules: ['@nuxt/content', '@unocss/nuxt', '@nuxtjs/color-mode'],
   content: {},
 
   app: {
@@ -35,7 +35,10 @@ export default defineNuxtConfig({
     },
   },
 
-  unocss: {
-    attributify: false,
+  css: ['@unocss/reset/tailwind.css', '@/assets/scss/style.scss'],
+
+  colorMode: {
+    classSuffix: '',
+    preference: 'dark',
   },
 });
