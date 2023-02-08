@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "@nuxt/content": "^2.4.3",
+    "@types/node": "^18.13.0",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "@typescript-eslint/parser": "^5.50.0",
     "@unocss/nuxt": "^0.49.4",
