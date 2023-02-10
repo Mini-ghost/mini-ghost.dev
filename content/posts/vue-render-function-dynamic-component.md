@@ -6,7 +6,7 @@ tags:
 created: 2020-05-12T19:46:19.329Z
 image: /images/vue-render-function-exp.png
 image_caption: Vue Render Functions
-excerpt: 在開發 Vue 專案的時候，單檔組件（SFC）提供了開發者非常好的便利性。但有時候在某些特殊情況時 Render Functions 提供了更好的靈活性，可以讓組件寫得更優雅。那我們該怎麼應用呢？
+description: 在開發 Vue 專案的時候，單檔組件（SFC）提供了開發者非常好的便利性。但有時候在某些特殊情況時 Render Functions 提供了更好的靈活性，可以讓組件寫得更優雅。那我們該怎麼應用呢？
 ---
 
 在本文當中主要會提到以下幾件事情：

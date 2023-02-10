@@ -7,7 +7,7 @@ tags:
 created: 2020-07-07T10:12:47.567Z
 image: /images/Intersection-observer-api.jpg
 image_caption: Intersection Observer API
-excerpt: 剛進入業界時，為了提高網頁的效能以及更豐富的網頁互動效果，會利用 bLazy.js 實作圖片延遲載入或是用 waypoints.js 執行間單的進場效果。不過後來發現 Intersection Observer 這個瀏覽器原生的 Web API 讓這一切變得更簡單使用而且效能也更好。
+description: 剛進入業界時，為了提高網頁的效能以及更豐富的網頁互動效果，會利用 bLazy.js 實作圖片延遲載入或是用 waypoints.js 執行間單的進場效果。不過後來發現 Intersection Observer 這個瀏覽器原生的 Web API 讓這一切變得更簡單使用而且效能也更好。
 ---
 
 在本文當種會提到這些內容：

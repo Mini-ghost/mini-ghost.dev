@@ -1,3 +1,19 @@
+.dark {
+  --c-default: #D3D3D6;
+  --c-link: #FFAC11;
+  --bg-code-block: #202020;
+}
+
+.light {
+  --c-default: #212121;
+  --c-link: #FFAC11;
+  --bg-code-block: #7D7D7D10;
+}
+
 html.dark {
   color-scheme: dark;
+}
+
+body {
+  color: var(--c-default);
 }

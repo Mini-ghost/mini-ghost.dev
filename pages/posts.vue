@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { format } from '@/composiables/format';
+
 interface Post {
   _path: string;
   title: string;
@@ -52,7 +54,7 @@ const { data: posts } = await useAsyncData(
 </script>
 
 <template>
-  <div>
+  <div class="max-w-21cm w-11/12 mx-auto">
     <div
       v-for="group in posts"
       :key="group.year"
@@ -66,7 +68,7 @@ const { data: posts } = await useAsyncData(
           <NuxtLink :to="post._path">
             {{ post.title }}
           </NuxtLink>
-          <time :datetime="post.created">{{ post.created }}</time>
+          | <time :datetime="post.created">{{ format(post.created) }}</time>
         </li>
       </ol>
     </div>

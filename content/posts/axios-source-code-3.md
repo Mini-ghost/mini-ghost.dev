@@ -7,7 +7,7 @@ tags:
 created: 2021-10-30T13:16:18.101Z
 image: https://og-image-mini-ghost.vercel.app/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20axios.png?fontSize=82
 image_caption: axios 內部 Promise 導致請求延遲
-excerpt: axios 在 GitHub 上有超過 88.9k 的星星，擁有非常大量的使用社群，也有無數的開源貢獻者，但 axios 就因此無懈可擊了嗎？本篇將分享在今年年初一個筆者非常關注的的 PR 內容，而者個 PR 也被正式採納並發布在 axios v0.21.2 當中，就讓我們一起看下去吧！
+description: axios 在 GitHub 上有超過 88.9k 的星星，擁有非常大量的使用社群，也有無數的開源貢獻者，但 axios 就因此無懈可擊了嗎？本篇將分享在今年年初一個筆者非常關注的的 PR 內容，而者個 PR 也被正式採納並發布在 axios v0.21.2 當中，就讓我們一起看下去吧！
 ---
 
 ## 前言
@@ -15,8 +15,9 @@ excerpt: axios 在 GitHub 上有超過 88.9k 的星星，擁有非常大量的�
 > 本篇的 axios 版本為 v0.21.2，但截至目前最新版本為 v0.24.0
 
 閱讀本篇前建議可以先看過下面這兩篇
-- [深入淺出 axios（一）：預設 axios 物件、Axios 類別、攔截器](../axios-source-code-1/)
-- [深入淺出 axios（二）：XMLHttpRequest、CancelToken](../axios-source-code-2/)
+
+- [深入淺出 axios（一）：預設 axios 物件、Axios 類別、攔截器](/posts/axios-source-code-1/)
+- [深入淺出 axios（二）：XMLHttpRequest、CancelToken](/posts/axios-source-code-2/)
 
 在過去研究 axios 原始碼時翻閱了許多的 PRs 與 issues，經由這些紀錄當中的討論了解了 axios 一步一步演變、累積至今的原因與過程。
 
@@ -91,7 +92,7 @@ Axios.prototype.request = function request(config) {
 
 ## 分析 axios 造成請求延遲的原因
 
-為什麼透過 axios 發出請求會導致延遲呢？我們可以看到串連攔截器的部分，在[第一篇](../axios-source-code-1) 有提到，串連完攔截器的 axios 請求後如下：
+為什麼透過 axios 發出請求會導致延遲呢？我們可以看到串連攔截器的部分，在[第一篇](/posts/axios-source-code-1) 有提到，串連完攔截器的 axios 請求後如下：
 
 ```js
 Promise.resolve(config)
@@ -116,21 +117,21 @@ Promise.resolve(config)
 ```javascript
 function axios () {
   return Promise.resolve("res")
-	.then((res) => {
+ .then((res) => {
     // request 攔截器
-		console.log("then 1")
-		return res + " => then"
-	})
-	.then((res) => {
+  console.log("then 1")
+  return res + " => then"
+ })
+ .then((res) => {
     // 發出請求
     console.log("then 2")
-		return new Promise((resolve) => resolve(res + " => Promise"))
-	})
-	.then((res) => {
+  return new Promise((resolve) => resolve(res + " => Promise"))
+ })
+ .then((res) => {
     // response 攔截器
     console.log("then 3")
-		return res + " => then"
-	});
+  return res + " => then"
+ });
 }
 
 axios()
@@ -295,7 +296,6 @@ InterceptorManager.prototype.use = function use(fulfilled, rejected, options) {
   return this.handlers.length - 1;
 };
 ```
-
 
 ```javascript
 Axios.prototype.request = function request(config) {

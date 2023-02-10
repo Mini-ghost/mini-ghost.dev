@@ -8,7 +8,7 @@ tags:
 created: 2021-02-26T00:06:44.109Z
 image: https://og-image-mini-ghost.vercel.app/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20axios.png?fontSize=82
 image_caption: 深入淺出 axios - XMLHttpRequest
-excerpt: axios 是一個 Promise based 的 Http 請求工具，他可以運行在瀏覽器環境與 Node.js 中。相信在 AJAX 技術被廣泛應用的今日，稍微有一點經驗的捧油門對他一定都不陌生。上篇對 axios 的核心程式設計做了剖析，這篇要來從 axios 的適配器（adapter，介面）的設計認識 XMLHttpRequest 物件，並且了解 axios 取消請求的設計。那就就讓我們一起看下去吧！
+description: axios 是一個 Promise based 的 Http 請求工具，他可以運行在瀏覽器環境與 Node.js 中。相信在 AJAX 技術被廣泛應用的今日，稍微有一點經驗的捧油門對他一定都不陌生。上篇對 axios 的核心程式設計做了剖析，這篇要來從 axios 的適配器（adapter，介面）的設計認識 XMLHttpRequest 物件，並且了解 axios 取消請求的設計。那就就讓我們一起看下去吧！
 ---
 
 ## 前言

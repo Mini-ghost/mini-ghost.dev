@@ -8,7 +8,7 @@ tags:
 created: 2020-06-10T22:31:55.435Z
 image: /images/dynamic-vue-layout.png
 image_caption: 使用 Vue.js 實作 Dynamic Layout（動態布局 / 動態版面配置）
-excerpt: 在使用 Vue 在製作比較複雜的專案時，可能會因應不同的頁面需求需要有多種不同的 Layout 設定，在 Nuxt.js 可以輕鬆的利用屬性來設定，但在 Vue CLI 下或是 Gridsome 中要如何實作呢？這裡將分享幾種實作方式。
+description: 在使用 Vue 在製作比較複雜的專案時，可能會因應不同的頁面需求需要有多種不同的 Layout 設定，在 Nuxt.js 可以輕鬆的利用屬性來設定，但在 Vue CLI 下或是 Gridsome 中要如何實作呢？這裡將分享幾種實作方式。
 ---
 
 在本文當種會提到這些內容：

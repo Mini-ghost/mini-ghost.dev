@@ -7,7 +7,7 @@ tags:
 created: 2021-09-19T18:33:26.128Z
 image: https://og-image-mini-ghost.vercel.app/如何%E5%9C%A8%20Vuetify%20%E5%8A%A0%E5%85%A5%E5%85%B1%E7%94%A8%E7%9A%84%20ConfirmBox?fontSize=82
 image_caption: 如何在 Vuetify 加入共用的 ConfirmBox
-excerpt: 在 Element-ui 中提供了 $alert、$notify、$message 這些方法，讓我們可以依照需求開啟對話框確認使用者的操作，或是叫出 Toast（或 Snackbar）針對使用者的操作結果進行回饋。但在 Vuefiy，雖然有 VDialog、VSnackber 這些 Component 卻沒有提供這類全域方法使用。這篇紀錄了我在真實專案中用到的解決方法，那就讓我們一起看下去吧！
+description: 在 Element-ui 中提供了 $alert、$notify、$message 這些方法，讓我們可以依照需求開啟對話框確認使用者的操作，或是叫出 Toast（或 Snackbar）針對使用者的操作結果進行回饋。但在 Vuefiy，雖然有 VDialog、VSnackber 這些 Component 卻沒有提供這類全域方法使用。這篇紀錄了我在真實專案中用到的解決方法，那就讓我們一起看下去吧！
 ---
 
 ## 前言

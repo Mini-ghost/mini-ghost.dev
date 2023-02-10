@@ -7,7 +7,7 @@ tags:
 created: 2021-02-13T14:39:24.210Z
 image: https://og-image-mini-ghost.vercel.app/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20axios.png?fontSize=82
 image_caption: 深入淺出 axios - 預設 axios 物件、Axios 類別、攔截器
-excerpt: axios 是一個 Promise based 的 HTTP 請求工具，他可以運行在「瀏覽器環境」與「Node.js」中。相信在 AJAX 技術被廣泛應用的今日，稍微有一點經驗的捧油門對他一定都不陌生。因此這系列分享不會特別著重在如何使用 axios，而是針對幾個我覺得 axios 有趣、好用的地方，研究他的原始碼是如何撰寫的，從中吸收寶貴的經驗。那就讓我們一起看下去吧！
+description: axios 是一個 Promise based 的 HTTP 請求工具，他可以運行在「瀏覽器環境」與「Node.js」中。相信在 AJAX 技術被廣泛應用的今日，稍微有一點經驗的捧油門對他一定都不陌生。因此這系列分享不會特別著重在如何使用 axios，而是針對幾個我覺得 axios 有趣、好用的地方，研究他的原始碼是如何撰寫的，從中吸收寶貴的經驗。那就讓我們一起看下去吧！
 ---
 
 ## 前言

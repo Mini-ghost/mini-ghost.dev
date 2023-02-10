@@ -6,7 +6,7 @@ tags:
 created: 2020-09-11T22:52:45.395Z
 image: https://og-image-mini-ghost.vercel.app/Webpack%20%E5%8B%95%E6%85%8B%E8%BC%89%E5%85%A5%20import()%20%E7%9A%84%20Magic%20Comments.png?fontSize=62
 image_caption: Webpack 動態載入的 Magic Comments
-excerpt: 動態載入（Dynamic import）可以有效的減少 Webpack 打包後的 bundle size。適當地使用動態載入，將不立即需要的 code 切分至獨立的模塊（chunk）可以在初次載入時帶來更好的使用者體驗。此外 webpack 也為動態載入提供了一些 Magic Comments，讓開發人員能更有彈性的調整各項細節。本篇將一一介紹這些 Comment 的用法並搭配簡易範例來呈現、說明。
+description: 動態載入（Dynamic import）可以有效的減少 Webpack 打包後的 bundle size。適當地使用動態載入，將不立即需要的 code 切分至獨立的模塊（chunk）可以在初次載入時帶來更好的使用者體驗。此外 webpack 也為動態載入提供了一些 Magic Comments，讓開發人員能更有彈性的調整各項細節。本篇將一一介紹這些 Comment 的用法並搭配簡易範例來呈現、說明。
 ---
 
 ## 前言

@@ -7,10 +7,10 @@ tags:
 created: 2020-05-02T01:32:32.592Z
 image: /images/15-puzzle-congratulations.jpg
 image_caption: 15 Puzzle 數字推盤遊戲
-excerpt: 上一篇分享了用 Vue.js 做 15-puzzle 小遊戲的資料部分。接下來這一篇來分：我是怎麼規劃 components 與遊戲成功的判定方式。
+description: 上一篇分享了用 Vue.js 做 15-puzzle 小遊戲的資料部分。接下來這一篇來分：我是怎麼規劃 components 與遊戲成功的判定方式。
 ---
 
-上篇：[用 Vue.js 做 15 Puzzle 拼圖小遊戲（上）](../vue-15-puzzle-vuex/)
+上篇：[用 Vue.js 做 15 Puzzle 拼圖小遊戲（上）](/posts/vue-15-puzzle-vuex/)
 
 那個！這個練習是在去年 9 月中左右做的，上篇紀錄是在去年 10 月 1 號寫的。距離上一篇其實好像過了整整 7 個月了阿！呵...以下正文開始。
 

@@ -8,7 +8,7 @@ tags:
 created: 2020-05-01T23:50:57Z
 image: /images/rbF4vD8.jpg
 image_caption: 15 Puzzle 數字推盤遊戲
-excerpt: 前陣子在 Facebook 社團看到有網友用 Vanilla JS 做了一個 15 puzzle 的小遊戲，剛好假日非常有（ㄅㄧㄢ）空（ㄩㄢˊ），那就利用 Vue.js 來做做看囉！
+description: 前陣子在 Facebook 社團看到有網友用 Vanilla JS 做了一個 15 puzzle 的小遊戲，剛好假日非常有（ㄅㄧㄢ）空（ㄩㄢˊ），那就利用 Vue.js 來做做看囉！
 ---
 
 那個！這個練習是在去年 9 月中左右做的，而這篇紀錄原始版是在去年 10 月 1 號寫的，以下正文開始。

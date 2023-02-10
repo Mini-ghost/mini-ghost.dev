@@ -7,7 +7,7 @@ tags:
 created: 2019-06-02T16:07:16Z
 image: /images/4yieHue.jpg
 image_caption: 新手 JS 地下城 - 2F 時鐘 Clock
-excerpt: 這是由六角學院在 Udemy 推出的：JavaScript 題目篇 - 新手 JS 地下城，所出的題目。今天要來分享的是第二題：時鐘（Clock)
+description: 這是由六角學院在 Udemy 推出的：JavaScript 題目篇 - 新手 JS 地下城，所出的題目。今天要來分享的是第二題：時鐘（Clock)
 ---
 
 ## 題目說明

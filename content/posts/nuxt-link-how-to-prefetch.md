@@ -9,7 +9,7 @@ created: 2020-09-02T17:30:53.162Z
 image: https://og-image-mini-ghost.vercel.app/%E6%B7%B1%E5%85%A5%E8%A7%A3%E6%9E%90%20Nuxt.js%20%E7%9A%84%20%3Cnuxt-link%3E%20Smart%20Prefetching%20%E5%AF%A6%E4%BD%9C.png
 
 image_caption: 解析 Nuxt.js 如何實作 <nuxt-link> 的 Smart Prefetching
-excerpt: Smart Prefetching（或稱 Router Prefetch） 機制改善了使用者等待換頁請求的體驗，他讓頁面切換更為順暢。在 Nuxt.js 中內建的 <nuxt-link> 組件也實做了這項功能，讓我們一起從 Nuxt.js 的 source code 中認識這項技術並從中吸取大神們的寶貴經驗吧！
+description: Smart Prefetching（或稱 Router Prefetch） 機制改善了使用者等待換頁請求的體驗，他讓頁面切換更為順暢。在 Nuxt.js 中內建的 <nuxt-link> 組件也實做了這項功能，讓我們一起從 Nuxt.js 的 source code 中認識這項技術並從中吸取大神們的寶貴經驗吧！
 ---
 
 ## 前言
@@ -80,7 +80,7 @@ export default {
 
 - **`IntersectionObserver`**
 
-  如同開頭部分所提及，可以觀察元素是否進到畫面或指定區域，對於不支援的瀏覽器需要自己引入對應的 polyfill。這之前研究過這個 Web API 的細節，有興趣的可以看這篇：[Intersection Observer API 使用筆記](../api-intersection-oserver)
+  如同開頭部分所提及，可以觀察元素是否進到畫面或指定區域，對於不支援的瀏覽器需要自己引入對應的 polyfill。這之前研究過這個 Web API 的細節，有興趣的可以看這篇：[Intersection Observer API 使用筆記](/posts/api-intersection-oserver)
 
 - **`requestIdleCallback`**
 
@@ -575,4 +575,4 @@ export default {
 - [window.requestIdleCallback() - Web APIs | MDN](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback)
 - [Navigator.connection - Web APIs | MDN](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/connection)
 
-- [Intersection Observer API 使用筆記](../api-intersection-oserver)
+- [Intersection Observer API 使用筆記](/posts/api-intersection-oserver)

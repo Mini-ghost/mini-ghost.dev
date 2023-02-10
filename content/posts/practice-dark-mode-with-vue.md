@@ -8,7 +8,7 @@ tags:
 created: 2020-05-30T16:04:11.796Z
 image: /images/practice-dark-mode-with-vue.md.jpg
 image_caption: 用 Vue.js 實作時下流行的深色模式（Dark Mode）網頁
-excerpt: 現在越來越多網站，開始加入「深色模式」的切換選擇，關於這個近期逐漸流行的色彩模式切換到底該怎麼做呢？在技術上會有什麼限制呢！
+description: 現在越來越多網站，開始加入「深色模式」的切換選擇，關於這個近期逐漸流行的色彩模式切換到底該怎麼做呢？在技術上會有什麼限制呢！
 ---
 
 在本文當種會提到這些內容：
