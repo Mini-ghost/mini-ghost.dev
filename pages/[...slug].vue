@@ -51,69 +51,69 @@ const created = useFormat(() => {
 
 <style lang="scss">
 .prose {
-  @apply leading-[1.75];
+  --at-apply: leading-[1.75];
 }
 
 .prose :is(h1, h2, h3) {
-  @apply font-bold;
-  @apply mt-8 mb-4;
+  --at-apply: font-bold;
+  --at-apply: mt-8 mb-4;
 }
 
 .prose h1 {
-  @apply text-4xl;
+  --at-apply: text-4xl;
 }
 
 .prose h2 {
-  @apply text-3xl;
+  --at-apply: text-3xl;
 }
 
 .prose h3 {
-  @apply text-2xl;
+  --at-apply: text-2xl;
 }
 
 .prose :is(p, pre) {
-  @apply my-4;
+  --at-apply: my-4;
 }
 
 .prose p {
-  @apply my-6;
+  --at-apply: my-6;
 }
 
 .prose :not(h1, h2, h3) > a {
-  @apply underline decoration-1 decoration-dashed underline-offset-6;
-  @apply hover:text-[#FFAC11];
+  --at-apply: underline decoration-1 decoration-dashed underline-offset-6;
+  --at-apply: hover:text-[#FFAC11];
 }
 
 .prose pre {
-  @apply text-sm;
-  @apply bg-[var(--bg-code-block)];
-  @apply border border-solid border-gray/10;
-  @apply p-4;
-  @apply rounded-2 overflow-x-auto;
+  --at-apply: text-sm;
+  --at-apply: bg-[var(--bg-code-block)];
+  --at-apply: border border-solid border-gray/10;
+  --at-apply: p-4;
+  --at-apply: rounded-2 overflow-x-auto;
 }
 
 .prose :not(pre) > code {
-  @apply dark:text-white text-black;
-  @apply text-[15px];
-  @apply bg-[var(--bg-code-block)];
-  @apply py-1 px-1.5;
-  @apply rounded;
+  --at-apply: dark:text-white text-black;
+  --at-apply: text-[15px];
+  --at-apply: bg-[var(--bg-code-block)];
+  --at-apply: py-1 px-1.5;
+  --at-apply: rounded;
 }
 
 .prose :is(ul, ol) {
-  @apply ps-5;
+  --at-apply: ps-5;
 }
 
 .prose ul {
-  @apply list-disc;
+  --at-apply: list-disc;
 }
 
 .prose ol {
-  @apply list-decimal;
+  --at-apply: list-decimal;
 }
 
 .prose li {
-  @apply my-2;
-  @apply marker:text-gray/60;
+  --at-apply: my-2;
+  --at-apply: marker:text-gray/60;
 }
 </style>
