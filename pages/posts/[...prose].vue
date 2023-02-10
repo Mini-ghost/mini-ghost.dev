@@ -12,12 +12,7 @@ const route = useRoute();
 const { data: prose } = await useAsyncData(
   route.path,
   () =>
-    queryContent()
-      .where({
-        _path: {
-          $eq: route.path,
-        },
-      })
+    queryContent(route.path)
       .only(['title', 'description', 'created'])
       .findOne() as Promise<Prose>
 );
@@ -45,6 +40,9 @@ const created = useFormat(() => {
       </div>
       <p>{{ prose.description }}</p>
       <ContentDoc />
+    </template>
+    <template v-else>
+      Not Fount
     </template>
   </div>
 </template>
