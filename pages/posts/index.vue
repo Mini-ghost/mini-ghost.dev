@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { format } from '@/composiables/format';
+import format from '@/helper/format';
 
 interface Post {
   _path: string;
   title: string;
   created: string;
 }
+
+useHead(() => ({
+  title: 'Blog',
+}));
 
 const { data: posts } = await useAsyncData(
   'QUERY_POSTS',
@@ -54,23 +58,38 @@ const { data: posts } = await useAsyncData(
 </script>
 
 <template>
-  <div class="max-w-21cm w-11/12 mx-auto">
+  <div class="max-w-21cm w-11/12 mx-auto space-y-6">
     <div
       v-for="group in posts"
       :key="group.year"
     >
-      <div>{{ group.year }}</div>
-      <ol>
+      <div class="relative h-20 pointer-events-none">
+        <span class="absolute -top-5 -left-5 text-[8rem] font-bold opacity-08">
+          {{ group.year }}
+        </span>
+      </div>
+      <ul class="space-y-6">
         <li
           v-for="post in group.posts"
           :key="post._path"
         >
-          <NuxtLink :to="post._path">
-            {{ post.title }}
+          <NuxtLink
+            :to="post._path"
+            class="opacity-60 transition-opacity duration-300 hover:opacity-100"
+          >
+            <span class="text-lg w-fit">
+              {{ post.title }}
+            </span>
+            <br>
+            <time
+              :datetime="post.created"
+              class="text-sm opacity-70"
+            >
+              {{ format(post.created, { month: 'short', day: 'numeric' }) }}
+            </time>
           </NuxtLink>
-          | <time :datetime="post.created">{{ format(post.created) }}</time>
         </li>
-      </ol>
+      </ul>
     </div>
   </div>
 </template>

@@ -1,64 +1,49 @@
 <script setup lang="ts">
-import useFormat from '@/composiables/format';
-
-interface Prose {
-  title: string;
-  description: string;
-  created: string;
-}
-
-const route = useRoute();
-
-const { data: prose } = await useAsyncData(
-  route.path,
-  () =>
-    queryContent(route.path)
-      .only(['title', 'description', 'created'])
-      .findOne() as Promise<Prose>
-);
-
-const created = useFormat(() => {
-  return prose.value != null ? new Date(prose.value.created) : null;
-});
+import format from '@/helper/format';
 </script>
 
 <template>
-  <div class="prose max-w-21cm w-11/12 mx-auto">
-    <template v-if="prose">
-      <h1 class="mt-0">
-        <NuxtLink :to="route">
-          {{ prose.title }}
-        </NuxtLink>
-      </h1>
-      <div>
-        <time
-          class="text-sm text-gray/60"
-          :datatype="prose.created"
-        >
-          {{ created }}
-        </time>
-      </div>
-      <p>{{ prose.description }}</p>
-      <ContentDoc />
+  <ContentDoc>
+    <template #default="{ doc, excerpt }">
+      <ContentMeta
+        :title="doc.title"
+        :description="doc.description"
+      />
+      <article class="prose max-w-21cm w-11/12 mx-auto pb-32">
+        <header>
+          <h1 class="mt-0 text-4xl leading-relaxed">
+            <NuxtLink :to="doc._path">
+              {{ doc.title }}
+            </NuxtLink>
+          </h1>
+          <div>
+            <time
+              class="text-sm text-gray/60"
+              :datatype="doc.created"
+            >
+              {{ format(doc.created) }}
+            </time>
+          </div>
+          <p>{{ doc.description }}</p>
+        </header>
+
+        <ContentRenderer
+          :value="doc"
+          :excerpt="excerpt"
+        />
+      </article>
     </template>
-    <template v-else>
-      Not Fount
-    </template>
-  </div>
+  </ContentDoc>
 </template>
 
 <style lang="scss">
 .prose {
-  --at-apply: leading-[1.75];
+  --at-apply: leading-loose;
 }
 
 .prose :is(h1, h2, h3) {
   --at-apply: font-bold;
   --at-apply: mt-8 mb-4;
-}
-
-.prose h1 {
-  --at-apply: text-4xl;
 }
 
 .prose h2 {

@@ -1,7 +1,7 @@
 .dark {
   --c-default: #D3D3D6;
   --c-link: #FFAC11;
-  --bg-code-block: #202020;
+  --bg-code-block: #1A1A1ACC;
 }
 
 .light {
@@ -12,6 +12,7 @@
 
 html.dark {
   color-scheme: dark;
+  background: #121212;
 }
 
 body {

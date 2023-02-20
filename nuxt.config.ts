@@ -48,4 +48,18 @@ export default defineNuxtConfig({
     classSuffix: '',
     preference: 'dark',
   },
+
+  vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          entryFileNames: `_nuxt/main.[hash].js`,
+          chunkFileNames: `_nuxt/[hash].js`,
+          assetFileNames: `_nuxt/[hash].[ext]`,
+        },
+      },
+    },
+  },
+
+  experimental: { componentIslands: true },
 });
