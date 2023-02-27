@@ -208,4 +208,4 @@ css 的部分跟比較細的 UI 設計就沒有著墨太多了，整個遊戲花
 
 **[ Alex 宅幹嘛 ] 👨‍💻 Vue.js 應用｜HTML+CSS+JS 兩百行拼圖小遊戲**（[連結](https://youtu.be/ed2wmMBfveo)）
 
-![[ Alex 宅幹嘛 ] 👨‍💻 Vue.js 應用｜HTML+CSS+JS 兩百行拼圖小遊戲](//img.youtube.com/vi/ed2wmMBfveo/maxresdefault.jpg){ loading=lazy width=768 }
+![[ Alex 宅幹嘛 ] 👨‍💻 Vue.js 應用｜HTML+CSS+JS 兩百行拼圖小遊戲](//img.youtube.com/vi/ed2wmMBfveo/maxresdefault.jpg){ loading=lazy width=794 }

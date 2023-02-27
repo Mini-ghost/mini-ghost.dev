@@ -116,7 +116,7 @@ interface IntersectionObserverInit {
 
       看看這張圖吧！（取自：[Now You See Me: How To Defer, Lazy-Load And Act With IntersectionObserver](https://www.smashingmagazine.com/2018/01/deferring-lazy-loading-intersection-observer-api/)）。
 
-      ![rootMargin 示意圖](https://res.cloudinary.com/indysigner/image/fetch/f_auto,q_auto/w_2000/<https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/08ecf6a6-d230-4c7c-946c-59720be4e315/intersectionobserver-props-rootmargin-opt.jpg){> loading=lazy width=768 }
+      ![rootMargin 示意圖](https://res.cloudinary.com/indysigner/image/fetch/f_auto,q_auto/w_2000/<https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/08ecf6a6-d230-4c7c-946c-59720be4e315/intersectionobserver-props-rootmargin-opt.jpg){> loading=lazy width=794 }
 
 - `threshold`
   - Type: `number | number[]`
@@ -152,7 +152,7 @@ interface IntersectionObserverCallback {
 
     `boundingClientRect`、`intersectionRect`、`rootBounds` 引用一張圖片來解釋
 
-    ![Rectangles of IntersectionObserverEntry](https://res.cloudinary.com/indysigner/image/fetch/f_auto,q_auto/w_2000/<https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/0c9b56a3-5870-42ec-a3b5-0fc85f85aba7/intersectionobserver-entry-rectangles-opt.jpg){> loading=lazy width=768 }
+    ![Rectangles of IntersectionObserverEntry](https://res.cloudinary.com/indysigner/image/fetch/f_auto,q_auto/w_2000/<https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/0c9b56a3-5870-42ec-a3b5-0fc85f85aba7/intersectionobserver-entry-rectangles-opt.jpg){> loading=lazy width=794 }
 
     - `rootBounds`：
         「觀察區」的矩形資料 `DOMRectReadOnly`。

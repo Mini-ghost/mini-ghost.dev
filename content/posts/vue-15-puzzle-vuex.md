@@ -403,4 +403,4 @@ export default new Vuex.Store({
 
 **[ Alex 宅幹嘛 ] 👨‍💻 Vue.js 應用｜HTML+CSS+JS 兩百行拼圖小遊戲**（[連結](https://youtu.be/ed2wmMBfveo)）
 
-![[ Alex 宅幹嘛 ] 👨‍💻 Vue.js 應用｜HTML+CSS+JS 兩百行拼圖小遊戲](//img.youtube.com/vi/ed2wmMBfveo/maxresdefault.jpg){ loading=lazy width=768 }
+![[ Alex 宅幹嘛 ] 👨‍💻 Vue.js 應用｜HTML+CSS+JS 兩百行拼圖小遊戲](//img.youtube.com/vi/ed2wmMBfveo/maxresdefault.jpg){ loading=lazy width=794 }

@@ -175,7 +175,7 @@ var hrRotate = hr*30 + min*0.5 + 180;
 這邊我使用了 `requestAnimationFrame()` 執行畫面的更新。_雖然題目指定要使用 setTimeout() 或 setInterval()_。
 requestAnimationFrame() 可以想像是優化版本的 setTimeout()，他的更新頻率是對準螢幕更新平率的，在有，當螢幕更新一次畫面就會呼叫一次 `requestAnimationFrame()` 帶進去的 function。新方法總要看一下瀏覽器支援度。
 
- ![Can I use requestAnimationFrame](https://i.imgur.com/vlHEhlu.png "Can I use requestAnimationFrame"){ loading=lazy width=768 }
+ ![Can I use requestAnimationFrame](https://i.imgur.com/vlHEhlu.png "Can I use requestAnimationFrame"){ loading=lazy width=794 }
  Can I use requestAnimationFrame：[Can I use requestAnimationFrame](https://caniuse.com/#feat=requestanimationframe)
 
  基本上大多數瀏覽器都已經有很高的支援度，如果真的在意的話可以做下面的動作：
@@ -204,6 +204,6 @@ requestAnimationFrame() 可以想像是優化版本的 setTimeout()，他的更�
 如果想看更多關於 JavaScript 時鐘的製作，也推薦下面這支影片：
 
 **[ Alex 宅幹嘛 ] 👨‍💻 深入淺出 Javascript30 快速導覽：Day 2：CSS + JS Clock**（[連結](http://www.youtube.com/watch?v=O1YsB3qxO4g)）
-![深入淺出 Javascript30 快速導覽：Day 2：CSS + JS Clock](//img.youtube.com/vi/O1YsB3qxO4g/maxresdefault.jpg){ loading=lazy width=768 }
+![深入淺出 Javascript30 快速導覽：Day 2：CSS + JS Clock](//img.youtube.com/vi/O1YsB3qxO4g/maxresdefault.jpg){ loading=lazy width=794 }
 
 Alex 大大的頻道上有非常豐富的 JavaScript 學習資源，特別如果喜歡 Vue.js 的捧油絕對不能錯過啦！

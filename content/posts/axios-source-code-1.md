@@ -28,7 +28,7 @@ axios 可應用在「瀏覽器環境」與「Node.js」環境中。在瀏覽器�
 
 一開始，先來看看當透過 axios 發出請求（request）到取得到資料（response）的過程中發生了那些事情，以下是我自製的 axios 請求流程圖：
 
-![axios 請求流程圖 - by Alex Liu](/images/axios-flowchart.png)
+![axios 請求流程圖 - by Alex Liu](/images/axios-flowchart.png){width=794 height=1250}
 
 從流程圖可以知道，當透過 axios 發出一個請求後，會先經過請求攔截器（Interceptors），之後依照執行環境選擇適當的請求適配器（adapter，介面）發出請求。取得請求的回應後，經過處理回應的攔截器，最後回傳給使用者，完成整個 HTTP 請求。
 
