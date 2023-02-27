@@ -8,6 +8,7 @@ import format from '@/helper/format';
       <ContentMeta
         :title="doc.title"
         :description="doc.description"
+        :image="doc.image"
       />
       <article class="prose max-w-21cm w-11/12 mx-auto pb-32">
         <header>
