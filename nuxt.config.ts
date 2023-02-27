@@ -5,7 +5,12 @@ const description =
   'Front-end Web Developer from Taiwan | Work with Vue, Nuxt and React | Author of Vorms | Super fan for TypeScript';
 
 export default defineNuxtConfig({
-  modules: ['@nuxt/content', '@unocss/nuxt', '@nuxtjs/color-mode'],
+  modules: [
+    '@nuxt/image-edge',
+    '@nuxt/content',
+    '@unocss/nuxt',
+    '@nuxtjs/color-mode',
+  ],
   content: {
     highlight: {
       theme: {
