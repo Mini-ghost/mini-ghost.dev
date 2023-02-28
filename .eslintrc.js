@@ -5,6 +5,7 @@ module.exports = {
   env: {
     node: true,
   },
+  ignorePatterns: ['dist'],
   plugins: ['import'],
   extends: [
     'plugin:prettier-vue/recommended',
