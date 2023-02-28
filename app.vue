@@ -5,10 +5,8 @@ useHead(() => ({
 </script>
 
 <template>
-  <div>
-    <NavBar />
-    <main>
-      <NuxtPage />
-    </main>
-  </div>
+  <NavBar />
+  <main>
+    <NuxtPage />
+  </main>
 </template>

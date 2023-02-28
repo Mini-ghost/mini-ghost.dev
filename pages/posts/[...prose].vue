@@ -78,7 +78,6 @@ import format from '@/helper/format';
 
 .prose :not(pre) > code {
   --at-apply: dark:text-white text-black;
-  --at-apply: text-[15px];
   --at-apply: bg-[var(--bg-code-block)];
   --at-apply: py-1 px-1.5;
   --at-apply: rounded;
