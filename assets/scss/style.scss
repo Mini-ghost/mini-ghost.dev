@@ -18,3 +18,11 @@ html.dark {
 body {
   color: var(--c-default);
 }
+
+.before\:content-\[\'\'\]::before {
+  content: '';
+}
+
+.after\:content-\[\'\'\]::after {
+  content: '';
+}
