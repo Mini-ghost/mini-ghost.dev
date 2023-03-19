@@ -20,7 +20,7 @@ import format from '@/helper/format';
           <div>
             <time
               class="text-sm text-gray/60"
-              :datatype="doc.created"
+              :datetime="doc.created"
             >
               {{ format(doc.created) }}
             </time>
@@ -77,8 +77,9 @@ import format from '@/helper/format';
 }
 
 .prose :not(pre) > code {
-  --at-apply: dark:text-white text-black;
-  --at-apply: bg-[var(--bg-code-block)];
+  --at-apply: text-[0.785rem];
+  --at-apply: text-[var(--c-text-code)];
+  --at-apply: bg-[var(--bg-code-inline)];
   --at-apply: py-1 px-1.5;
   --at-apply: rounded;
 }

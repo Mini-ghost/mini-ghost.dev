@@ -58,7 +58,7 @@ const { data: posts } = await useAsyncData(
 </script>
 
 <template>
-  <div class="max-w-21cm w-11/12 mx-auto space-y-6">
+  <div class="max-w-21cm w-11/12 mx-auto space-y-6 pb-32">
     <div
       v-for="group in posts"
       :key="group.year"
