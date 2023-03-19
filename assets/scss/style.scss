@@ -2,16 +2,20 @@
   --c-default: #D3D3D6;
   --c-link: #FFAC11;
   --c-text-code: #CBCBCB;
+  --c-divider: #525259;
   --bg-code-inline: #313136;
   --bg-code-block: #1A1A1ACC;
+  --bg-soft: #2A2A2A;
 }
 
 .light {
   --c-default: #212121;
   --c-link: #FFAC11;
   --c-text-code: #5D6F5D;
+  --c-divider: #525259;
   --bg-code-inline: #F6F6F7;
   --bg-code-block: #7D7D7D10;
+  --bg-soft: #7D7D7D10;
 }
 
 html.dark {
