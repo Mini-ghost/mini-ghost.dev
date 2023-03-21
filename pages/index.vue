@@ -20,7 +20,7 @@ const person = data.value!;
 </script>
 
 <template>
-  <div class="grid lg:grid-cols-[450px_minmax(0,1fr)] md:grid-cols-[320px_minmax(0,1fr)] gap-[calc(1.25rem+2vw)] w-11/12 max-w-[1366px] mx-auto md:py-10 py-5">
+  <div class="grid lg:grid-cols-[450px_minmax(0,1fr)] md:grid-cols-[320px_minmax(0,1fr)] gap-[calc(1.25rem+2vw)] w-11/12 max-w-[1366px] mx-auto lg:py-16 py-5">
     <div class="hidden md:block">
       <div class="relative w-fit rounded-xl overflow-hidden opacity-80 transition-opacity duration-500 hover:opacity-100 after:content-[''] after:block after:bg-gradient-to-br after:absolute after:top-0 after:w-full after:h-full after:block after:from-[#ABC74A] after:to-[#2F993A] after:opacity-30 after:transition-opacity after:duration-500 hover:after:opacity-20">
         <img
@@ -37,7 +37,7 @@ const person = data.value!;
       <h1 class="text-4xl lg:text-5xl leading-tight font-bold">
         Hello!<br> I'm {{ person.name }}
       </h1>
-      <p>
+      <p class="leading-relaxed opacity-70">
         {{ person.description }}
       </p>
 
