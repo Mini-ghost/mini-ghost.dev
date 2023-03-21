@@ -10,9 +10,9 @@ import format from '@/helper/format';
         :description="doc.description"
         :image="doc.image"
       />
-      <article class="prose max-w-21cm w-11/12 mx-auto pb-32">
+      <article class="prose max-w-21cm w-11/12 mx-auto pb-16 lg:pb-32">
         <header>
-          <h1 class="mt-0 text-4xl leading-relaxed">
+          <h1 class="mt-0 text-[1.75rem] lg:text-[2.25rem] leading-relaxed">
             <NuxtLink :to="doc._path">
               {{ doc.title }}
             </NuxtLink>
@@ -39,90 +39,119 @@ import format from '@/helper/format';
 
 <style lang="scss">
 .prose {
-  --at-apply: leading-loose;
+  @apply leading-loose;
 
-  :is(h1, h2, h3) {
-    --at-apply: font-bold;
-    --at-apply: mt-8 mb-4;
+  h1,
+  h2,
+  h3 {
+    @apply font-bold;
+  }
+
+  h1 {
+    @apply mt-8 mb-4;
+  }
+
+  h2,
+  h3 {
+    @apply table;
+    @apply -mt-12 mb-4 pt-20;
   }
 
   h2 {
-    --at-apply: text-3xl;
+    @apply text-2xl lg:text-3xl;
   }
 
   h3 {
-    --at-apply: text-2xl;
+    @apply text-xl lg:text-2xl;
   }
 
   :is(p, pre) {
-    --at-apply: my-4;
+    @apply my-4;
   }
 
   p {
-    --at-apply: my-6;
+    @apply my-6;
   }
 
   :not(h1, h2, h3) > a {
-    --at-apply: underline decoration-1 decoration-dashed underline-offset-6;
-    --at-apply: hover:text-[#FFAC11];
+    @apply underline decoration-1 decoration-dashed underline-offset-6;
+    @apply hover:text-[#FFAC11];
+  }
+
+  hr {
+    @apply my-10 border-t-2 opacity-10;
+  }
+
+  blockquote,
+  pre {
+    @apply transition-colors duration-500 my-6;
+  }
+
+  blockquote {
+    @apply border border-[#10B981]/30 bg-[#10B981]/20 p-4 rounded hover:border-[#10B981]/50;
+  }
+
+  blockquote p {
+    @apply my-0;
   }
 
   pre {
-    --at-apply: text-sm;
-    --at-apply: bg-[var(--bg-code-block)];
-    --at-apply: border border-solid border-gray/10;
-    --at-apply: p-4;
-    --at-apply: rounded-2 overflow-x-auto;
+    @apply text-sm;
+    @apply bg-[var(--bg-code-block)];
+    @apply border border-solid border-gray/10 hover:border-gray/30;
+    @apply p-4;
+    @apply rounded-2 overflow-x-auto;
   }
 
   :not(pre) > code {
-    --at-apply: text-[var(--c-text-code)];
-    --at-apply: bg-[var(--bg-code-inline)];
-    --at-apply: py-1 px-1.5;
-    --at-apply: rounded;
+    @apply text-[var(--c-text-code)];
+    @apply bg-[var(--bg-code-inline)];
+    @apply py-1 px-1.5;
+    @apply rounded;
   }
 
   :not(pre, h1, h2, h3, h4, h5, h6) > code {
-    --at-apply: text-[0.785rem];
+    @apply text-[0.785rem];
   }
 
-  :is(ul, ol) {
-    --at-apply: ps-5;
+  ul,
+  ol {
+    @apply ps-5;
   }
 
   ul {
-    --at-apply: list-disc;
+    @apply list-disc;
   }
 
   ol {
-    --at-apply: list-decimal;
+    @apply list-decimal;
   }
 
   li {
-    --at-apply: my-2;
-    --at-apply: marker:text-gray/60;
+    @apply my-2;
+    @apply marker:text-gray/60;
   }
 
   table {
-    --at-apply: block;
-    --at-apply: border-collapse;
-    --at-apply: overflow-x-auto;
-    --at-apply: my-5;
+    @apply block;
+    @apply border-collapse;
+    @apply overflow-x-auto;
+    @apply my-5;
   }
 
   th {
-    --at-apply: text-sm;
-    --at-apply: font-bold;
-    --at-apply: bg-[var(--bg-soft)]
+    @apply text-sm;
+    @apply font-bold;
+    @apply bg-[var(--bg-soft)];
   }
 
   tr {
-    --at-apply: border-t border-[var(--c-divider)];
+    @apply border-t border-[var(--c-divider)];
   }
 
   :is(th, td) {
-    --at-apply: border border-[var(--c-divider)];
-    --at-apply: py-2 px-4
+    @apply border border-[var(--c-divider)];
+    @apply py-2 px-4;
   }
 }
 </style>

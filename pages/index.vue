@@ -34,7 +34,7 @@ const person = data.value!;
     </div>
 
     <div class="space-y-8">
-      <h1 class="text-5xl leading-tight font-bold">
+      <h1 class="text-4xl lg:text-5xl leading-tight font-bold">
         Hello!<br> I'm {{ person.name }}
       </h1>
       <p>
@@ -42,14 +42,14 @@ const person = data.value!;
       </p>
 
       <section class="space-y-5">
-        <h2 class="text-3xl font-bold">
+        <h2 class="text-2xl lg:text-3xl font-bold">
           Skills
         </h2>
-        <ul class="flex space-x-3">
+        <ul class="flex flex-wrap space-x-2 lg:space-x-3">
           <li
             v-for="item in person.skills"
             :key="item"
-            class="flex items-center before:content-[''] before:block first:before:hidden before:h-1/3 before:w-px before:bg-[#8A949E] before:mr-3"
+            class="inline-flex items-center before:content-[''] before:block first:before:hidden before:h-1/3 before:w-px before:bg-[#8A949E] before:mr-2 lg:before-mr-3"
           >
             <span>{{ item }}</span>
           </li>
@@ -57,7 +57,7 @@ const person = data.value!;
       </section>
 
       <section class="space-y-5">
-        <h2 class="text-3xl font-bold">
+        <h2 class="text-2xl lg:text-3xl font-bold">
           Work Experience
         </h2>
         <ul>

@@ -58,7 +58,7 @@ const { data: posts } = await useAsyncData(
 </script>
 
 <template>
-  <div class="max-w-21cm w-11/12 mx-auto space-y-6 pb-32">
+  <div class="max-w-21cm w-11/12 mx-auto space-y-6 lg:pt-16 pb-16 lg:pb-32">
     <div
       v-for="group in posts"
       :key="group.year"
@@ -75,7 +75,7 @@ const { data: posts } = await useAsyncData(
         >
           <NuxtLink
             :to="post._path"
-            class="opacity-60 transition-opacity duration-300 hover:opacity-100"
+            class="opacity-80 lg:opacity-60 transition-opacity duration-300 focus:opacity-100 hover:opacity-100 focus:outline-none "
           >
             <span class="text-lg w-fit">
               {{ post.title }}

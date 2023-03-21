@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@unocss/nuxt',
     '@nuxtjs/color-mode',
+    '@vueuse/nuxt',
   ],
   content: {
     highlight: {
