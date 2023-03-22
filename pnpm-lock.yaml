@@ -17,6 +17,7 @@ specifiers:
   eslint-plugin-prettier-vue: ^4.2.0
   eslint-plugin-vue: ^9.9.0
   nuxt: ^3.3.1
+  nuxt-simple-sitemap: ^2.1.8
   sass: ^1.59.3
   typescript: ^5.0.2
 
@@ -37,6 +38,7 @@ devDependencies:
   eslint-plugin-prettier-vue: 4.2.0
   eslint-plugin-vue: 9.9.0_eslint@8.36.0
   nuxt: 3.3.1_kbpct55opnc656xwml45ws4itq
+  nuxt-simple-sitemap: 2.1.8
   sass: 1.59.3
   typescript: 5.0.2
 
@@ -5488,6 +5490,22 @@ packages:
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.2
+    dev: true
+
+  /nuxt-simple-sitemap/2.1.8:
+    resolution: {integrity: sha512-QhQeiNkI9HdbBk8emKJ5/3KTOdu6C1I2dQecvIHk41zSo9od+WTIf0BxPazxK+Sm4Dvz+p0JfxVgWPa4cJvXLA==}
+    dependencies:
+      '@nuxt/kit': 3.3.1
+      chalk: 5.2.0
+      defu: 6.1.2
+      escape-string-regexp: 5.0.0
+      knitwork: 1.0.0
+      pathe: 1.1.0
+      radix3: 1.0.0
+      ufo: 1.1.1
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
     dev: true
 
   /nuxt/3.3.1_kbpct55opnc656xwml45ws4itq:

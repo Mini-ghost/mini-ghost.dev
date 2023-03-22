@@ -11,7 +11,9 @@ export default defineNuxtConfig({
     '@unocss/nuxt',
     '@nuxtjs/color-mode',
     '@vueuse/nuxt',
+    'nuxt-simple-sitemap',
   ],
+
   content: {
     highlight: {
       theme: {
@@ -35,15 +37,9 @@ export default defineNuxtConfig({
         { property: 'og:locale', content: 'zh_TW' },
 
         // twitter
-        {
-          name: 'twitter:card',
-          content: 'summary_large_image',
-        },
+        { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
-        {
-          name: 'twitter:description',
-          content: description,
-        },
+        { name: 'twitter:description', content: description },
       ],
     },
   },
@@ -65,6 +61,16 @@ export default defineNuxtConfig({
         },
       },
     },
+  },
+
+  runtimeConfig: {
+    public: {
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
+    },
+  },
+
+  sitemap: {
+    trailingSlash: true,
   },
 
   experimental: { componentIslands: true },
