@@ -17,13 +17,14 @@ import format from '@/helper/format';
               {{ doc.title }}
             </NuxtLink>
           </h1>
-          <div>
-            <time
-              class="text-sm text-gray/60"
-              :datetime="doc.created"
-            >
+          <div class="text-sm text-gray/60">
+            <time :datetime="doc.created">
               {{ format(doc.created) }}
             </time>
+            •
+            <span>
+              {{ doc.readingTime.text }}
+            </span>
           </div>
           <p>{{ doc.description }}</p>
         </header>

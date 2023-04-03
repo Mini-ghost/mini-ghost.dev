@@ -5,6 +5,9 @@ interface Post {
   _path: string;
   title: string;
   created: string;
+  readingTime: {
+    text: string;
+  };
 }
 
 useHead(() => ({
@@ -16,7 +19,7 @@ const { data: posts } = await useAsyncData(
   () =>
     queryContent('/posts/')
       .where({ _partial: false })
-      .only(['_path', 'title', 'created'])
+      .only(['_path', 'title', 'created', 'readingTime'])
       .sort({ created: -1 })
       .find() as Promise<Post[]>,
   {
@@ -81,12 +84,15 @@ const { data: posts } = await useAsyncData(
               {{ post.title }}
             </span>
             <br>
-            <time
-              :datetime="post.created"
-              class="text-sm opacity-70"
-            >
-              {{ format(post.created, { month: 'short', day: 'numeric' }) }}
-            </time>
+            <span class="text-sm opacity-70">
+              <time :datetime="post.created">
+                {{ format(post.created, { month: 'short', day: 'numeric' }) }}
+              </time>
+              •
+              <span>
+                {{ post.readingTime.text }}
+              </span>
+            </span>
           </NuxtLink>
         </li>
       </ul>

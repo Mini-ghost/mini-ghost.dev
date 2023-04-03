@@ -15,6 +15,10 @@ export default defineNuxtConfig({
   ],
 
   content: {
+    markdown: {
+      // https://github.com/nuxt/content/issues/1231#issuecomment-1149871306
+      remarkPlugins: ['remark-reading-time'],
+    },
     highlight: {
       theme: {
         dark: 'vitesse-dark',
