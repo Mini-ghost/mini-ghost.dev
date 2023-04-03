@@ -27,6 +27,7 @@
     "nuxt-simple-sitemap": "^2.1.8",
     "remark-reading-time": "^2.0.1",
     "sass": "^1.59.3",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.2",
+    "ufo": "^1.1.1"
   }
 }
