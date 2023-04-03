@@ -4,7 +4,7 @@ import { withoutTrailingSlash } from 'ufo';
 import format from '@/helper/format';
 
 const route = useRoute();
-const path = toRef(route, 'path');
+const path = computed(() => withoutTrailingSlash(route.path));
 
 // TODO 整合到 <ContentDoc> 裡面
 const { data: surround } = await useAsyncData(
@@ -14,7 +14,7 @@ const { data: surround } = await useAsyncData(
       .where({ _partial: false })
       .only(['_path', 'title'])
       .sort({ created: 1 })
-      .findSurround(withoutTrailingSlash(path.value))
+      .findSurround(path.value)
 );
 </script>
 
