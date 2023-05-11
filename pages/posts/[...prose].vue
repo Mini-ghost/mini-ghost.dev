@@ -142,7 +142,7 @@ const { data: surround } = await useAsyncData(
   }
 
   blockquote {
-    @apply border border-[#10B981]/30 bg-[#10B981]/20 p-4 rounded hover:border-[#10B981]/50;
+    @apply border border-[#10B981]/30 bg-[#10B981]/5 p-4 rounded hover:border-[#10B981]/50;
   }
 
   blockquote p {
