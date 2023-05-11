@@ -287,15 +287,13 @@ Axios.prototype.request = function request(config) {
 從上面的設計可以得知，在 `request()` 中會先對傳入的 `config` 與預設的 config `this.default` 合併，補齊一些必要的屬性，像是 `method`。如果合併後 `config` 裡面還是沒有 `method` 這個屬性，預設會使用 GET 方法。最後觸發 `dispatchRequest()` 發出請求。
 
 > **補充：**
-
 > `dispatchRequest()`  中會針對請求資料做最後的轉換（Transform request data）並依照依照執行環境選擇適當的請求適配器發出請求。收到回應資料後，會再將回應資料專換（Transform response data）過後再交由回應攔截器處理。
 
 <p></p>
 
 > **補充：**
-
 > 由一開始的條件判斷可以得知，其實 `request()` 方法提供了兩種使用方式，如下：
-
+>
 > ```ts
 > // 官方並沒有針對 Axios 類別提供 interface
 > 
@@ -306,14 +304,14 @@ Axios.prototype.request = function request(config) {
 >   // 略
 > }
 > ```
-
+>
 > 不過第二種方式在 `AxiosInstance` 並沒有提供型別，在文件中也沒有提及，我猜這應該是因為第二種方法其實只是為了要服務 `axios(url[, config])` 這種用法而產生的。
 
 到這邊基本的 `request()` 已經可以運作，但還有一個很重要的功能沒有實踐：**攔截器（Interceports）**
 
 **加入攔截器（Interceports）**
 
-如果有使用過像是 Express.js 的捧油，可能會聽過**中間件（Middleware）**這個功能。攔截器的概念跟中間件很相似，可以用於例如：處理身分驗證，或是共同的邏輯處理。
+如果有使用過像是 Express.js 的捧油，可能會聽過 **中間件（Middleware）** 這個功能。攔截器的概念跟中間件很相似，可以用於例如：處理身分驗證，或是共同的邏輯處理。
 
 從上面的建構式中得知，攔截器是透過 `InterceptorManager` 類別建構出的實例。我們還沒有介紹到這個類別，但現在可以先想像他是個陣列，並有一個 `forEach` 的方法可以遍歷所有存在陣列中的攔截器。
 
@@ -394,7 +392,7 @@ Promise.resolve(config)
 這樣就完成了整個 `axios.request()` 的設計。
 
 > 注意
-
+>
 > ``` js
 > const promise1 = promise.then(onFulfilled, onRejected)
 >

@@ -88,9 +88,7 @@ request.send(data);
 另外如果是非同步請求，則可以設置事件處理器（EventHandler）：`onreadystatechange`。當 `readyState` 發生改變時調用指定的 function 確認狀態，取得回應的資料。
 
 > **補充**
-
 > 如果去看 You might not need jQuery 這個網站上的範例，可能會看見他不是使用 `onreadystatechange` 這個事件處理器，而是選用 `onload`，並且不需要特別確認 `readyState` 的值。如果要看到跟上述一樣的範例，需要將 「What's the oldest version of IE you need to support?」這個選項設定為 9 或是 8。
-
 > 根據 MDN 以及 [Can I use...](https://caniuse.com/mdn-api_xmlhttprequesteventtarget_onload) 的資料都顯示，`onload` 事件處理器是在 IE 9 之後才支援的。
 
 瞭解了基本使用方式，與在建立 `XMLHttpRequest` 物件後，就要準備來初始化請求了。
