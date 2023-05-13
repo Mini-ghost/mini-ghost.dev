@@ -5,7 +5,7 @@ tags:
 - Pinia
 
 created: 2023-04-03T08:56:53.162Z
-image: <https://og-image-mini-ghost.vercel.app/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20pinia.png>
+image: https://og-image-mini-ghost.vercel.app/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20pinia.png?fontSize=72
 description: 在開發比較大型的專案時我們不經常需要將一些「狀態」儲存到一個共用的地方，讓些狀態可以更容易的在各個元件之間被共用。Pinia 是目前官方首推的狀態管理工具，而關於 Pinia 的介紹與五星吹捧更是多不勝數，因此這系列分享會聚焦在幾個我覺得 Pinia 有趣、好玩的地方，研究他的原始碼是如何撰寫的，從中吸收寶貴的經驗。
 ---
 

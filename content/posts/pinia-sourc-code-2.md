@@ -5,7 +5,7 @@ tags:
 - Pinia
 
 created: 2023-04-04T22:10:58.357Z
-image: <https://og-image-mini-ghost.vercel.app/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20pinia.png>
+image: https://og-image-mini-ghost.vercel.app/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20pinia.png?fontSize=72
 description: 在開發比較大型的專案時我們不經常需要將一些「狀態」儲存到一個共用的地方，讓些狀態可以更容易的在各個元件之間被共用。在上一篇的內容我們先看了 Pinia instance 上有哪些東西，也初步了解了 defineStore 的功能。接下來會更深入核心了解 Options Store 跟 Setup Store 內部的實作。
 ---
 
@@ -75,7 +75,7 @@ function createOptionsStore(id, options, pinia) {
 
 我們一步一步往下看。
 
-### 初始化 state
+### 初始化 Options Store state
 
 這是是定義 state 的方法，我們需要定義一個 state function，並且會回傳一個物件。
 
@@ -188,7 +188,7 @@ Object.keys(getters || {}).reduce((computedGetters, name) => {
 }, {} as Record<string, ComputedRef>)
 ```
 
-我們可以透過 `call` 來改變 `this` 的指向。
+我們可以透過 `Function.prototype.call` 來改變 `this` 的指向。
 
 ```ts
 //       ⬇️ 指定 this 的指向為 `state`
@@ -199,11 +199,17 @@ fun.call(thisArg, arg1, arg2, ...)
 ### 合併 state、actions 跟 getters
 
 ```ts
-return Object.assign(
-  localState,
-  actions,
-  getter
-)
+function createOptionsStore(id, options, pinia) {
+  function setup() {
+    return Object.assign(
+      localState,
+      actions,
+      getter
+    )
+  }
+
+  store = createSetupStore(id, setup, options, pinia, true)
+}
 ```
 
 這裡會因為後蓋前，所以如果有相同的屬性， `state` 會被 `actions` 跟 `getters` 覆蓋。
@@ -216,17 +222,18 @@ return Object.assign(
 |--------------------|---------|
 | `store.$onAction`  | 設定一個 callback function，在 action 被執行前調用。 |
 | `store.$subscribe` | 設定一個 callback function，當 state 更新時調用。它會回傳一個用來移除該 callback function 的 function |
-| `store.$patch`     | 更新 state，可以值接赴與部分新的狀態或是使用 callback 取的當前 state 並修改。 |
+| `store.$patch`     | 更新 state，可以值接賦值部分新的狀態或是使用 callback 取得當前 state 並修改。 |
+| `store.$state`     | 當前 store 的 state，如果對他直接設定 state，內部會使用 `store.$patch` 更新 |
 | `store.$reset`     | 重置整個 store 的 state，只是適用於 Options Store。 |
 | `store.$dispose`   | 清除整個 store 的「副作用」，並且將 store 從 Pinia Instance 上將該 store 刪除。 |
 
 不過在一一介紹 api 之前，我們還是需要初始化 state。
 
-### 初始化 SetupOptions state
+### 初始化 Setup Store state
 
 在 `createOptionsStore` 的一開始我們因為要解決 SSR 的需求，所以會先檢查 `initialState` 是否存在，如果存在就沿用，不存在則需要初始化。
 
-這裡要做的事情大致相同，不過因為 Option Store 的 state  先前已經透過 `state` function 來初始化，所以如果是 Options Store 這裡不需要再做一次，僅判斷 Setup Store 使否需要初始化  `pinia.state.value[$id] = {}`。
+這裡要做的事情大致相同，不過因為 Option Store 的 state  先前已經透過 `state` function 來初始化，所以如果是 Options Store 這裡不需要再做一次，僅判斷針對 Setup Store 是否需要初始化  `pinia.state.value[$id] = {}`。
 
 ```ts
 // 忽略了 HMR 的部分
@@ -267,7 +274,7 @@ const store = useStore()
 store.env // hydration error
 ```
 
-所以這裡會先檢查 `initialState` 是否存在，如果存在就沿用，不存在則需要初始化。
+所以這裡會先檢查 `initialState` 是否存在，並且是否需要進行補水（hydrate）。
 
 ```ts
 function shouldHydrate(obj: any) {
@@ -852,6 +859,66 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 
 撇除掉訂閱的程式碼，這裡我們只要處理不同參數修改 state 的方式就可以了。
 
+### API: store.$state
+
+`store.$state` 的使用方式如下，順邊想想下邊面的操作的結果 $state 會變成什麼：
+
+```ts
+/**
+ * 假設當前 `$state` 是這樣的
+ * 
+ * ```ts
+ * {
+ *   count: 0,
+ *   name: 'Vuex',
+ * }
+ * ```
+ */
+const store = useStore()
+
+store.$state.count = 1
+store.$state = {
+  name: 'Pinia',
+}
+
+// store.$state 變成？
+```
+
+`store.$state.count = 1` 的結果可想而知 `count` 的值會變成 `1`，但 `store.$state = { name: 'Pinia' }` 的結果會是什麼呢？
+
+實作部份如下：
+
+```ts
+function createSetupStore($id, setup, options, pinia, isOptionsStore) {
+  Object.defineProperty(store, '$state', {
+    get: () => pinia.state.value[$id],
+    set: (state) => {
+      $patch(($state) => {
+        Object.assign($state, state)
+      })
+    },
+  })
+}
+```
+
+當我們執行 `store.$state.count = 1` 時，實際上是直接對 `pinia.state.value[$id]` 進行修改，就會像是 `pinia.state.value[$id].count = 1` 一樣，所以不會觸發 `set`。而當我們對 `store.$state` 直接賦值時，則會觸發 `set`。
+
+所以上面執行的程式碼，實際效果如下：
+
+```ts
+// store.$state.count = 1
+pinia.state.value[$id].count = 1
+
+// store.$state = {
+//   name: 'Pinia',
+// }
+store.$patch((state) => {
+  Object.assign(state, {
+    name: 'Pinia',
+  })
+})
+```
+
 ### API: store.$reset
 
 在 Options Store 建立的 Store instance 上我們可以使用 `store.$reset` 來重置整個 store 的 state。
@@ -980,15 +1047,6 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 
 ```ts
 function createSetupStore($id, setup, options, pinia, isOptionsStore) {
-  Object.defineProperty(store, '$state', {
-    get: () => pinia.state.value[$id],
-    set: (state) => {
-      $patch(($state) => {
-        assign($state, state)
-      })
-    },
-  })
-
   if (
     initialState &&
     isOptionsStore &&
@@ -999,29 +1057,17 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
-**最後結束前**
-
-來到最後，在前面我們建立了 `isListening` 跟 `isSyncListening` 兩個變數，初始值為 `undefined`，完成 Store instance 後會被設定為 `true` 並將 store 返回給使用者。
-
-```ts
-function createSetupStore($id, setup, options, pinia, isOptionsStore) {
-  let isListening: boolean
-  let isSyncListening: boolean
-
-  // ...
-
-  isListening = true
-  isSyncListening = true
-  return store
-}
-```
-
 ## 結語
 
-綜合一上的內容，我們可以整理出 Option Store 的實作內容：
+綜合以上的內容，我們可以整理出 Option Store 的實作內容：
 
-- **初始化 state**，
-- 整理 getters
+- **初始化 state**，這裡在初始化時需要考量 SSR 的問題，所以僅在 `pinia.state.value[id]` 不存在時才會初始化 state。
+- **整理 getters**，這裡會使用 `Function.prototype.call` 讓 getter 的 `this` 指向 Store instance。
+- 合併 state、actions 跟 getters，並且使用 `createSetupStore()` 來實際建立 Store instance。
+
+Setup Store 的實作內容：
+
+- **初始化 state**，這裡在初始化時一樣需要考量 SSR 的問題，但不太一樣的是這裡會針對每一個屬性檢查是補水。
 
 ### 參考資料
 
