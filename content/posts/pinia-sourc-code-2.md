@@ -4,21 +4,21 @@ tags:
 - Vue
 - Pinia
 
-created: 2023-04-04T22:10:58.357Z
+created: 2023-05-13T00:00:00.000Z
 image: https://og-image-mini-ghost.vercel.app/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20pinia.png?fontSize=72
-description: 在開發比較大型的專案時我們不經常需要將一些「狀態」儲存到一個共用的地方，讓些狀態可以更容易的在各個元件之間被共用。在上一篇的內容我們先看了 Pinia instance 上有哪些東西，也初步了解了 defineStore 的功能。接下來會更深入核心了解 Options Store 跟 Setup Store 內部的實作。
+description: 在開發比較大型的專案時我們經常需要將一些「狀態」儲存到一個共用的地方，讓些狀態可以更容易的在各個元件之間使用。在上一篇的內容我們先看了 Pinia instance 上有哪些東西，也初步了解了 defineStore 的功能。接下來會更深入核心了解 Options Store 跟 Setup Store 內部的實作。
 ---
 
 ## 前言
 
-> 本篇的 pinia 版本為 2.0.33
+> 本篇的 pinia 版本為 2.0.36
 
 在上一篇中我們看了 Pinia instance 的實作內容，也初步了解了 `defineStore` 的功能。接下來會更深入核心了解 Options Store 跟 Setup Store 內部的實作。
 
 本篇會介紹的內容有這些：
 
-- Options Store 的實作細節。
-- Setup Store 的實作細節。
+1. Options Store 的實作細節。
+2. Setup Store 的實作細節。
 
 ## Options Store
 
@@ -989,25 +989,6 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 
 ### 其他沒提到的部分
 
-**共用 Store（單例模式）**
-
-在前一篇有提到 Pinia 會把建立過的 Store instance 存在 `pinia._s` 這個「全域存取點」上，所以在 setup store 建立好 store 後只要這樣做就可以重複利用 Store instance 了：
-
-```ts
-function createSetupStore($id, setup, options, pinia, isOptionsStore) {
-  const store = reactive({
-    $id,
-    $onAction,
-    $patch,
-    $reset,
-    $subscribe,
-    $dispose,
-  })
-
-  pinia._s.set($id, store)
-}
-```
-
 **安裝 Plugin**
 
 ```ts
@@ -1045,6 +1026,21 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 
 **hydrate**
 
+這是一個 Options Store 用來補水的 API。以下為使用範例：
+
+```ts
+const useStore = defineStore('main', {
+  state: () => ({
+    n: useLocalStorage('key', 0)
+  }),
+  hydrate(storeState, initialState) {
+    storeState.n = useLocalStorage('key', 0)
+  }
+})
+```
+
+實作如下：
+
 ```ts
 function createSetupStore($id, setup, options, pinia, isOptionsStore) {
   if (
@@ -1054,6 +1050,25 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
   ) {
     options.hydrate(store.$state, initialState)
   }
+}
+```
+
+**共用 Store（單例模式）**
+
+在前一篇有提到 Pinia 會把建立過的 Store instance 存在 `pinia._s` 這個「全域存取點」上，所以在 setup store 建立好 store 後只要這樣做就可以重複利用 Store instance 了：
+
+```ts
+function createSetupStore($id, setup, options, pinia, isOptionsStore) {
+  const store = reactive({
+    $id,
+    $onAction,
+    $patch,
+    $reset,
+    $subscribe,
+    $dispose,
+  })
+
+  pinia._s.set($id, store)
 }
 ```
 
@@ -1068,6 +1083,12 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 Setup Store 的實作內容：
 
 - **初始化 state**，這裡在初始化時一樣需要考量 SSR 的問題，但不太一樣的是這裡會針對每一個屬性檢查是補水。
+- **包裝 actions**，這裡會將 action function 封裝，並且在執行 action 前後調用 callback function。
+- 實作：`store.$onAction`、`store.$subscribe`、`store.$patch`、`store.$state`、`store.$reset`、`store.$dispose`。
+
+深入了解 Pinia 的實作後，我們可以發現 Pinia 的實作其實很簡單，但也照顧到了非常多面向以及一些特殊案例，例如：Server Side Render、非同步等問題。但也因為篇幅考量，也將處理 HMR 的細節省都略了，另外還有一些 API 沒有提及或更詳細解析，這些部分有興趣歡迎與我討埨或是到 GitHub 上看更完整的原始碼！
+
+最後希望這篇文章可以讓大家對 Pinia 的實作有更深入的了解。
 
 ### 參考資料
 
