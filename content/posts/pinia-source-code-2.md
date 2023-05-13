@@ -6,7 +6,7 @@ tags:
 
 created: 2023-05-13T00:00:00.001Z
 image: https://og-image-mini-ghost.vercel.app/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20pinia.png?fontSize=72
-description: 在開發比較大型的專案時我們經常需要將一些「狀態」儲存到一個共用的地方，讓些狀態可以更容易的在各個元件之間使用。在上一篇的內容我們先看了 Pinia instance 上有哪些東西，也初步了解了 defineStore 的功能。接下來會更深入核心了解 Options Store 跟 Setup Store 內部的實作。
+description: Pinia 是目前 Vue 官方首推的狀態管理工具。這系列分享不會特別著重在如何使用 Pinia 而是深入剖析 Pinia 的原始碼，研究他的原始碼是如何撰寫的，從中吸收寶貴的經驗。在上一篇的內容我們先看了 Pinia instance 上有哪些東西，也初步了解了 defineStore 的功能。接下來會更深入核心了解 Options Store 跟 Setup Store 內部的實作。
 ---
 
 ## 前言
@@ -15,16 +15,16 @@ description: 在開發比較大型的專案時我們經常需要將一些「狀�
 
 在上一篇中我們看了 Pinia instance 的實作內容，也初步了解了 `defineStore` 的功能。接下來會更深入核心了解 Options Store 跟 Setup Store 內部的實作。
 
-本篇會介紹的內容有這些：
+本篇會深入研究的內容有如下：
 
 1. Options Store 的實作細節。
 2. Setup Store 的實作細節。
 
 ## Options Store
 
-如果有用過 Vuex 或是還沒有接觸過 Composition API 的話，Options Store 應該會是比較好上手的一個選擇，這也是官方建議可以優先嘗試看看的方向。
+如果有用過 Vuex 或是還沒有接觸過 Composition API 的話，Options Store 應該會是比較好上手的一個選擇，這也是官方建議可以優先嘗試看看的方式。
 
-如果選擇了 Options Store 在 `useStore` 內會選執行 `createOptionsStore`，我們來看看這裡面做了什麼。
+我們在第一篇知到，如果選擇了 Options Store 在 `useStore` 內會選執行 `createOptionsStore`，我們來看看這裡面做了什麼。
 
 ```js
 function createOptionsStore(id, options, pinia) {
@@ -77,7 +77,7 @@ function createOptionsStore(id, options, pinia) {
 
 ### 初始化 Options Store state
 
-這是是定義 state 的方法，我們需要定義一個 state function，並且會回傳一個物件。
+這是是定義 `state` 的方法，我們需要定義一個 state function，並且會回傳一個物件。
 
 ```ts
 export const useStore = defineStore('STORE_ID', {
@@ -128,11 +128,11 @@ export default defineNuxtPlugin((nuxtApp) => {
 })
 ```
 
-根據這段原始碼我們發現，這裡是為了要解決 Server Side Render（SSR）的問題。以 Nuxt 為例，在 Server 端時會先進行初始化，並且將 HTML 產出傳到前端。在這過程中會有一連串的資料請求，並且將取得商品的資料並存在 Store 裡面。
+根據這段原始碼我們發現，這裡是為了要解決 Server Side Render（SSR）的問題。以 Nuxt 為例，在 Server 端時會先進行初始化，並且將 HTML 產出傳到前端。在這過程中可能會經歷一連串的資料請求，並且將取得的資料並存在 Store 裡面。
 
-我們無法把 Pinia instance 透過請求送到前端，但為了讓 Client 端可以取得到這些資料，所以會把 Pinia instance 上的 state 儲存在 `nuxtApp.payload.pinia` 上，這樣在 Client 端就可以取得到這些在 Server 端已經準備好資料。
+為了讓 Client 端可以取得到這些資料，Nuxt 會在 Server 端時會將 Pinia instance 上的 `state` 同步在 `nuxtApp.payload.pinia` 上，而在 Client 端初始化時會將 `nuxtApp.payload.pinia` 的資料同步到 Pinia instance 上。
 
-如果 initialState 沒有資料我們定義的 state function 才會對 Pinia instance 上的 `state` 進行初始化。
+所以如果 `initialState` 沒有資料我們定義的 state function 才會對 Pinia instance 上的 `state` 進行初始化，否則則沿用。
 
 ```ts
 if (!initialState) {
@@ -144,7 +144,7 @@ if (!initialState) {
 }
 ```
 
-接著把 `pinia.state.value[id]` 的 Reactive 物件透過 `toRefs` 轉換裝著所有 Ref 資料的一般物件。
+接著把 `pinia.state.value[id]` 的 `Reactive` 物件透過 `toRefs` 轉換裝著所有 `Ref` 資料的一般物件。
 
 ```ts
 //                   這裡得資料是一個 Reactive ⬇️ 
@@ -212,7 +212,7 @@ function createOptionsStore(id, options, pinia) {
 }
 ```
 
-這裡會因為後蓋前，所以如果有相同的屬性， `state` 會被 `actions` 跟 `getters` 覆蓋。
+最後講整理好的屬性合併，這裡會因為後蓋前，所以如果有相同的屬性， `state` 會被 `actions` 跟 `getters` 覆蓋。
 
 ## Setup Store
 
@@ -221,10 +221,10 @@ function createOptionsStore(id, options, pinia) {
 | api                | 功能說明 |
 |--------------------|---------|
 | `store.$onAction`  | 設定一個 callback function，在 action 被執行前調用。 |
-| `store.$subscribe` | 設定一個 callback function，當 state 更新時調用。它會回傳一個用來移除該 callback function 的 function |
-| `store.$patch`     | 更新 state，可以值接賦值部分新的狀態或是使用 callback 取得當前 state 並修改。 |
-| `store.$state`     | 當前 store 的 state，如果對他直接設定 state，內部會使用 `store.$patch` 更新 |
-| `store.$reset`     | 重置整個 store 的 state，只是適用於 Options Store。 |
+| `store.$subscribe` | 設定一個 callback function，當 `state` 更新時調用。它會回傳一個用來移除該 callback function 的 function |
+| `store.$patch`     | 更新 `state，可以值接賦值部分新的狀態或是使用` callback 取得當前 state 並修改。 |
+| `store.$state`     | 當前 store 的 `state`，如果對他直接設定 state，內部會使用 `store.$patch` 更新 |
+| `store.$reset`     | 重置整個 store 的 `state`，只是適用於 Options Store。 |
 | `store.$dispose`   | 清除整個 store 的「副作用」，並且將 store 從 Pinia Instance 上將該 store 刪除。 |
 
 不過在一一介紹 api 之前，我們還是需要初始化 state。
@@ -233,7 +233,7 @@ function createOptionsStore(id, options, pinia) {
 
 在 `createOptionsStore` 的一開始我們因為要解決 SSR 的需求，所以會先檢查 `initialState` 是否存在，如果存在就沿用，不存在則需要初始化。
 
-這裡要做的事情大致相同，不過因為 Option Store 的 state  先前已經透過 `state` function 來初始化，所以如果是 Options Store 這裡不需要再做一次，僅判斷針對 Setup Store 是否需要初始化  `pinia.state.value[$id] = {}`。
+這裡要做的事情大致相同，不過因為 Option Store 的 `state`  先前已經透過 state function 來初始化，所以如果是 Options Store 這裡不需要再做一次，僅判斷針對 Setup Store 是否需要初始化  `pinia.state.value[$id] = {}`。
 
 ```ts
 // 忽略了 HMR 的部分
@@ -284,7 +284,6 @@ function shouldHydrate(obj: any) {
 }
 
 function createSetupStore($id, setup, options, pinia, isOptionsStore) {
-
   const setupStore = pinia._e.run(() => {
     scope = effectScope()
     return scope.run(() => setup())
@@ -318,11 +317,9 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
-前一篇有提到 Effect Scope，每一個 Store 的 setup 都會在 Pinia instance 上的 Effect Scope 中建立自己的 Effect Scope，形成一個樹狀的 Effect Scope。這樣的用意是一但當 Pinia instance 被銷毀時，可以透過這個樹狀的 Effect Scope 來清除所有的副作用。
+前一篇有提到 Effect Scope，每一個 Store 的 setup 都會在 Pinia instance 上的 Effect Scope 中建立自己的 Effect Scope，形成一個樹狀的 Effect Scope。這樣的用意是一但當 Pinia instance 被銷毀時，可以透過這個樹狀的 Effect Scope 關係來清除所有的副作用。
 
 接著 `setupStore` 是我們回傳的一個物件，這裡會將這個物件的每個屬性進行檢查，如果是 `Ref` 或是 `Reactive` 物件，就會進行初始化，如果是 `Computed` 則表示這是 getter 不需要額外處理。
-
-一樣這邊僅針對 Setup Store 進行初始化，如果是 Options Store 就不需要再做一次。
 
 ### 包裝 Actions
 
@@ -355,15 +352,15 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
-在剛剛 `setupStore` 的物件中，我們挑出了 `Ref` 或是 `Reactive` 作為 state。而剩下的如果型別為 `function` 的話，就會被當作 action 來處理。
+在剛剛 `setupStore` 的物件中，我們挑出了 state 以及 getter。而剩下的如果型別為 `function` 的話，就會被當作 action 來處理。
 
 在這裡很單純地透過 `wrapAction` 來包裝 action，並將包裝過後的 action 重新賦值回 `setupStore` 上。
 
-緊接著說明為何 action 需要包裝。
+但，為何 action 需要包裝。
 
 ### API: store.$onAction
 
-仔分析實作前我們可以先看看這個 API 的使用方式。
+開始分析實作前我們可以先看看這個 API 的使用方式。
 
 ```ts
 // 回傳一個 function 用來移除 callback function
@@ -372,8 +369,8 @@ const removeSubscribe = store.$onAction(
     name,    // action 名稱（物件上的屬性名稱）
     store,   // Store instance
     args,    // 調用 action 時傳入的參數
-    after,   // 在 action 成功後調用的 callback function
-    onError, // 在 action 失敗後調用的 callback function
+    after,   // 新增在 action 成功後調用的 callback function
+    onError, // 新增在 action 失敗後調用的 callback function
   }) => {
     // action 被調用時會觸發
 
@@ -473,7 +470,7 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
-所以我們只要在執行果後，依照狀況調用 `afterCallbackList` 或是 `onErrorCallbackList` 中的 callback function 就可以了。
+所以我們只要在執行果後，依照成功於否調用 `afterCallbackList` 或是 `onErrorCallbackList` 中的 callback function 就可以了。
 
 ```ts
 function createSetupStore($id, setup, options, pinia, isOptionsStore) {
@@ -541,10 +538,10 @@ const removeSubscribe = store.$subscribe((mutation, state) => {
   // 是否要在銷毀 store 時自動移除 callback function
   detached: true,
 
-  // 就是 `watch` 的 options
+  // 這邊就是 `watch` 的 options
   flush: 'post',
   immediate: false,
-  deep: true, // 預設為 true
+  deep: true, // <--- 預設為 true
 })
 ```
 
@@ -570,7 +567,7 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
-觸發 `subscriptions` 中的 callback function 有兩種方法，其中一種就是直接修改 state，例如：
+觸發 `subscriptions` 中的 callback function 有兩種方式，其中一種就是直接修改 `state`，例如：
 
 ```ts
 const store = useStore()
@@ -579,9 +576,9 @@ const store = useStore()
 store.count++
 ```
 
-另一種方法是透過 `store.$patch` 來修改 state，但後面再講。
+<!-- 另一個方式是透過 `store.$patch` 來修改 `state`，但後面再講。 -->
 
-要補捉直接修改 state 的最簡單方法就是 watch。所以我們可以對 `$subscribe` 稍微加工，。
+要補捉直接修改 `state` 的最簡單方法就是 `watch`。所以我們可以對 `$subscribe` 稍微加工，。
 
 ```ts
 function createSetupStore($id, setup, options, pinia, isOptionsStore) {
@@ -598,13 +595,7 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
         watch(
           () => pinia.state.value[$id],
           (state) => {
-            callback(
-              {
-                storeId: $id,
-                type: 'direct',
-              },
-              state
-            )
+            callback({ storeId: $id, type: 'direct' }, state)
           },
           //                ⬇️ 預設 deep 為 true
           Object.assign({}, $subscribeOptions, options)
@@ -623,11 +614,13 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
-這樣就可以補捉到直接修改 state 的行為了。但除了 直接修改之外，還有使用 `store.$patch(obj)` 跟 `store.$patch(() => {})` 兩種，這兩種行為是透過 `store.$patch` 來觸發的。
+這樣就可以補捉到直接修改 state 的行為了。
+
+另外一種觸發 `subscriptions` callback function 的做方式則是透過 `store.$patch` 修改 `state`。
 
 儘管這裡我們還沒有看到 `store.$patch` 的實作，但為了完整了解 `store.$subscribe` 的實作，我們先插入一點點 `store.$patch` 的實現。
 
-要實現透過 `store.$patch` 來觸發 `store.$subscribe` 的 callback function，其實很簡單，實作方法就跟前面提到的 `store.$onAction` 一樣，只要在 `store.$patch` 被呼使用時將`subscriptions` 中的 callback function 逐一執行就可以了。
+要實現透過 `store.$patch` 來觸發 `store.$subscribe` 的 callback function，其實很簡單，實作方法就跟前面提到的 `store.$onAction` 一樣，只要在 `store.$patch` 被呼使用時將 `subscriptions` 中的 callback function 逐一執行就可以了。
 
 ```ts
 function createSetupStore($id, setup, options, pinia, isOptionsStore) {
@@ -659,6 +652,7 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 
     // ... 
 
+    // 執行所有 callback function
     subscriptions.slice().forEach((callback) => {
       callback(subscriptionMutation, pinia.state.value[$id])
     })
@@ -666,9 +660,9 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
-到這裡 `store.$subscribe` 的實作就大致完成了，但我們會遇到一個問題。
+到這裡 `store.$subscribe` 的實作就大致完成了。
 
-當我們透過 `store.$patch` 修改 state 時，`subscriptions` 會被觸發兩次。
+但我們會遇到一個問題，當我們透過 `store.$patch` 修改 `state` 時，`subscriptions` 會被觸發兩次。
 
 ```ts
 store.$subscribe((mutation, state) => {
@@ -685,7 +679,7 @@ store.$patch({
 })
 ```
 
-原本寫在 `$subscribe` 中的 watch 也因為 state 的變化多執行了一次。所以我們需要一個開關，當 state 是透過 `store.$patch` 修改時在 watch 中不要執行 subscribes 中的 callback function。
+原本寫在 `$subscribe` 中的 `watch` 也因為 `state` 的變化多執行了一次。所以我們需要一個開關，當 `state` 是透過 `store.$patch` 修改時在 `watch` 中不要執行 `subscribes` 中的 callback function。
 
 ```ts
 function createSetupStore($id, setup, options, pinia, isOptionsStore) {
@@ -735,7 +729,7 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
-並且 `$subscribe` 中的 watch 也要加上這個開關。
+並且 `$subscribe` 中的 `watch` 也要加上這個開關。
 
 ```ts
 const store = reactive({
@@ -761,11 +755,11 @@ const store = reactive({
 })
 ```
 
-我們知道 watch 的第三個參數 options 可以設定 watch 的 callback function 何時被執行，預設為 `pre`。
+我們知道 `watch` 的第三個參數 `options` 可以設定 `watch` 的 callback function 何時被執行，預設為 `pre`。
 
-在預設狀態下 watch 的 callback function 會被推進 queue 裡面，非同步的執行，這樣就算我們一連更新多次響應資料，watch 的 callback function 也只會被執行一次。也因此 `isListening` 需要在 `nextTick` 後才打開，這樣就可以確保在 watch 的 callback function 判斷要忽略這次的執行後才恢復開關。
+在預設狀態下 `watch` 的 callback function 會被推進 queue 裡面，非同步的執行，這樣就算我們一連更新多次響應資料，`watch` 的 callback function 也只會被執行一次。也因此 `isListening` 需要在 `nextTick` 後才打開，這樣就可以確保在 `watch` 的 callback function 判斷要忽略這次的執行後才恢復開關。
 
-而 `isSyncListening` 則是用來控制 `flush` 為 `sync` 的 watch，這種 watch 的 callback function 會在資料一改變就馬上執行，所以我們可以直接在 `store.$patch` 的最後直接恢復開關。
+而 `isSyncListening` 則是用來控制 `flush` 為 `sync` 的 `watch`，這種 `watch` 的 callback function 會在資料一改變就馬上執行，所以我們可以直接在 `store.$patch` 的最後直接恢復開關。
 
 但問題又來了！<br>
 但問題又來了！<br>
@@ -787,15 +781,15 @@ patch object
 direct <--------- !!?
 ```
 
-為什麼會這樣，我們把事發經過一步一步攤開來看。
+為什麼會這樣，我們把事發經過一步一步攤開來看。（可搭配重現範例：[Pinia #1129 重現](https://stackblitz.com/edit/vitejs-vite-vuof7u?file=src%2FApp.vue){ target="_blank" }）
 
 1. 執行 `store.$patch({ count: 2 })` 在這時 `isListening` 被關閉。
 2. 等待微任務結束，並且執行 watch 的 callback function，不過這時候 `isListening` 是處於被關閉的狀態所以沒有做任何事情。
 3. 執行 `store.$patch({ count: 20 })` 在這時 `isListening` 維持被關閉。
 4. 進到第一次執行 `store.$patch` 的 `nextTick().then()` 裡面將 `isListening` 打開。
-5. 執行 watch 的 callback function，這時候 `isListening` 已經被打開，所以會執行 callback function。（抓到！！！）
+5. 執行 `watch` 的 callback function，這時候 `isListening` 已經被打開，所以會執行 callback function。（抓到你了！！！）
 
-原因是第一次執行 `store.$patch` 的 `nextTick().then()` 裡面先將 `isListening` 打開了，這時候對應的第二次的 watch 的 callback function 來說 `isListening` 已經被打開，所以會執行 subscribe 的 callback function。
+原來是因為第一次執行 `store.$patch` 的 `nextTick().then()` 裡面先將 `isListening` 打開了，這時候對應的第二次的 watch 的 callback function 來說 `isListening` 已經被打開，所以會執行 `subscriptions` 的 callback function。
 
 解決方法就是確保第二次（最後一次）的 `nextTick().then()` 才把 `isListening` 打開，我們需要一個方法來確認是否為最後一次執行的 `store.$patch`。
 
@@ -843,7 +837,6 @@ store.$patch((state) => {
 function createSetupStore($id, setup, options, pinia, isOptionsStore) {
   function $patch(partialStateOrMutator: (state: _DeepPartial<UnwrapRef<S>> | (UnwrapRef<S>) => void)): void {
 
-
     if (typeof partialStateOrMutator === 'function') {
       partialStateOrMutator(pinia.state.value[$id])
 
@@ -857,11 +850,11 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
-撇除掉訂閱的程式碼，這裡我們只要處理不同參數修改 state 的方式就可以了。
+撇除掉訂閱的程式碼，這裡我們只要處理不同參數修改 `state` 的方式就可以了。
 
 ### API: store.$state
 
-`store.$state` 的使用方式如下，順邊想想下邊面的操作的結果 $state 會變成什麼：
+`store.$state` 的使用方式如下，順邊想想下邊面的操作的結果 `store.$state` 會變成什麼：
 
 ```ts
 /**
@@ -983,7 +976,7 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
-在這裡 Pinia 僅僅將 store 從 Pinia instance 上刪除，並沒有將 store 的 `state` 刪除，所以如果我們在 `store.$dispose` 後再次使用 `useStore` 來取得 store，那麼這個新的 store 會使用舊的 `state`。
+在這裡 Pinia 僅僅將 Store instance 從 Pinia instance 上刪除，並沒有將 store 的 `state` 刪除，所以如果我們在 `store.$dispose` 後再次使用 `useStore` 來取得 store，那麼這個新的 store 會延用舊的 `state`。
 
 原因在 `state` 的初始化流程中，如果看到這裡已經印象模糊的話，可以回到上面的段落複習一下！
 
@@ -1086,11 +1079,11 @@ Setup Store 的實作內容：
 - **包裝 actions**，這裡會將 action function 封裝，並且在執行 action 前後調用 callback function。
 - 實作：`store.$onAction`、`store.$subscribe`、`store.$patch`、`store.$state`、`store.$reset`、`store.$dispose`。
 
-深入了解 Pinia 的實作後，我們可以發現 Pinia 的實作其實很簡單，但也照顧到了非常多面向以及一些特殊案例，例如：Server Side Render、非同步等問題。但也因為篇幅考量，也將處理 HMR 的細節省都略了，另外還有一些 API 沒有提及或更詳細解析，這些部分有興趣歡迎與我討埨或是到 GitHub 上看更完整的原始碼！
+深入了解 Pinia 的實作後，我們可以發現 Pinia 的實作其實很簡單，但也照顧到了非常多面向以及一些特殊案例，例如：Server Side Render、非同步等問題！最後希望這篇文章可以讓大家對 Pinia 的實作有更深入的了解。
 
-最後希望這篇文章可以讓大家對 Pinia 的實作有更深入的了解。
+因為篇幅考量，這裡將處理 HMR 的細節省全部略了，另外還有一些 API 沒有提及或更詳細探討，如果對這些部分有興趣歡迎與我討埨或是到 GitHub 上看更完整的原始碼！
 
 ### 參考資料
 
-- [Pinia | The intuitive store for Vue.js](https://pinia.vuejs.org)
-- [Patterns.dev - Singleton Pattern](https://www.patterns.dev/posts/singleton-pattern)
+- [Pinia | The intuitive store for Vue.js](https://pinia.vuejs.org){ target="_blank" }
+- [$subscribe handler invoked twice for single $patch operation #1129](https://github.com/vuejs/pinia/issues/1129){ target="_blank" }
