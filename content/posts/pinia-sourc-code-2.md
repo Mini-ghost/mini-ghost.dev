@@ -4,7 +4,7 @@ tags:
 - Vue
 - Pinia
 
-created: 2023-05-13T00:00:00.000Z
+created: 2023-05-13T00:00:00.001Z
 image: https://og-image-mini-ghost.vercel.app/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20pinia.png?fontSize=72
 description: 在開發比較大型的專案時我們經常需要將一些「狀態」儲存到一個共用的地方，讓些狀態可以更容易的在各個元件之間使用。在上一篇的內容我們先看了 Pinia instance 上有哪些東西，也初步了解了 defineStore 的功能。接下來會更深入核心了解 Options Store 跟 Setup Store 內部的實作。
 ---
