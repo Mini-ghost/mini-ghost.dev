@@ -235,9 +235,29 @@ function useStore(pinia) {
 
 ## 跨請求狀態污染（Cross-Request State Pollution）
 
-把 Pinia 的實例存在全域會不會有「跨請求狀態污染」的問題呢？
+跨請求狀態污染是什麼？
 
-在處理 Server Side Render（SSR） 時如果我們沒有正確的使用單例模式，任意將變數存在全域，可能會有「跨請求狀態污染」，但在這裡並不會！因為儘管 Pinia instance 被存在全域，但是每個請求都會從 `createSSRApp` 重新建立，也會重新建立 Pinia instance 並且透過 `setActivePinia` 覆蓋掉前一個請求建立的 Pinia instance，所以在這裡不用擔心跨請求狀態污染的問題。
+在處理 Server Side Render（SSR） 時如果我們任意將變數存在全域並且沒有正確的使用單例模式，可能會有「跨請求狀態污染」。例如：
+
+1. 第一個請求進到 Server，建立了一個全域的變數 `store`。
+2. 渲染畫面，過程中將共用狀態存到 `store` 裡面。
+3. 第二個請求進到 Server，發現 `store` 已經存在，直接使用 `store`。
+4. 渲染畫面，**使用了 `store` 裡面的共用狀態（污染！拿到別人的資料了！！！）**。
+
+以上，如果我們在 Server Side Render 時沒有正確的使用單例模式，嚴重一點就可能會有「跨請求狀態污染」的問題，輕微一點也可能造成記憶體洩漏。
+
+那把 Pinia 的實例存在全域會不會有「跨請求狀態污染」的問題呢？
+
+在這裡並不會！因為儘管 Pinia instance 被存在全域，但是每個請求都會從 `createSSRApp` 重新建立，也會重新建立 Pinia instance 並且透過覆蓋掉前一個請求建立的 Pinia instance，所以在這裡不用擔心跨請求狀態污染的問題。
+
+為了方便理解，我們來看看 Pinia 如何避免「跨請求狀態污染」的問題。
+
+1. 第一個請求進到 Server，建立 Pinia instance 存到全域的變數 `activePinia`。
+2. 渲染畫面，過程中將共用狀態存到 `activePinia` 中的 store 裡面。
+3. 第二個請求進到 Server，建立 Pinia instance 存到全域的變數 `activePinia`。
+4. 渲染畫面，過程中將共用狀態存到 `activePinia` 中的 store 裡面。
+
+可以看到每個請求都會建立一個新的 Pinia instance，並且存到全域的變數 `activePinia`，單例模式僅使用在存取 store，這樣就不會有「跨請求狀態污染」的問題了。
 
 ## 結語
 
@@ -249,3 +269,4 @@ function useStore(pinia) {
 
 - [Pinia | The intuitive store for Vue.js](https://pinia.vuejs.org){ target="_blank" }
 - [Patterns.dev - Singleton Pattern](https://www.patterns.dev/posts/singleton-pattern){ target="_blank" }
+- [Server-Side Rendering (SSR) | Vue.js #Cross-Request State Pollution](https://vuejs.org/guide/scaling-up/ssr.html#cross-request-state-pollution)
