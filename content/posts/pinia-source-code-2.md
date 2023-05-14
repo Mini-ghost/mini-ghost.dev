@@ -13,13 +13,11 @@ description: Pinia 是目前 Vue 官方首推的狀態管理工具。這系列�
 
 > 本篇的 pinia 版本為 2.0.36
 
-本篇會深入研究的內容有如下：
+如果有用過 Vuex 或是還沒有接觸過 Composition API 的話，Options Store 應該會是比較好上手的一個選擇，這也是官方建議可以優先嘗試看看的方式。
 
-1. Options Store 的實作細節。
+本篇將聚焦在 Options Store 的實作細節。
 
 ## Options Store
-
-如果有用過 Vuex 或是還沒有接觸過 Composition API 的話，Options Store 應該會是比較好上手的一個選擇，這也是官方建議可以優先嘗試看看的方式。
 
 我們在第一篇知到，如果選擇了 Options Store 在 `useStore` 內會選執行 `createOptionsStore`，我們來看看這裡面做了什麼。
 
@@ -72,7 +70,7 @@ function createOptionsStore(id, options, pinia) {
 
 我們一步一步往下看。
 
-### 初始化 Options Store state
+### 初始化 state
 
 這是是定義 `state` 的方法，我們需要定義一個 state function，並且會回傳一個物件。
 
@@ -156,8 +154,9 @@ export const useCounterStore = defineStore('STORE_ID', {
   state: () => ({
     count: 0,
   }),
-  // ⬇️ Options API 的 getters
+  
   // getter 會接收 state 當作參數，或是透過 `this` 來取得 state
+  // ⬇️ Options API 的 getters
   getters: {
     doubleCount: (state) => state.count * 2,
 
@@ -218,9 +217,9 @@ function createOptionsStore(id, options, pinia) {
 
 - **初始化 state**，這裡在初始化時需要考量 SSR 的問題，所以僅在 `pinia.state.value[id]` 不存在時才會初始化 state。
 - **整理 getters**，這裡會使用 `Function.prototype.call` 讓 getter 的 `this` 指向 Store instance。
-- 合併 state、actions 跟 getters，並且使用 `createSetupStore()` 來實際建立 Store instance。
+- 合併 state、actions 跟 getters，並且使用 `createSetupStore` 來實際建立 Store instance。
 
-Options 裡面做的事情非常單純，而且也很容易理解；礙於如果要在這一篇也交代完 Setup Stor 的實作內容篇幅會有點重，因此講 Setup Store 的內容獨立出來，下一篇將深入核心研究  Setup Store 的實作細節。
+看完 `createOptionsStore` 的實作後發現裡面處理的事情非常單純，但礙於篇幅的關係，如果要在這一篇也交代完 `createSetupStore` 的實作細節內容會太長。因此將 Setup Store 的內容獨立出來，下一篇將深入核心研究 Setup Store 的實作細節。
 
 ### 參考資料
 

@@ -13,9 +13,7 @@ description: Pinia 是目前 Vue 官方首推的狀態管理工具。這系列�
 
 > 本篇的 pinia 版本為 2.0.36
 
-本篇會深入研究的內容有如下：
-
-1. Setup Store 的實作細節。
+如果熟悉 Composition API 的話，Setup Store 在使用上會有非常一致的體驗。而 `createSetupStore` 我個人認為算是 Pinia 中最核心的部分，幾乎所有的功能都是在這裡實作的。在本篇將會深入了解 Setup Store 的實作細節。
 
 
 ## Setup Store
@@ -33,7 +31,7 @@ description: Pinia 是目前 Vue 官方首推的狀態管理工具。這系列�
 
 不過在一一介紹 api 之前，我們還是需要初始化 state。
 
-### 初始化 Setup Store state
+### 初始化 state
 
 在 `createOptionsStore` 的一開始我們因為要解決 SSR 的需求，所以會先檢查 `initialState` 是否存在，如果存在就沿用，不存在則需要初始化。
 
@@ -121,7 +119,7 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
-前一篇有提到 Effect Scope，每一個 Store 的 setup 都會在 Pinia instance 上的 Effect Scope 中建立自己的 Effect Scope，形成一個樹狀的 Effect Scope。這樣的用意是一但當 Pinia instance 被銷毀時，可以透過這個樹狀的 Effect Scope 關係來清除所有的副作用。
+第一篇有提到 Effect Scope，每一個 Store 的 setup 都會在 Pinia instance 上的 Effect Scope 中建立自己的 Effect Scope，形成一個樹狀的 Effect Scope。這樣的用意是一但當 Pinia instance 被銷毀時，可以透過這個樹狀的 Effect Scope 關係來清除所有的副作用。
 
 接著 `setupStore` 是我們回傳的一個物件，這裡會將這個物件的每個屬性進行檢查，如果是 `Ref` 或是 `Reactive` 物件，就會進行初始化，如果是 `Computed` 則表示這是 getter 不需要額外處理。
 
@@ -559,17 +557,15 @@ const store = reactive({
 })
 ```
 
-我們知道 `watch` 的第三個參數 `options` 可以設定 `watch` 的 callback function 何時被執行，預設為 `pre`。
+按照 `watch` 的 API，第三個參數 `options` 中的 `flush` 可以設定 `watch` 的 callback function 在何時被執行，預設行為為準備更新畫面前：`pre`。
 
-在預設狀態下 `watch` 的 callback function 會被推進 queue 裡面，非同步的執行，這樣就算我們一連更新多次響應資料，`watch` 的 callback function 也只會被執行一次。也因此 `isListening` 需要在 `nextTick` 後才打開，這樣就可以確保在 `watch` 的 callback function 判斷要忽略這次的執行後才恢復開關。
-
-而 `isSyncListening` 則是用來控制 `flush` 為 `sync` 的 `watch`，這種 `watch` 的 callback function 會在資料一改變就馬上執行，所以我們可以直接在 `store.$patch` 的最後直接恢復開關。
+`isListening` 是用來控制 `flush` 為 `pre` 的 watch，因此 `isListening` 需要在 `nextTick` 後才打開，這樣就才以確保在 `watch` 執行時，知道要忽略這次的 callback 執行；而 `isSyncListening` 則是用來控制 `flush` 為 `sync` 的 watch，這種 watch 會在資料一改變就馬上執行，所以我們可以直接在 `store.$patch` 的最後直接恢復開關。
 
 但問題又來了！<br>
 但問題又來了！<br>
 但問題又來了！<br>
 
-現在的程式碼遇在下列情況會有問題：
+現在的程式碼在這個時候會出問題（可搭配重現範例：[Pinia #1129 重現](https://stackblitz.com/edit/vitejs-vite-vuof7u?file=src%2FApp.vue){ target="_blank" }）：
 
 ```ts
 store.$patch({ count: 2 })
@@ -585,7 +581,7 @@ patch object
 direct <--------- !!?
 ```
 
-為什麼會這樣，我們把事發經過一步一步攤開來看。（可搭配重現範例：[Pinia #1129 重現](https://stackblitz.com/edit/vitejs-vite-vuof7u?file=src%2FApp.vue){ target="_blank" }）
+為什麼會這樣，我們把事發經過一步一步攤開來看。
 
 1. 執行 `store.$patch({ count: 2 })` 在這時 `isListening` 被關閉。
 2. 等待微任務結束，並且執行 watch 的 callback function，不過這時候 `isListening` 是處於被關閉的狀態所以沒有做任何事情。

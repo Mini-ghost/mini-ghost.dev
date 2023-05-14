@@ -209,6 +209,7 @@ function useStore(pinia) {
 
   pinia = activePinia
 
+  //  ⬇️ 如果沒有建立過 Store instance 就建立一個
   if (!pinia._s.has(id)) {
     if (isSetupStore) {
       createSetupStore(id, setup, options, pinia)
@@ -217,7 +218,8 @@ function useStore(pinia) {
     }
   }
 
-  const store: StoreGeneric = pinia._s.get(id)!
+  // 透過 id 取得 Store instance
+  const store = pinia._s.get(id)
 
   return store
 }
@@ -263,7 +265,7 @@ function useStore(pinia) {
 
 在這一篇我們了解了 `createPinia` 以及 `defineStore` 的設計，也知道了 `useStore` 是如何建立 store 並且讓它可以跨元件共享狀態的。除此之外也提到了 Effect Scoped 以及使用單例模式的概念，以及在處理 SSR 時如何避免跨請求狀態污染的問題。
 
-接下來我們會進入到 `createSetupStore` 與 `createOptionsStore`。
+接下來我們會進入到 `createOptionsStore` 的實作探討。
 
 ### 參考資料
 
