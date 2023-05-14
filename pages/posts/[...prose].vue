@@ -12,9 +12,9 @@ useHead(() => {
   const content = post.value;
   if (content == null) return {};
 
-  const title = `${post.value.title} | Alex Liu`;
-  const description = post.value.description;
-  const image = post.value.image;
+  const title = `${content.title} | Alex Liu`;
+  const description = content.description;
+  const image = content.image;
 
   return {
     title,
@@ -74,19 +74,19 @@ useHead(() => {
         innerHTML: JSON.stringify({
           '@context': 'http://schema.org',
           '@type': 'BlogPosting',
-          description: post.value.description,
-          datePublished: post.value.created,
-          dateModified: post.value.created,
+          description: content.description,
+          datePublished: content.created,
+          dateModified: content.created,
           author: {
             '@type': 'Person',
             name: 'Alex Liu（Han-Zhang Liu）',
           },
           publisher: {
             '@type': 'Organization',
-            name: post.value.title,
+            name: title,
           },
-          headline: post.value.title,
-          image: post.value.image,
+          headline: title,
+          image,
           mainEntityOfPage: {
             '@type': 'WebPage',
             '@id': fullPath.value,
