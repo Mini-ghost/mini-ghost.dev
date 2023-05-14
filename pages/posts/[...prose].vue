@@ -4,52 +4,124 @@ import { withoutTrailingSlash } from 'ufo';
 import format from '@/helper/format';
 
 const route = useRoute();
-const path = computed(() => withoutTrailingSlash(route.path));
-
-// TODO 整合到 <ContentDoc> 裡面
-const { data: surround } = await useAsyncData(
-  `CONTENT_SURROUND:${path.value}`,
-  () =>
-    queryContent('/posts/')
-      .where({ _partial: false })
-      .only(['_path', 'title'])
-      .sort({ created: 1 })
-      .findSurround(path.value)
+const { post, surround, fullPath } = await useProse(() =>
+  withoutTrailingSlash(route.path)
 );
+
+useHead(() => {
+  const content = post.value;
+  if (content == null) return {};
+
+  const title = `${post.value.title} | Alex Liu`;
+  const description = post.value.description;
+  const image = post.value.image;
+
+  return {
+    title,
+    meta: [
+      {
+        name: 'description',
+        content: description,
+      },
+
+      // og
+      {
+        property: 'og:title',
+        content: title,
+      },
+      {
+        property: 'og:description',
+        content: description,
+      },
+      {
+        property: 'og:image',
+        content: image,
+      },
+      {
+        property: 'og:url',
+        content: fullPath.value,
+      },
+      {
+        property: 'og:type',
+        content: 'article',
+      },
+
+      // twitter
+      {
+        name: 'twitter:title',
+        content: title,
+      },
+      {
+        name: 'twitter:description',
+        content: description,
+      },
+      {
+        name: 'twitter:card',
+        content: 'summary_large_image',
+      },
+      {
+        name: 'twitter:image:src',
+        content: image,
+      },
+      {
+        name: 'twitter:url',
+        content: fullPath.value,
+      },
+    ],
+    script: [
+      {
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify({
+          '@context': 'http://schema.org',
+          '@type': 'BlogPosting',
+          description: post.value.description,
+          datePublished: post.value.created,
+          dateModified: post.value.created,
+          author: {
+            '@type': 'Person',
+            name: 'Alex Liu（Han-Zhang Liu）',
+          },
+          publisher: {
+            '@type': 'Organization',
+            name: post.value.title,
+          },
+          headline: post.value.title,
+          image: post.value.image,
+          mainEntityOfPage: {
+            '@type': 'WebPage',
+            '@id': fullPath.value,
+          },
+        }),
+      },
+    ],
+  };
+});
 </script>
 
 <template>
-  <ContentDoc>
-    <template #default="{ doc, excerpt }">
-      <ContentMeta
-        :title="doc.title"
-        :description="doc.description"
-        :image="doc.image"
-      />
-      <article class="prose max-w-21cm w-11/12 mx-auto">
+  <div>
+    <template v-if="post">
+      <div class="prose max-w-21cm w-11/12 mx-auto">
         <header>
           <h1 class="mt-0 text-[1.75rem] lg:text-[2.25rem] leading-relaxed">
-            <NuxtLink :to="doc._path">
-              {{ doc.title }}
+            <NuxtLink :to="post._path">
+              {{ post.title }}
             </NuxtLink>
           </h1>
           <div class="text-sm text-gray/60">
-            <time :datetime="doc.created">
-              {{ format(doc.created) }}
+            <time :datetime="post.created">
+              {{ format(post.created) }}
             </time>
             •
             <span>
-              {{ doc.readingTime.text }}
+              {{ post.readingTime.text }}
             </span>
           </div>
-          <p>{{ doc.description }}</p>
+          <p>{{ post.description }}</p>
         </header>
 
-        <ContentRenderer
-          :value="doc"
-          :excerpt="excerpt"
-        />
-      </article>
+        <ContentRenderer :value="post" />
+      </div>
       <div class="max-w-21cm w-11/12 mx-auto mt-16 pb-16 lg:pb-32">
         <div class="grid grid-cols-2 gap-x-4 border-t border-white border-opacity-20 pt-8">
           <template v-if="surround && surround![0]">
@@ -75,7 +147,7 @@ const { data: surround } = await useAsyncData(
         </div>
       </div>
     </template>
-    <template #empty>
+    <template v-else>
       <div class="max-w-21cm w-11/12 mx-auto pb-16 lg:pb-32">
         <span>
           NOT FONT | 
@@ -88,7 +160,7 @@ const { data: surround } = await useAsyncData(
         </NuxtLink>
       </div>
     </template>
-  </ContentDoc>
+  </div>
 </template>
 
 <style lang="scss">
