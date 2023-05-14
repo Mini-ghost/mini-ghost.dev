@@ -225,7 +225,7 @@ function useStore(pinia) {
 
 每當 `useStore` 被執行時，會先使用 `defineStore` 傳入的 `id` 在 `pinia._s` 中尋找是否有建立過的 Store instance，如果有就直接回傳，如果沒有就建立一個新的 store，並且存放在 `_s` 中，這樣就可以達到跨元件共享狀態的效果了。
 
-單利模式在實作上有細分成幾個實作方式，像是積極單例（Eager Singleton）、惰性單例（Lazy Singleton），這裡我們使用的是惰性單例，只有在真正需要時才會建立 Store instance，這樣可以節省一些資源。
+單例模式在實作上有細分成幾個實作方式，像是積極單例（Eager Singleton）、惰性單例（Lazy Singleton），這裡我們使用的是惰性單例，只有在真正需要時才會建立 Store instance，這樣可以節省一些資源。
 
 ### 傳入 Pinia instance？
 

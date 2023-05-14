@@ -212,19 +212,19 @@ function createOptionsStore(id, options, pinia) {
 }
 ```
 
-最後講整理好的屬性合併，這裡會因為後蓋前，所以如果有相同的屬性， `state` 會被 `actions` 跟 `getters` 覆蓋。
+最後將整理好的屬性合併，這裡會因為後蓋前，所以如果有相同的屬性， `state` 會被 `actions` 跟 `getters` 覆蓋。
 
 ## Setup Store
 
-`createSetupStore` 實作含型別、HMR、著解等有 500 多行，也因為大部分會用到的 api 都集中在這裡面，所以我會先列出這裡面有實做到的 api，並且在後面逐一解釋。
+`createSetupStore` 實作含型別、HMR、註解等有 500 多行，也因為大部分會用到的 api 都集中在這裡面，所以我會先列出這裡面有實做到的 api，並且在後面逐一解釋。
 
 | api                | 功能說明 |
 |--------------------|---------|
 | `store.$onAction`  | 設定一個 callback function，在 action 被執行前調用。 |
-| `store.$subscribe` | 設定一個 callback function，當 `state` 更新時調用。它會回傳一個用來移除該 callback function 的 function |
-| `store.$patch`     | 更新 `state，可以值接賦值部分新的狀態或是使用` callback 取得當前 state 並修改。 |
-| `store.$state`     | 當前 store 的 `state`，如果對他直接設定 state，內部會使用 `store.$patch` 更新 |
-| `store.$reset`     | 重置整個 store 的 `state`，只是適用於 Options Store。 |
+| `store.$subscribe` | 設定一個 callback function，當 state 更新時調用。它會回傳一個用來移除該 callback function 的 function |
+| `store.$patch`     | 更新 state，可以值接賦值部分新的狀態或是使用 callback 取得當前 state 並修改。 |
+| `store.$state`     | 當前 store 的 state，如果對他直接設定 state，內部會使用 `store.$patch` 更新 |
+| `store.$reset`     | 重置整個 store 的 state，只是適用於 Options Store。 |
 | `store.$dispose`   | 清除整個 store 的「副作用」，並且將 store 從 Pinia Instance 上將該 store 刪除。 |
 
 不過在一一介紹 api 之前，我們還是需要初始化 state。
@@ -259,7 +259,7 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
-如同在 SSR 部分提到的問題，如果直接使用 `setup` function 產生的 state 作為初始值，那就可能會有 hydration error 的問題：
+如同前面提到在 Server Side Render 會遇到的問題，如果直接使用 `setup` function 產生的 state 作為初始值，那就可能會有 hydration error 的問題：
 
 ```ts
 const useStore = defineStore('SETUP_STORE', () => {
