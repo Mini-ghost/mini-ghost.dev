@@ -17,7 +17,7 @@ useHead(() => {
   const image = content.image;
 
   return {
-    title,
+    title: content.title,
     meta: [
       {
         name: 'description',

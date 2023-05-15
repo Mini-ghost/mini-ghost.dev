@@ -3,7 +3,7 @@ import format from '@/helper/format';
 
 const { posts } = await usePosts();
 
-const title = 'Blog | Alex Liu';
+const title = 'Blog';
 const description =
   '嗨！我是 Alex Liu，這裡記錄了我自己技術開發上的一些心得、過程。目前主要開發以 Vue.js 搭配 TypeScript 為主，是一個追求有趣技術的偏執狂！';
 
@@ -17,7 +17,7 @@ useHead(() => {
       },
       {
         property: 'og:title',
-        content: title,
+        content: `${title} | Alex Liu`,
       },
       {
         property: 'og:description',
@@ -25,7 +25,7 @@ useHead(() => {
       },
       {
         name: 'twitter:title',
-        content: title,
+        content: `${title} | Alex Liu`,
       },
       {
         name: 'twitter:description',
@@ -39,7 +39,7 @@ useHead(() => {
 <template>
   <div class="max-w-21cm w-11/12 mx-auto space-y-6 lg:pt-16 pb-16 lg:pb-32">
     <h1 class="text-3xl font-bold">
-      Blog
+      {{ title }}
     </h1>
 
     <p class="opacity-50 leading-loose">
