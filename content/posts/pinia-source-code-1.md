@@ -229,41 +229,87 @@ function useStore(pinia) {
 
 單例模式在實作上有細分成幾個實作方式，像是積極單例（Eager Singleton）、惰性單例（Lazy Singleton），這裡我們使用的是惰性單例，只有在真正需要時才會建立 Store instance，這樣可以節省一些資源。
 
-### 傳入 Pinia instance？
-
-我們大多數在使用 `useStore` 時並不會將 Pinia instance 傳入。如果使用時沒有傳入 Pinia instance  這時候 `useStore` 會嘗試透過 `inject` 拿到 Pinia instance，這也意味著 `useStore` 只能在 setup 裡面使用？
-
-不，因為就算無法透過 `inject` 取得 Pinia instance，我們還有 `activePinia`，這個是在 Pinia install 時透過 `setActivePinia(pinia)` 寫入的，有了 `activePinia` 就可以讓我們不受到 `inject` 的使用限制，在任意地方呼叫 `useStore` 了（當然必須在 Pinia instance 被 Vue install 之後拉！）。
 
 ## 跨請求狀態污染（Cross-Request State Pollution）
 
-跨請求狀態污染是什麼？
+在上面的程式碼當中我們可以看到 `useStore` 接受傳入一個 Pinia instance 的參數，那為什麼 `useStore` 會接受傳入 Pinia instance 的參數呢？
 
-在處理 Server Side Render（SSR） 時如果我們任意將變數存在全域並且沒有正確的使用單例模式，可能會有「跨請求狀態污染」。例如：
+```ts
+//    可以傳入 pinia ⬇️ 
+function useStore(pinia) {
+  const currentInstance = getCurrentInstance()
+  pinia = pinia || (currentInstance && inject(piniaSymbol, null))
 
-1. 第一個請求進到 Server，建立了一個全域的變數 `store`。
-2. 渲染畫面，過程中將共用狀態存到 `store` 裡面。
-3. 第二個請求進到 Server，發現 `store` 已經存在，直接使用 `store`。
-4. 渲染畫面，**使用了 `store` 裡面的共用狀態（污染！拿到別人的資料了！！！）**。
+  if (pinia) setActivePinia(pinia)
 
-以上，如果我們在 Server Side Render 時沒有正確的使用單例模式，嚴重一點就可能會有「跨請求狀態污染」的問題，輕微一點也可能造成記憶體洩漏。
+  pinia = activePinia
+}
+```
 
-那把 Pinia 的實例存在全域會不會有「跨請求狀態污染」的問題呢？
+在處理 Server Side Render（SSR） 時如果我們任意將變數存在全域就可能會有「跨請求狀態污染」。但跨請求狀態污染是什麼？我們用下面例子來說明：
 
-在這裡並不會！因為儘管 Pinia instance 被存在全域，但是每個請求都會從 `createSSRApp` 重新建立，也會重新建立 Pinia instance 並且透過覆蓋掉前一個請求建立的 Pinia instance，所以在這裡不用擔心跨請求狀態污染的問題。
+1. 請求 A 進到 Server，建立了一個 Pinia instance 並存到全域。
+2. 請求 A 準備渲染畫面，過程中執行非同步請求。
+3. 請求 B 進到 Server，建立了一個 Pinia instance 並存到全域。
+4. 請求 B 準備渲染畫面，過程中執行非同步請求。
+5. 請求 A 的非同步結束，開始渲染。渲染過程中將 Store instance 存到 Pinia instance 裡面並寫了一些資料。
+6. 請求 B 的非同步結束，開始渲染。因為 Store instance 已經存在（拿到請求 A 的 Pinia instance）所以直接使用。
 
-為了方便理解，我們來看看 Pinia 如何避免「跨請求狀態污染」的問題。
+所以，如果在 Component 的 setup 裡面使用的話我們可以使用 `inject` 拿到在當前 Vue instance 上的 Pinia instance。但如果不是在 Component 的 setup 裡面使用的話呢？
 
-1. 第一個請求進到 Server，建立 Pinia instance 存到全域的變數 `activePinia`。
-2. 渲染畫面，過程中將共用狀態存到 `activePinia` 中的 store 裡面。
-3. 第二個請求進到 Server，建立 Pinia instance 存到全域的變數 `activePinia`。
-4. 渲染畫面，過程中將共用狀態存到 `activePinia` 中的 store 裡面。
+我們拿到的 Pinia instance 可能是其他請求建立的，這樣就會有跨請求狀態污染的問題。
 
-可以看到每個請求都會建立一個新的 Pinia instance，並且存到全域的變數 `activePinia`，單例模式僅使用在存取 store，這樣就不會有「跨請求狀態污染」的問題了。
+```ts
+router.beforeEach((to) => {
+  // 這裡有可能拿到的 Pinia instance 是其他請求建立的
+  const main = useStore()
+
+  // ...
+})
+```
+
+為了避免這個問題，我們可以在 `useStore` 中接受傳入 Pinia instance 的參數，如果有傳入就使用傳入的 Pinia instance，如果沒有就使用當前 Vue instance 上的 Pinia instance，或是全域的 `activePinia`。
+
+```ts
+function useStore(pinia) {
+  const currentInstance = getCurrentInstance()
+
+  //        ⬇️ 這裡會先嘗試使用傳入的 Pinia instance
+  pinia = pinia || (currentInstance && inject(piniaSymbol, null))
+
+  if (pinia) setActivePinia(pinia)
+
+  pinia = activePinia
+}
+```
+
+這樣樣在 Component 的 setup 以外的地方我們就有辦法確保使用的是當前請求建立的 Pinia instance 了。
+
+```ts
+// https://pinia.vuejs.org/ssr/#using-the-store-outside-of-setup
+router.beforeEach((to) => {
+  // ✅ This will work make sure the correct store is used for the
+  // current running app
+  const main = useMainStore(pinia)
+
+  if (to.meta.requiresAuth && !main.isLoggedIn) return '/login'
+})
+```
+
+上面的範例是使用 vue-router 的作為範例，在 vue-router v4.1.6 不傳入 Pinia instance 會有全域變數的問題，但在 v4.2.0 之後就不會有這個問題了。
+
+在讀這一段文件時我也疑惑很久，感謝來自 vue-router 同時是 Pinia 作者的回答：
+
+> On SSR, each request creates an app with its own router and pinia <br />
+> by not passing the instnance there is a risk of cross request state pollution <br />
+> but in the latest version of Vue Router, passing the pinia state is no longer needed <br />
+> <br />
+> 弱弱翻譯： <br />
+> 在 Server Side Render（SSR）中，每個請求都會建立一個具有自己的 router 和 pinia instance 的 app。如果不在這裡傳遞 pinia instance，就會存在跨請求狀態污染的風險。但在最新版本的 Vue Router 中，不再需要傳遞 Pinia 狀態。
 
 ## 結語
 
-在這一篇我們了解了 `createPinia` 以及 `defineStore` 的設計，也知道了 `useStore` 是如何建立 store 並且讓它可以跨元件共享狀態的。除此之外也提到了 Effect Scoped 以及使用單例模式的概念，以及在處理 SSR 時如何避免跨請求狀態污染的問題。
+在這一篇我們了解了 `createPinia` 以及 `defineStore` 的設計，也知道了 `useStore` 是如何建立 store 並且讓它可以跨元件共享狀態的。除此之外也提到了 Effect Scoped 以及使用單例模式的概念，以及 Pinia 在處理 SSR 時如何避免跨請求狀態污染的問題。
 
 接下來我們會進入到 `createOptionsStore` 的實作探討。
 

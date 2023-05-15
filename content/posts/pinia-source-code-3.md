@@ -217,6 +217,8 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
   // ⬇️ 包裝 action function
   function wrapAction(name, action) {
     return function () {
+      setActivePinia(pinia) // 這個在上一篇的 getter 中有提到，這裡就不多說了
+
       const args = Array.from(arguments)
 
       actionSubscriptions.slice().forEach((callback) => {
@@ -246,6 +248,8 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 
   function wrapAction(name, action) {
     return function () {
+      setActivePinia(pinia)
+
       const args = Array.from(arguments)
 
       const afterCallbackList = []
