@@ -373,6 +373,49 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
+不過我們還需要時做 `{ detached: true }` 的功能，當 `detached` 為 `true` 時，他就「不會」在銷毀 store 時自動移除 callback function。
+
+```vue
+<script setup>
+const store = useStore()
+
+// 即使在 component 銷毀後，這訂個 subscription 也會保留
+store.$subscribe(callback, { detached: true })
+</script>
+```
+
+為了時做這個功能，我們需要在 `store.$subscribe` 中加入一些邏輯處理。並且使用當 Effect Scope 被銷毀時會觸發的 hook：`onScopeDispose`。`onScopeDispose` 可以想像像是 `onUnmounted`，但是他是在 Effect Scope 被銷毀時觸發，而每個元件都有自己的 Effect Scoped，所以元件在銷毀時也會銷毀自身的 Effect Scope 。
+
+```ts
+function createSetupStore($id, setup, options, pinia, isOptionsStore) {
+  const subscriptions: SubscriptionCallback<S>[] = markRaw([])
+
+  const store = reactive({
+    // ...
+    $subscribe(callback, options) {
+      subscriptions.push(callback)
+
+      const removeSubscription () => {
+        const index = subscriptions.indexOf(callback)
+        if (index > -1) {
+          subscriptions.splice(index, 1)
+        }
+      }
+
+      // 依照上面範例 
+      // 這裡的 Current Scope 為該 component 的 Effect Scope
+      if (!options?.detached && getCurrentScope()) {
+
+        // 當 Current Scope 銷毀時執行 removeSubscription
+        onScopeDispose(removeSubscription)
+      }
+
+      return removeSubscription
+    },
+  })
+}
+```
+
 觸發 `subscriptions` 中的 callback function 有兩種方式，其中一種就是直接修改 `state`，例如：
 
 ```ts
@@ -381,8 +424,6 @@ const store = useStore()
 // 直接修改 state
 store.count++
 ```
-
-<!-- 另一個方式是透過 `store.$patch` 來修改 `state`，但後面再講。 -->
 
 要補捉直接修改 `state` 的最簡單方法就是 `watch`。所以我們可以對 `$subscribe` 稍微加工，。
 
@@ -857,6 +898,7 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 ```ts
 function createSetupStore($id, setup, options, pinia, isOptionsStore) {
   const store = reactive({
+    _p: pinia,
     $id,
     $onAction,
     $patch,
@@ -869,12 +911,48 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
+**markRaw**
+
+在上一部份我們看到了 Pinia instance 會被以私有屬性的方式存到 Store instance 上，這裡我們可以使用 `markRaw` 來避免 Pinia instance 被 reactive。
+
+```ts
+function createSetupStore($id, setup, options, pinia, isOptionsStore) {
+  const store = reactive({
+    _p: markRaw(pinia),
+    $id,
+    $onAction,
+    $patch,
+    $reset,
+    $subscribe,
+    $dispose,
+  })
+
+  pinia._s.set($id, store)
+}
+```
+
+不過實際上這裡的 `markRaw` 是被寫在第一篇得 `createPinia` 裡面
+
+```ts
+export function createPinia(): Pinia {
+
+  let _p = []
+  let toBeInstalled = []
+
+  const pinia: Pinia = markRaw({
+    // 略
+  })
+
+  return pinia
+}
+```
+
 ## 結語
 
 綜合以上的內容，我們可以整理出 Setup Store 的實作內容：
 
-- **初始化 state**，這裡在初始化時一樣需要考量 SSR 的問題，但不太一樣的是這裡會針對每一個屬性檢查是補水。
-- **包裝 actions**，這裡會將 action function 封裝，並且在執行 action 前後調用 callback function。
+- **初始化 state**，這裡在初始化時一樣需要考量 SSR 的 hydration 問題，但不太一樣的部分是這裡會針對每一個屬性檢查是補水。
+- **包裝 actions**，在這裡會將 action function 封裝，並且在執行 action 前後調用 `store.$onAction` 的 subscription function；另外雖然這一篇沒有細講跨請求狀態污染的議題，但是每次在呼叫 action 前我們還是需要 `setActivePinia(pinia)` 來避免污染的問題，詳情可以回顧第二篇「整理 getters」的部分。
 - 實作：`store.$onAction`、`store.$subscribe`、`store.$patch`、`store.$state`、`store.$reset`、`store.$dispose`。
 
 深入了解 Pinia 的實作後，我們可以發現 Pinia 的實作其實很簡單，但也照顧到了非常多面向以及一些特殊案例，例如：Server Side Render、非同步等問題！最後希望這篇文章可以讓大家對 Pinia 的實作有更深入的了解。
@@ -884,4 +962,6 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 ### 參考資料
 
 - [Pinia | The intuitive store for Vue.js](https://pinia.vuejs.org){ target="_blank" }
+- [RFC - Reactivity Effect Scope](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md){ target="_blank" }
 - [$subscribe handler invoked twice for single $patch operation #1129](https://github.com/vuejs/pinia/issues/1129){ target="_blank" }
+- [Server-Side Rendering (SSR) | Vue.js #Cross-Request State Pollution](https://vuejs.org/guide/scaling-up/ssr.html#cross-request-state-pollution){ target="_blank" }

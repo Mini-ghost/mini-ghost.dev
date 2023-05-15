@@ -298,4 +298,5 @@ function createOptionsStore(id, options, pinia) {
 ### 參考資料
 
 - [Pinia | The intuitive store for Vue.js](https://pinia.vuejs.org){ target="_blank" }
+- [Server-Side Rendering (SSR) | Vue.js #Cross-Request State Pollution](https://vuejs.org/guide/scaling-up/ssr.html#cross-request-state-pollution){ target="_blank" }
 

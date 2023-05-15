@@ -37,35 +37,39 @@ app.use(pinia)
 app.mount('#app')
 ```
 
-我們來看看 `createPinia()` 實作的程式碼：
+我們來看看 `createPinia` 實作的程式碼：
 
 ### 建立 Effect Scope
+
+當我們開始研究 `createPinia` 的實作，馬上就會看到一個陌生的 API：`effectScope`，這是 Vue 3.2 之後新增的 API。
 
 ```ts
 export function createPinia(): Pinia {
   const scope = effectScope(true)
   const state = scope.run(() => ref({}))!
 
-  const pinia: Pinia = markRaw({
+  const pinia: Pinia = {
     _e: scope,
     state,
-  })
+  }
 
   return pinia
 }
 ```
 
-首先馬上看到了一個陌生的 API：`effectScope()`，這是 Vue 3.2 之後新增的 API。
+**什麼是 Effect Scope？**
 
-在 Vue 元件的 setup function 中，副作用（effect）會被收集到執行當下的元件 instance 上。一但元件被銷毀，所有被收集到的 effect 也會自動被清除。而當這些副作用不是在元件內被建立，就會需要自己收集並清除。
+在 Vue 元件的 setup function 中，副作用（effect）會被收集到執行當下的元件 instance 上。一但元件被銷毀，所有被自動收集到的 effect 也會被清除。而當這些副作用不是在元件內被建立，就會需要自己收集並清除。
 
-自己收集並清除有點麻煩，而且真實情況可能又更複雜的許多，而 Effect Scope 是將元件搜集並清除副作用的機制抽象成更泛用的 API，讓我們可以自己建立一個 Effect Scope，並在需要的時候手動清除。
+要自己收集並清除有點麻煩，而且真實情況可能又更複雜的許多，而 Effect Scope 的出現將元件搜集並清除副作用的機制抽象成更泛用的 API，讓我們可以自己建立一個 Effect Scope，並在需要的時候手動清除。
 
-Effect Scope 有類似元件的樹狀結構設計，當父層的 Effect Scope 被銷毀時，收集到的子層的 Effect Scope 也會一起被銷毀。但我們也可以透過 `effectScope(true)` 來建立一個獨立的 Effect Scope，這個 Effect Scope 不會被建立當下的父層收集，所以不會跟著父層被銷毀。
+另外，Effect Scope 也有類似元件的樹狀結構設計，當父層的 Effect Scope 被銷毀時，收集到的子層的 Effect Scope 也會一起被銷毀。但我們也可以透過 `effectScope(true)` 來建立一個獨立的 Effect Scope，這個 Effect Scope 不會被建立當下的父層收集，所以不會跟著父層被銷毀。
 
-更詳細的介紹可以參考這篇 RFC：[RFC - Reactivity Effect Scope](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md)。
+更詳細的介紹可以參考這篇 RFC：[RFC - Reactivity Effect Scope](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md){ target="_blank" }。
 
-我們可以看到在 `createPinia()` 中建立了一個獨立的 Effect Scope，在這個 scope 裡面建立了一個 `state` 的 Ref，並且將這個 Ref 設定給了 `pinia.state`。最後將 Pinia instance 的 `_e` 指向這個 Effect Scope。
+**為什麼這裡要使用 Effect Scope？**
+
+在 Pinia 的設計裡面，Pinia instance 是整個 Store 的管理中心，而每個 Store instance 會可能有自己的副作用，所以我們需要一個 Effect Scope 來管理、收集這些副作用，當 Store instance 被銷毀時，這些副作用也會被清除，而 Pinia 銷毀時也可以把他所有管理的 Store 的副作用全數處理掉。
 
 ### 建立 Pinia instance
 
@@ -75,7 +79,7 @@ export function createPinia(): Pinia {
   let _p = []
   let toBeInstalled = []
 
-  const pinia: Pinia = markRaw({
+  const pinia: Pinia = {
     install(app: App) {
       setActivePinia(pinia)
 
@@ -101,7 +105,7 @@ export function createPinia(): Pinia {
     _p,
     _a: null,
     _s: new Map<string, StoreGeneric>(),
-  })
+  }
 
   return pinia
 }
@@ -252,8 +256,8 @@ function useStore(pinia) {
 2. 請求 A 準備渲染畫面，過程中執行非同步請求。
 3. 請求 B 進到 Server，建立了一個 Pinia instance 並存到全域。
 4. 請求 B 準備渲染畫面，過程中執行非同步請求。
-5. 請求 A 的非同步結束，開始渲染。渲染過程中將 Store instance 存到 Pinia instance 裡面並寫了一些資料。
-6. 請求 B 的非同步結束，開始渲染。因為 Store instance 已經存在（拿到請求 A 的 Pinia instance）所以直接使用。
+5. 請求 A 的非同步結束，開始渲染。渲染過程中將 Store instance 存到 Pinia instance 裡面並寫了一些資料，但這個 Pinia instance 是請求 B 建立的。
+6. 請求 B 的非同步結束，開始渲染。因為 Store instance 已經存在（請求 A 渲染時建立的）所以直接使用。
 
 所以，如果在 Component 的 setup 裡面使用的話我們可以使用 `inject` 拿到在當前 Vue instance 上的 Pinia instance。但如果不是在 Component 的 setup 裡面使用的話呢？
 
@@ -316,5 +320,6 @@ router.beforeEach((to) => {
 ### 參考資料
 
 - [Pinia | The intuitive store for Vue.js](https://pinia.vuejs.org){ target="_blank" }
+- [RFC - Reactivity Effect Scope](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md){ target="_blank" }
 - [Patterns.dev - Singleton Pattern](https://www.patterns.dev/posts/singleton-pattern){ target="_blank" }
-- [Server-Side Rendering (SSR) | Vue.js #Cross-Request State Pollution](https://vuejs.org/guide/scaling-up/ssr.html#cross-request-state-pollution)
+- [Server-Side Rendering (SSR) | Vue.js #Cross-Request State Pollution](https://vuejs.org/guide/scaling-up/ssr.html#cross-request-state-pollution){ target="_blank" }
