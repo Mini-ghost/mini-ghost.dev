@@ -951,7 +951,7 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
-不過實際上這裡的 `markRaw` 是被寫在第一篇得 `createPinia` 裡面
+不過實際上這裡的 `markRaw` 是被寫在第一篇的 `createPinia` 裡面
 
 ```ts
 export function createPinia(): Pinia {
