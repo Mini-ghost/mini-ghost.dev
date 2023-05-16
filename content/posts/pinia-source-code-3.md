@@ -825,9 +825,27 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 
 原因在 `state` 的初始化流程中，如果看到這裡已經印象模糊的話，可以回到上面的段落複習一下！
 
-### 其他沒提到的部分
+### 安裝 Plugins
 
-**安裝 Plugin**
+在研究 Plugins 安裝功能前先看看怎麼使用吧：
+
+```ts
+import { createPinia } from 'pinia'
+
+function plugin({ 
+  pinia,    // pinia instance
+  app,      // 當前的 vue application instance
+  store,    // 當前的 store
+  options   // 取得 `defineStore()` 時定義商店的初始選項
+})  {
+  return { secret: 'the cake is a lie' }
+}
+
+const pinia = createPinia()
+pinia.use(plugin)
+```
+
+而實際設計非常簡單：
 
 ```ts
 function createSetupStore($id, setup, options, pinia, isOptionsStore) {
@@ -861,6 +879,8 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
   })
 }
 ```
+
+### 其他沒提到的部分
 
 **hydrate**
 
