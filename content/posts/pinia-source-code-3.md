@@ -33,24 +33,15 @@ description: Pinia 是目前 Vue 官方首推的狀態管理工具。這系列�
 
 ### 初始化 state
 
-在 `createOptionsStore` 的一開始我們因為要解決 SSR 的需求，所以會先檢查 `initialState` 是否存在，如果存在就沿用，不存在則需要初始化。
+這裡要做的事情大致與 `createOptionsStore` 相同，不過因為 Option Store 的 `state` 先前已經透過 state function 來初始化，所以如果是 Options Store 這裡不需要再做一次。
 
-這裡要做的事情大致相同，不過因為 Option Store 的 `state`  先前已經透過 state function 來初始化，所以如果是 Options Store 這裡不需要再做一次，僅判斷針對 Setup Store 是否需要初始化  `pinia.state.value[$id] = {}`。
+另外在 Setup Store 我們沒有一個專們取得 state 的 state function，所以我們無法因為 `initialState` 不存在而透過 `state()` 來取得 state。所以 `initialState` 不存在時，我們先將 `pinia.state.value[$id]` 設定成一個空物件。 
 
 ```ts
-// 忽略了 HMR 的部分
 function createSetupStore($id, setup, options, pinia, isOptionsStore) {
-  // ...
-
-  // 如果 EffectScope 的 active 為 false，代表 Pinia 已經被銷毀
-  if (!pinia._e.active) {
-    throw new Error('Pinia destroyed')
-  }
-
   const initialState = pinia.state.value[$id]
 
   if (!isOptionsStore && !initialState) {
-    /* istanbul ignore if */
     if (isVue2) {
       set(pinia.state.value, $id, {})
     } else {
@@ -61,42 +52,46 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
-如同前面提到在 Server Side Render 會遇到的問題，如果直接使用 `setup` function 產生的 state 作為初始值，那就可能會有 hydration error 的問題：
+接下來我們可以把 setup function 回傳的 state 一個一個的寫進 `pinia.state.value[$id]` 中，在整個 setup function 回傳的物件中，我們可以透過 `isRef`、`isReactive` 來判斷是 state 還是 getter 或 action。
+
+判定為 state 的條件如下：
+
+1. 是 `Ref` 且不是 `Computed`。
+2. 是 `Reactive`。
+
+依照條件我們可以寫出分類程式碼，如下：
 
 ```ts
-const useStore = defineStore('SETUP_STORE', () => {
-  const env = ref(process.server ? 'server' : 'client',);
-
-  return {
-    env
-  }
-})
-
-const store = useStore()
-store.env // hydration error
-```
-
-所以這裡會先檢查 `initialState` 是否存在，並且是否需要進行補水（hydrate）。
-
-```ts
-function shouldHydrate(obj: any) {
-  return isVue2
-    ? !skipHydrateMap.has(obj)
-    : !isPlainObject(obj) || !obj.hasOwnProperty(skipHydrateSymbol)
-}
-
 function createSetupStore($id, setup, options, pinia, isOptionsStore) {
-  const setupStore = pinia._e.run(() => {
-    scope = effectScope()
-    return scope.run(() => setup())
-  })!
+  const setupStore = setup()
 
   for (const key in setupStore) {
     const prop = setupStore[key]
 
     if ((isRef(prop) && !isComputed(prop)) || isReactive(prop)) {
+      // state
+    } else if (typeof prop === 'function') {
+      // action
+    }
+  }
+}
+```
+
+接著我們把 `setupStore` 寫進 `pinia.state.value[$id]` 裡面。但是我們已經知道這裡有一個問題：如果我們直接將 `setupStore` 寫進 `pinia.state.value[$id]`，那麼在 Server Side Render 時就有機會遇到 hydration error。
+
+為了避免 hydration error 我們需要檢查 `initialState[key]` 是否存在，如果存在，就使沿用，反之則使用 `setupStore[key]` 的值。
+
+```ts
+function createSetupStore($id, setup, options, pinia, isOptionsStore) {
+  const setupStore = setup()
+
+  for (const key in setupStore) {
+    const prop = setupStore[key]
+
+    if ((isRef(prop) && !isComputed(prop)) || isReactive(prop)) {
+      // Options Store 的 state 會在 state function 中初始化，所以這裡不需要再初始化
       if (!isOptionsStore) {
-        if (initialState && shouldHydrate(prop)) {
+        if (initialState) {
           if (isRef(prop)) {
             prop.value = initialState[key]
           } else {
@@ -119,11 +114,33 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
-第一篇有提到 Effect Scope，每一個 Store 的 setup 都會在 Pinia instance 上的 Effect Scope 中建立自己的 Effect Scope，形成一個樹狀的 Effect Scope。這樣的用意是一但當 Pinia instance 被銷毀時，可以透過這個樹狀的 Effect Scope 關係來清除所有的副作用。
+另外第一篇有提到 Effect Scope，每一個 Store 的 setup 都會在 Pinia instance 上的 Effect Scope 中建立自己的 Effect Scope，形成一個樹狀的 Effect Scope。這樣的用意是一但當 Pinia instance 被銷毀時，可以透過這個樹狀的 Effect Scope 關係來清除所有的副作用。
 
-接著 `setupStore` 是我們回傳的一個物件，這裡會將這個物件的每個屬性進行檢查，如果是 `Ref` 或是 `Reactive` 物件，就會進行初始化，如果是 `Computed` 則表示這是 getter 不需要額外處理。
+setup function 中除了可以歇 `computed` 之外還可以定義 `watch`，這些都會有副作用需要清除，所以我們需要一個專們的 Effect Scope 來收集這些副作用，我們將 `setupStore` 的部分改寫成這樣：
+
+```ts
+
+function createSetupStore($id, setup, options, pinia, isOptionsStore) {
+  const setupStore = pinia._e.run(() => {
+    scope = effectScope()
+    return scope.run(() => setup())
+  })
+
+  //
+}
+```
+
+這樣我們就可以收集到 `setupStore` 中所有的副作用了。
+
+接著我們來處理 actions 的部分。
 
 ### 包裝 Actions
+
+在剛剛 `setupStore` 的物件中，我們挑出了 state 以及 getter。而剩下的如果型別為 `function` 的話，就會被當作 actions 來處理。
+
+基本上 action 是可以被直接使用不需進過特別處理的，但是在 Pinia 中我們需要對 action 做包裝，因為 Pinia 提供了一個 API 可以讓我們在 action 執行前後調用 callback function，這個 API 就是 `store.$onAction`。
+
+所以們可以定義一個並使用 `wrapAction` 來包裝 actions 負責攔截每一個 action 的執行。
 
 ```ts
 function createSetupStore($id, setup, options, pinia, isOptionsStore) {
@@ -140,7 +157,7 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
     const prop = setupStore[key]
 
     if ((isRef(prop) && !isComputed(prop)) || isReactive(prop)) {
-      // ...
+      // state
     } else if (typeof prop === 'function') {
       const actionValue = wrapAction(key, prop)
 
@@ -154,11 +171,8 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
-在剛剛 `setupStore` 的物件中，我們挑出了 state 以及 getter。而剩下的如果型別為 `function` 的話，就會被當作 action 來處理。
 
-在這裡很單純地透過 `wrapAction` 來包裝 action，並將包裝過後的 action 重新賦值回 `setupStore` 上。
-
-但，為何 action 需要包裝。
+`wrapAction` 要怎麼攔截 actions 的值行呢？
 
 ### API: store.$onAction
 
