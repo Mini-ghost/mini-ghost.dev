@@ -6,7 +6,7 @@ tags:
 
 created: 2023-05-13T00:00:00.002Z
 image: https://og-image-mini-ghost.vercel.app/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20pinia.png?fontSize=72
-description: Pinia 是目前 Vue 官方首推的狀態管理工具。這系列分享不會特別著重在如何使用 Pinia 而是深入剖析 Pinia 的原始碼，研究他的原始碼是如何撰寫的，從中吸收寶貴的經驗。在上一篇的內容我們先看了 Options Store 的實作，發先最後會透過 Setup Store 完成整個 Store 的建立。因此接下來會更深入核心了解 Setup Store 內部的實作。
+description: Pinia 是目前 Vue 官方首推的狀態管理工具。這系列文章不會特別著重在如何使用 Pinia 而是深入剖析 Pinia 的原始碼，研究它的設計，從中吸收寶貴的經驗。在上一篇的內容我們先看了 Options Store 的實作，發先最後會透過 Setup Store 完成整個 Store 的建立。因此接下來會更深入核心了解 Setup Store 內部的實作。
 ---
 
 ## 前言
@@ -52,9 +52,9 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 }
 ```
 
-接下來我們可以把 setup function 回傳的 state 一個一個的寫進 `pinia.state.value[$id]` 中，在整個 setup function 回傳的物件中，我們可以透過 `isRef`、`isReactive` 來判斷是 state 還是 getter 或 action。
+接下來我們可以把 setup function 回傳的 state 一個一個的寫進 `pinia.state.value[$id]` 中，在整個 setup function 回傳的物件中，我們可以透過 `isRef`、`isComputed`、`isReactive` 來判斷是 state 還是 getter 或 action。
 
-判定為 state 的條件如下：
+判斷是否為 state 的條件如下：
 
 1. 是 `Ref` 且不是 `Computed`。
 2. 是 `Reactive`。
@@ -116,7 +116,7 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 
 另外第一篇有提到 Effect Scope，每一個 Store 的 setup 都會在 Pinia instance 上的 Effect Scope 中建立自己的 Effect Scope，形成一個樹狀的 Effect Scope。這樣的用意是一但當 Pinia instance 被銷毀時，可以透過這個樹狀的 Effect Scope 關係來清除所有的副作用。
 
-setup function 中除了可以歇 `computed` 之外還可以定義 `watch`，這些都會有副作用需要清除，所以我們需要一個專們的 Effect Scope 來收集這些副作用，我們將 `setupStore` 的部分改寫成這樣：
+setup function 中除了可以使用 `computed` 之外還可以定義 `watch`，這些都會有副作用需要清除，所以我們需要一個專們的 Effect Scope 來收集這些副作用，我們將 `setupStore` 的部分改寫成這樣：
 
 ```ts
 
@@ -131,8 +131,6 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 ```
 
 這樣我們就可以收集到 `setupStore` 中所有的副作用了。
-
-接著我們來處理 actions 的部分。
 
 ### 包裝 Actions
 

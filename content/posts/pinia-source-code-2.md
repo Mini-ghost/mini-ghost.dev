@@ -6,22 +6,20 @@ tags:
 
 created: 2023-05-13T00:00:00.001Z
 image: https://og-image-mini-ghost.vercel.app/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20pinia.png?fontSize=72
-description: Pinia 是目前 Vue 官方首推的狀態管理工具。這系列分享不會特別著重在如何使用 Pinia 而是深入剖析 Pinia 的原始碼，研究他的原始碼是如何撰寫的，從中吸收寶貴的經驗。在上一篇的內容我們先看了 Pinia instance 上有哪些東西，也初步了解了 defineStore 的功能。接下來會更深入了解 Options Store 的內部的實作。
+description: Pinia 是目前 Vue 官方首推的狀態管理工具。這個系列分享不會特別著重於如何使用 Pinia，而是深入剖析 Pinia 的原始碼，研究它的設計，從中吸收寶貴的經驗。在上一篇內容中，我們先查看了 Pinia 實例上的成員，也初步了解了 defineStore 的功能。接下來，我們將更深入地了解 Options Store 內部的實作。
 ---
 
 ## 前言
 
 > 本篇的 pinia 版本為 2.0.36
 
-如果有用過 Vuex 或是還沒有接觸過 Composition API 的話，Options Store 應該會是比較好上手的一個選擇，這也是官方建議可以優先嘗試看看的方式。
+如果你有使用過 Vuex，或者還沒有接觸過 Composition API 的話，Options Store 應該是比較好上手的一個選擇，這也是官方建議可以優先嘗試看看的方式。
 
 本篇將聚焦在 Options Store 的實作細節。
 
 ## Options Store
 
-我們在第一篇時瞭解到，如果選擇了 Options Store 在 `useStore` 內會使用 `createOptionsStore` 來建立 Store instance，我們來看看這裡面做了什麼。
-
-在 pinia 裡面，Options Store 與 Setup Store 並不是完全分開處理的兩段程式碼，反而是在 `createOptionsStore` 內部會呼叫 `createSetupStore` 來完成 Options Store 的建立。
+在第一篇中我們了解到，如果選擇了 Options Store，在 `useStore` 內會使用 `createOptionsStore` 來建立 Store instance。在 Pinia 中，Options Store 和 Setup Store 並不是完全分開處理的兩段程式碼，反而是在 `createOptionsStore` 內部會呼叫 `createSetupStore` 來完成 Options Store 的建立。
 
 ```ts
 function createOptionsStore(id, options, pinia) {
@@ -38,7 +36,7 @@ function createOptionsStore(id, options, pinia) {
 }
 ```
 
-為了更清楚的了解我們必須如何整理出 `createSetupStore` 需要的資料，我們得先知道 Setup Store 怎麼定義：
+為了更清楚地了解我們必須如何整理出 `createSetupStore` 需要的資料，我們需要先認識 Setup Store 的定義方式：
 
 ```ts
 const useStore = defineStore('SETUP_STORE', () => {
@@ -61,13 +59,13 @@ const useStore = defineStore('SETUP_STORE', () => {
 })
 ```
 
-在 Setup Store 裡面，`Ref` 跟 `Reactive` 會被視為 state，`Computed` 會被視為 getter，而 function 會被視為 action。所以我們接下來要做的事情如下：
+在 Setup Store 中，`Ref` 和 `Reactive` 被視為 state，`Computed` 被視為 getter，而 function 被視為 action。因此，我們接下來要完成 Options Store 的步驟如下：
 
 - 將 state 整理成 `Ref`。
 - 將 getter 整理成 `Computed`。
 - action 不需要特別處理。
 
-我們一步一步完成 Options Store。
+我們將一步一步完成 Options Store 的實作。
 
 ### 取得 state
 
@@ -90,7 +88,7 @@ export const useStore = defineStore('STORE_ID', {
 })
 ```
 
-我們可以透過 `state()` 來取得這個 state 物件。取得 state 物件後我們把這個物傳給 `pinia.state.value[id]`。
+因此我們可以透過執行 state function 來取得 state 物件。取得 state 物件後我們把這個物傳給 `pinia.state.value[id]`。
 
 
 ```ts
@@ -110,7 +108,7 @@ function createOptionsStore(id, options, pinia) {
 }
 ```
 
-在第一篇我們知道 `pinia.state` 是一個 `Ref` 的物件，所以當我們再透過 `pinia.state.value[id]` 取出 state 時，這個取出的 state 會變成一個 reactive 化的物件。
+在第一篇我們知道 `pinia.state` 是一個 `Ref` 的物件，所以當我們再透過 `pinia.state.value[id]` 將剛剛傳的 state 時，這個取出的 state 會變成一個 reactive 化的物件。
 
 因為我們最後要把這個 state 傳給 `createSetupStore` 使用，所以我們需要將裡面每一個屬性都透過 `toRefs` 轉換成 `Ref`。
 
@@ -145,9 +143,9 @@ export const useCounterStore = defineStore('STORE_ID', {
 })
 ```
 
-根據這個範例，我們可以知道 getters 是一個物件，裡面的每個 key 都是一個 function，這個 function 會接收 store 當作參數，或是透過 `this` 來取得 store。
+根據這個範例，我們可以知道 getters 是一個物件，裡面的每個屬性的值都是一個 function，這些 function 會接收 store 當作參數，或是透過 `this` 來取得 store。
 
-所以我們需要講 getters 轉換成 `Computed` 的形式，並且把 store 傳進去。
+所以我們需要講 getters 轉換成 `Computed`，並且把 store 傳進去。
 
 ```ts
 function createOptionsStore(id, options, pinia) {
@@ -217,9 +215,7 @@ Server Side Render 會遇到什麼問題？我們先看看 Server Side Render �
 
 當我們接收到 Server 端產生的 HTML 檔案這個 HTML 是純靜態的，Vue 並沒有辦法直接操作這個 HTML，所以我們需要透過 hydration 將這個 HTML 轉換成 Vue 可以操作的 DOM。
 
-在補水的過程中如果遇到 Server 端與 Client 產出的 HTML 結構不同的話，就會出現 hydration error 的情況。
-
-例如：
+在補水的過程中如果遇到 Server 端與 Client 端產出的 HTML 結構不相符的話，就會出現 hydration error 的情況。這通常表示 Server 端和 Client 端之間的元件或狀態存在不一致的情況，例如：
 
 ```ts
 const useStore = defineStore('OPTIONS_STORE', {
@@ -232,11 +228,11 @@ const store = useStore()
 store.env // hydration error
 ```
 
-所以我們只要想個辦法讓 Client 的 Store instance 在初始化時取得跟 Server 端一樣的 state，這樣就可以確保 hydration 不會出錯。
+所以我們只要想個辦法讓 Client 端的 Store instance 在初始化時取得跟 Server 端一樣的 state，這樣就可以確保 hydration 不會因為狀態對不起來而出錯。
 
 具體該怎麼做呢？
 
-我們可以在設法將 Server 端最終存在 Pinia instance 上的 state 隨著 HTML 傳到 Client 端，並且在 Client 端 `createPinia` 之後，將 state 寫回 Pinia instance 的 state 裡面。
+我們可以在設法將 Server 端最終存在 Pinia instance 上的 state 隨著 HTML 傳到 Client 端，並且在 Client 端執行 `createPinia` 之後，將 state 寫回 Pinia instance 的 state 裡面。
 
 ```ts
 const app = createApp()
@@ -316,7 +312,7 @@ console.log(aStore.fromB) // 必須輸出 'b b'
 
 這段程式碼模擬了 `aStore` 跟 `bStore` 分別屬於不同請求（不同請求有不同的 Pinia instance 跟 vue application），如果今天是在「跨請求狀態污染」發生的情況下 `aStore.fromB` 的值可能就不會是 `b b`。
 
-拆解一下這裡的執行步驟：
+讓我們逐步解析這段程式碼的執行步驟：
 
 1. 建立 Pinia instance 1，並且設定為當前的 Pinia instance。
 2. 建立 `useA` store，並且設定為當前的 Pinia instance。
@@ -328,7 +324,7 @@ console.log(aStore.fromB) // 必須輸出 'b b'
     1. 執行 `const bStore = useB()` 這個時候的 `activePinia` 是 Pinia instance 2
     2. Pinia instance 2 上的 `bStore.b` 為 `c`，所以回傳 `b c`。
 
-因為遭受到了跨請求狀態污染，所以最終的結果與期望不符。要解決這個問題很簡單，我們只要在每次執行 getter function 時，都把 `activePinia` 設定為當前的 Pinia instance 就可以了。
+因為遭受到了跨請求狀態污染，所以最終的結果與期望不符。要解決這個問題很簡單，我們只要在每次執行 getter function 時，都把 `activePinia` 設定為當前 scope 的 Pinia instance 就可以了。
 
 ```ts
 function createOptionsStore(id, options, pinia) {
