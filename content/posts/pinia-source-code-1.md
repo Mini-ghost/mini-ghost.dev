@@ -261,7 +261,7 @@ export function defineStore(idOrOptions, setup, setupOptions) {
 
 ### 單例模式 Singleton
 
-以下內容擷取自 [Patterns.dev - Singleton Pattern](https://www.patterns.dev/posts/singleton-pattern) 這篇文章。
+以下內容擷取自 [Patterns.dev - Singleton Pattern](https://www.patterns.dev/posts/singleton-pattern){ target="_blank" } 這篇文章。
 
 > Singletons are classes which can be instantiated once, and can be accessed globally. This single instance can be shared throughout our application, which makes Singletons great for managing global state in an application.
 

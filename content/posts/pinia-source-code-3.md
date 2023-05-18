@@ -211,7 +211,7 @@ const removeSubscribe = store.$onAction(
 
 ```ts
 function createSetupStore($id, setup, options, pinia, isOptionsStore) {
-  const actionSubscriptions = markRaw([])
+  const actionSubscriptions = []
 
   const store = reactive({
     // ...
@@ -254,7 +254,7 @@ function createSetupStore($id, setup, options, pinia, isOptionsStore) {
 
 ```ts
 function createSetupStore($id, setup, options, pinia, isOptionsStore) {
-  const actionSubscriptions = markRaw([])
+  const actionSubscriptions = []
 
   // ...
 
@@ -367,7 +367,7 @@ const removeSubscribe = store.$subscribe((mutation, state) => {
 
 ```ts
 function createSetupStore($id, setup, options, pinia, isOptionsStore) {
-  const subscriptions: SubscriptionCallback<S>[] = markRaw([])
+  const subscriptions: SubscriptionCallback<S>[] = []
 
   const store = reactive({
     // ...
@@ -400,7 +400,7 @@ store.$subscribe(callback, { detached: true })
 
 ```ts
 function createSetupStore($id, setup, options, pinia, isOptionsStore) {
-  const subscriptions: SubscriptionCallback<S>[] = markRaw([])
+  const subscriptions: SubscriptionCallback<S>[] = []
 
   const store = reactive({
     // ...
@@ -443,7 +443,7 @@ store.count++
 function createSetupStore($id, setup, options, pinia, isOptionsStore) {
   let scope!: EffectScope
 
-  const subscriptions: SubscriptionCallback<S>[] = markRaw([])
+  const subscriptions: SubscriptionCallback<S>[] = []
 
   const store = reactive({
     // ...
@@ -996,4 +996,4 @@ export function createPinia(): Pinia {
 - [Pinia | The intuitive store for Vue.js](https://pinia.vuejs.org){ target="_blank" }
 - [RFC - Reactivity Effect Scope](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md){ target="_blank" }
 - [$subscribe handler invoked twice for single $patch operation #1129](https://github.com/vuejs/pinia/issues/1129){ target="_blank" }
-- [Server-Side Rendering (SSR) | Vue.js #Cross-Request State Pollution](https://vuejs.org/guide/scaling-up/ssr.html#cross-request-state-pollution){ target="_blank" }
+

@@ -377,4 +377,3 @@ function createOptionsStore(id, options, pinia) {
 - [Pinia | The intuitive store for Vue.js](https://pinia.vuejs.org){ target="_blank" }
 - [Server-Side Rendering (SSR) | Vue.js #Cross-Request State Pollution](https://vuejs.org/guide/scaling-up/ssr.html#cross-request-state-pollution){ target="_blank" }
 [Server-Side Rendering (SSR) | Vue.js #Client Hydration](https://vuejs.org/guide/scaling-up/ssr.html#client-hydration)
-
