@@ -4,14 +4,14 @@ tags:
 - Vue
 - Pinia
 
-created: 2023-05-13T00:00:00.000Z
+created: 2023-05-20T00:00:00.000Z
 image: https://og-image-mini-ghost.vercel.app/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20pinia.png?fontSize=72
 description: 在開發比較大型的專案時我們經常需要將一些「狀態」儲存到一個共用的地方，讓些狀態可以更容易的在各個元件之間使用。Pinia 是目前 Vue 官方首推的狀態管理工具，而關於 Pinia 的使用介紹與五星吹捧更是多不勝數。因此這系列文章不會特別著重在如何使用 Pinia 而是深入剖析 Pinia 的原始碼，研究它的設計，從中吸收寶貴的經驗。
 ---
 
 ## 前言
 
-> 本篇的 pinia 版本為 2.0.36
+> 本篇的 pinia 版本為 2.1.3 
 
 作為這個系列的開頭，本篇會研究的內容有：
 

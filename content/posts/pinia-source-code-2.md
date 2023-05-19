@@ -4,14 +4,14 @@ tags:
 - Vue
 - Pinia
 
-created: 2023-05-13T00:00:00.001Z
+created: 2023-05-20T00:00:00.001Z
 image: https://og-image-mini-ghost.vercel.app/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20pinia.png?fontSize=72
 description: Pinia 是目前 Vue 官方首推的狀態管理工具。這個系列分享不會特別著重於如何使用 Pinia，而是深入剖析 Pinia 的原始碼，研究它的設計，從中吸收寶貴的經驗。在上一篇內容中，我們先查看了 Pinia 實例上的成員，也初步了解了 defineStore 的功能。接下來，我們將更深入地了解 Options Store 內部的實作。
 ---
 
 ## 前言
 
-> 本篇的 pinia 版本為 2.0.36
+> 本篇的 pinia 版本為 2.1.3 
 
 如果你有使用過 Vuex，或者還沒有接觸過 Composition API 的話，Options Store 應該是比較好上手的一個選擇，這也是官方建議可以優先嘗試看看的方式。
 
