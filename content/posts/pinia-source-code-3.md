@@ -12,6 +12,12 @@ description: Pinia 是目前 Vue 官方首推的狀態管理工具。這系列�
 
 > 本篇的 pinia 版本為 2.1.3 
 
+這系列一共有三篇文章，分別是：
+
+1. [深入淺出 pinia（一）：createPinia、defineStore](./pinia-source-code-1.ms)
+2. [深入淺出 pinia（二）：createOptionsStore](./pinia-source-code-2.md)
+3. [深入淺出 pinia（三）：createSetupStore](./pinia-source-code-3.md)
+
 如果熟悉 Composition API 的話，Setup Store 在使用上會有非常一致的體驗。而 `createSetupStore` 我個人認為算是 Pinia 中最核心的部分，幾乎所有的功能都是在這裡實作的。在本篇將會深入了解 Setup Store 的實作細節。
 
 
