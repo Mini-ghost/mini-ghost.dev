@@ -1,67 +1,51 @@
 <script setup lang="ts">
 import format from '@/helper/format';
 
-interface Post {
-  _path: string;
-  title: string;
-  created: string;
-  readingTime: {
-    text: string;
+const { posts } = await usePosts();
+
+const title = 'Blog';
+const description =
+  '嗨！我是 Alex Liu，這裡記錄了我自己技術開發上的一些心得、過程。目前主要開發以 Vue.js 搭配 TypeScript 為主，是一個追求有趣技術的偏執狂！';
+
+useHead(() => {
+  return {
+    title,
+    meta: [
+      {
+        name: 'description',
+        content: description,
+      },
+      {
+        property: 'og:title',
+        content: `${title} | Alex Liu`,
+      },
+      {
+        property: 'og:description',
+        content: description,
+      },
+      {
+        name: 'twitter:title',
+        content: `${title} | Alex Liu`,
+      },
+      {
+        name: 'twitter:description',
+        content: description,
+      },
+    ],
   };
-}
-
-useHead(() => ({
-  title: 'Blog',
-}));
-
-const { data: posts } = await useAsyncData(
-  'QUERY_POSTS',
-  () =>
-    queryContent('/posts/')
-      .where({ _partial: false })
-      .only(['_path', 'title', 'created', 'readingTime'])
-      .sort({ created: -1 })
-      .find() as Promise<Post[]>,
-  {
-    transform(result) {
-      const posts: { year: string; posts: Post[] }[] = [];
-
-      let group: Post[] = [];
-      let year: string | null = null;
-
-      result.forEach(item => {
-        let current: string;
-        if (
-          (current = item.created.slice(0, 4)) !== year &&
-          typeof year === 'string'
-        ) {
-          posts.push({
-            year,
-            posts: group,
-          });
-
-          group = [];
-        }
-
-        year = current;
-        group.push(item);
-      });
-
-      if (typeof year === 'string' && group.length) {
-        posts.push({
-          year,
-          posts: group,
-        });
-      }
-
-      return posts;
-    },
-  }
-);
+});
 </script>
 
 <template>
   <div class="max-w-21cm w-11/12 mx-auto space-y-6 lg:pt-16 pb-16 lg:pb-32">
+    <h1 class="text-3xl font-bold">
+      {{ title }}
+    </h1>
+
+    <p class="opacity-50 leading-loose">
+      {{ description }}
+    </p>
+    
     <div
       v-for="group in posts"
       :key="group.year"

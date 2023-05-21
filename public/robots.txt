@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mini-ghost.dev/sitemap.xml

@@ -44,6 +44,12 @@ export default defineNuxtConfig({
         { name: 'twitter:card', content: 'summary_large_image' },
         { name: 'twitter:title', content: title },
         { name: 'twitter:description', content: description },
+
+        // google
+        {
+          name: 'google-site-verification',
+          content: process.env.NUXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+        },
       ],
     },
   },
@@ -69,7 +75,8 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
+      siteURL: process.env.NUXT_PUBLIC_SITE_URL,
+      googleTagId: process.env.NUXT_PUBLIC_GOOGLE_TAG_ID,
     },
   },
 
