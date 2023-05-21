@@ -5,7 +5,6 @@ tags:
 - Pinia
 
 created: 2023-05-20T00:00:00.002Z
-image: https://og-image-mini-ghost.vercel.app/%E6%B7%B1%E5%85%A5%E6%B7%BA%E5%87%BA%20pinia.png?fontSize=72
 description: Pinia 是目前 Vue 官方首推的狀態管理工具。這系列文章不會特別著重在如何使用 Pinia 而是深入剖析 Pinia 的原始碼，研究它的設計，從中吸收寶貴的經驗。在上一篇的內容我們先看了 Options Store 的實作，發先最後會透過 Setup Store 完成整個 Store 的建立。因此接下來會更深入核心了解 Setup Store 內部的實作。
 ---
 
