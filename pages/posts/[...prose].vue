@@ -4,6 +4,11 @@ import { withoutTrailingSlash } from 'ufo';
 import format from '@/helper/format';
 
 const route = useRoute();
+
+const {
+  public: { siteURL },
+} = useRuntimeConfig();
+
 const { post, surround, fullPath } = await useProse(() =>
   withoutTrailingSlash(route.path)
 );
@@ -14,7 +19,19 @@ useHead(() => {
 
   const title = `${content.title} | Alex Liu`;
   const description = content.description;
-  const image = content.image;
+
+  let image = content.image;
+  if (!image) {
+    const titleEncoded = encodeURIComponent(content.title);
+
+    const create = `${+new Date(content.created)}`;
+    const query = new URLSearchParams({
+      read: content.readingTime.text,
+      create,
+    });
+
+    image = `https://og-image-mini-ghost.vercel.app/${titleEncoded}?${query}`;
+  }
 
   return {
     title: content.title,
@@ -80,6 +97,7 @@ useHead(() => {
           author: {
             '@type': 'Person',
             name: 'Alex Liu（Han-Zhang Liu）',
+            url: siteURL,
           },
           publisher: {
             '@type': 'Organization',
