@@ -14,9 +14,9 @@ description: 在開發比較大型的專案時我們經常需要將一些「狀�
 
 這系列一共有三篇文章，分別是：
 
-1. [深入淺出 pinia（一）：createPinia、defineStore](./pinia-source-code-1.ms)
-2. [深入淺出 pinia（二）：createOptionsStore](./pinia-source-code-2.md)
-3. [深入淺出 pinia（三）：createSetupStore](./pinia-source-code-3.md)
+1. [深入淺出 pinia（一）：createPinia、defineStore](./pinia-source-code-1)
+2. [深入淺出 pinia（二）：createOptionsStore](./pinia-source-code-2)
+3. [深入淺出 pinia（三）：createSetupStore](./pinia-source-code-3)
 
 作為這個系列的開頭，本篇會研究的內容有：
 
