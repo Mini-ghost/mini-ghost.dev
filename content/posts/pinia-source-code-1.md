@@ -270,7 +270,7 @@ export function defineStore(idOrOptions, setup, setupOptions) {
 
 > Singletons are classes which can be instantiated once, and can be accessed globally. This single instance can be shared throughout our application, which makes Singletons great for managing global state in an application.
 
-單例模式的定義是：「保證一個類別僅有一個實例，並提供一個存取它的全域存取點」，利用單例模式我們可以讓每次 `useStore` 回傳的都會是同一個 Store instance，樣就可以達到跨元件共用狀態的功能。
+單例模式的定義是：「保證一個類別僅有一個實例，並提供一個存取它的全域存取點」，利用單例模式我們可以讓每次 `useStore` 回傳的都會是同一個 Store instance，這樣就可以達到跨元件共用狀態的功能。
 
 所以我們需要一個地方來存放建立過的 Store instance，把它存放在 Pinia instance 上是一個不錯的選擇。
 
@@ -379,7 +379,7 @@ function useStore(pinia) {
 }
 ```
 
-這樣樣在 Component 的 setup 以外的地方我們就有辦法確保使用的是當前請求建立的 Pinia instance 了。
+這樣在 Component 的 setup 以外的地方我們就有辦法確保使用的是當前請求建立的 Pinia instance 了。
 
 ```ts
 // https://pinia.vuejs.org/ssr/#using-the-store-outside-of-setup
