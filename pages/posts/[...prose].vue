@@ -3,11 +3,8 @@ import { withoutTrailingSlash } from 'ufo';
 
 import format from '@/helper/format';
 
+const siteURL = useSiteURL();
 const route = useRoute();
-
-const {
-  public: { siteURL },
-} = useRuntimeConfig();
 
 const { post, surround, fullPath } = await useProse(() =>
   withoutTrailingSlash(route.path)
@@ -35,6 +32,14 @@ useHead(() => {
 
   return {
     title: content.title,
+
+    link: [
+      {
+        rel: 'canonical',
+        href: fullPath.value,
+      },
+    ],
+
     meta: [
       {
         name: 'description',
@@ -96,12 +101,12 @@ useHead(() => {
           dateModified: content.created,
           author: {
             '@type': 'Person',
-            name: 'Alex Liu（Han-Zhang Liu）',
+            name: 'Alex Liu',
             url: siteURL,
           },
           publisher: {
-            '@type': 'Organization',
-            name: title,
+            '@type': 'Person',
+            name: 'Alex Liu',
           },
           headline: title,
           image,

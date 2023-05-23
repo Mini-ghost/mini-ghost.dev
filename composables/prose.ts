@@ -1,16 +1,13 @@
 import { toRef } from '@vueuse/core';
-import { joinURL } from 'ufo';
+import { joinURL, withTrailingSlash } from 'ufo';
 
 import type { MaybeRefOrGetter } from '@vueuse/core';
 
 export async function useProse(_path: MaybeRefOrGetter<string>) {
-  const {
-    public: { siteURL },
-  } = useRuntimeConfig();
-
   const path = toRef(_path);
-
-  const fullPath = computed(() => joinURL(siteURL, path.value));
+  const fullPath = useSiteURL(url => {
+    return withTrailingSlash(joinURL(url, path.value));
+  });
 
   const queryPost = useAsyncData<any>(`POST_CONTENT:${path.value}`, () => {
     return queryContent(path.value).where({ _partial: false }).findOne();

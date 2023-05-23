@@ -2,14 +2,42 @@
 import format from '@/helper/format';
 
 const { posts } = await usePosts();
+const siteURL = useSiteURL();
 
 const title = 'Blog';
 const description =
   '嗨！我是 Alex Liu，這裡記錄了我自己技術開發上的一些心得、過程。目前主要開發以 Vue.js 搭配 TypeScript 為主，是一個追求有趣技術的偏執狂！';
 
 useHead(() => {
+  const items = posts.value?.flatMap(({ posts }) => posts) ?? [];
+  const person = {
+    '@type': 'Person',
+    name: 'Alex Liu',
+    url: siteURL,
+  };
+
+  const transformImage = (title: string, created: string, read: string) => {
+    const titleEncoded = encodeURIComponent(title);
+
+    const create = `${+new Date(created)}`;
+    const query = new URLSearchParams({
+      read,
+      create,
+    });
+
+    return `https://og-image-mini-ghost.vercel.app/${titleEncoded}?${query}`;
+  };
+
   return {
     title,
+
+    link: [
+      {
+        rel: 'canonical',
+        href: `${siteURL}/posts/`,
+      },
+    ],
+
     meta: [
       {
         name: 'description',
@@ -30,6 +58,36 @@ useHead(() => {
       {
         name: 'twitter:description',
         content: description,
+      },
+    ],
+
+    script: [
+      {
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify({
+          '@context': 'http://schema.org',
+          '@type': 'Blog',
+          blogPost: items.map(post => ({
+            '@type': 'BlogPosting',
+            headline: post.title,
+            description: post.description,
+
+            image: transformImage(
+              post.title,
+              post.created,
+              post.readingTime.text
+            ),
+
+            datePublished: post.created,
+            dateModified: post.created,
+            author: person,
+            publisher: person,
+            mainEntityOfPage: {
+              '@type': 'WebPage',
+              '@id': `${siteURL}${post._path}`,
+            },
+          })),
+        }),
       },
     ],
   };

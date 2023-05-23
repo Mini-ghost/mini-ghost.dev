@@ -1,6 +1,7 @@
 interface Post {
   _path: string;
   title: string;
+  description: string;
   created: string;
   readingTime: {
     text: string;
@@ -13,7 +14,7 @@ export async function usePosts() {
     () =>
       queryContent('/posts/')
         .where({ _partial: false })
-        .only(['_path', 'title', 'created', 'readingTime'])
+        .only(['_path', 'title', 'description', 'created', 'readingTime'])
         .sort({ created: -1 })
         .find() as Promise<Post[]>,
     {
