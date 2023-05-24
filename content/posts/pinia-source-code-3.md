@@ -29,7 +29,7 @@ description: Pinia 是目前 Vue 官方首推的狀態管理工具。這系列�
 |--------------------|---------|
 | `store.$onAction`  | 設定一個 callback function，在 action 被執行前調用。 |
 | `store.$subscribe` | 設定一個 callback function，當 state 更新時調用。它會回傳一個用來移除該 callback function 的 function |
-| `store.$patch`     | 更新 state，可以值接賦值部分新的狀態或是使用 callback 取得當前 state 並修改。 |
+| `store.$patch`     | 更新 state，可以直接賦值部分新的狀態或是使用 callback 取得當前 state 並修改。 |
 | `store.$state`     | 當前 store 的 state，如果對他直接設定 state，內部會使用 `store.$patch` 更新 |
 | `store.$reset`     | 重置整個 store 的 state，只是適用於 Options Store。 |
 | `store.$dispose`   | 清除整個 store 的「副作用」，並且將 store 從 Pinia Instance 上將該 store 刪除。 |
