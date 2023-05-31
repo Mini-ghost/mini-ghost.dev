@@ -51,7 +51,7 @@ useHead(() => {
     <div>
       <div class="relative h-20 pointer-events-none">
         <span class="absolute -top-5 -left-5 text-[8rem] font-bold opacity-08">
-          {{ title }}
+          {{ data?.title }}
         </span>
       </div>
       <ul class="space-y-6">
