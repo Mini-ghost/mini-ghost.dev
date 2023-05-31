@@ -6,6 +6,12 @@ status = 301
 force = true
 
 [[redirects]]
+from = "/blog/tags/*"
+to = "/tags/:splat"
+status = 301
+force = true
+
+[[redirects]]
 from = "/blog/*"
 to = "/posts/:splat"
 status = 301
