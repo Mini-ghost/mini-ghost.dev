@@ -5,6 +5,9 @@ function gtag(..._args: any[]) {
 }
 
 export default defineNuxtPlugin(() => {
+  // 如果是在開發中則跳過
+  if (process.env.NODE_ENV !== 'production') return;
+
   const { googleTagId } = useRuntimeConfig().public;
 
   onNuxtReady(() => {
