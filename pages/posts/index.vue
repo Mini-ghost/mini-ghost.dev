@@ -13,7 +13,7 @@ useHead(() => {
   const person = {
     '@type': 'Person',
     name: 'Alex Liu',
-    url: siteURL,
+    url: siteURL.value,
   };
 
   const transformImage = (title: string, created: string, read: string) => {
@@ -34,7 +34,7 @@ useHead(() => {
     link: [
       {
         rel: 'canonical',
-        href: `${siteURL}/posts/`,
+        href: `${siteURL.value}/posts/`,
       },
     ],
 
@@ -84,7 +84,7 @@ useHead(() => {
             publisher: person,
             mainEntityOfPage: {
               '@type': 'WebPage',
-              '@id': `${siteURL}${post._path}`,
+              '@id': `${siteURL.value}${post._path}`,
             },
           })),
         }),

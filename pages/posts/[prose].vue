@@ -102,7 +102,7 @@ useHead(() => {
           author: {
             '@type': 'Person',
             name: 'Alex Liu',
-            url: siteURL,
+            url: siteURL.value,
           },
           publisher: {
             '@type': 'Person',
@@ -140,8 +140,24 @@ useHead(() => {
               {{ post.readingTime.text }}
             </span>
           </div>
+
+          <div class="flex gap-3 my-6">
+            <template
+              v-for="tag in post.tags"
+              :key="tag"
+            >
+              <NuxtLink
+                :to="`/tags/${tag.replace(/\s/g, '-').toLowerCase()}`"
+                class="opacity-50 hover:opacity-100"
+              >
+                #{{ tag }}
+              </NuxtLink>
+            </template>
+          </div>
+
           <p>{{ post.description }}</p>
         </header>
+
 
         <ContentRenderer :value="post" />
       </div>
@@ -216,10 +232,6 @@ useHead(() => {
 
   :is(p, pre) {
     @apply my-4;
-  }
-
-  p {
-    @apply my-6;
   }
 
   :not(h1, h2, h3) > a {

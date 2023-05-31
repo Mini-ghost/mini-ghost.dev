@@ -1,13 +1,10 @@
-export function useSiteURL(
-  getter: (url: string) => string
-): ComputedRef<string>;
+import { MaybeRefOrGetter } from '@vueuse/core';
+import { joinURL, withTrailingSlash } from 'ufo';
 
-export function useSiteURL(): string;
-
-export function useSiteURL(getter?: (url: string) => string) {
+export function useSiteURL(path: MaybeRefOrGetter<string> = '') {
   const {
     public: { siteURL },
   } = useRuntimeConfig();
 
-  return getter ? computed(() => getter(siteURL)) : siteURL;
+  return computed(() => withTrailingSlash(joinURL(siteURL, toValue(path))));
 }
