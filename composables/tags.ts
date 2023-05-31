@@ -10,7 +10,8 @@ interface Post {
 
 export async function useTags(target: string) {
   const nuxtApp = useNuxtApp();
-  const { data } = await useAsyncData(`QUERY_TAGS`, async () => {
+
+  const { data } = await useAsyncData(`QUERY_TAGS:${target}`, async () => {
     const list = await queryContent('/posts/')
       .where({ _partial: false })
       .only(['tags'])
@@ -28,7 +29,7 @@ export async function useTags(target: string) {
         .sort({ created: -1 })
         .find();
 
-      return posts;
+      return posts as Post[];
     });
 
     return {

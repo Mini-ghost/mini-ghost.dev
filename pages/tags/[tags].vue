@@ -48,37 +48,30 @@ useHead(() => {
       {{ description }}
     </p>
 
-    <div>
-      <div class="relative h-20 pointer-events-none">
-        <span class="absolute -top-5 -left-5 text-[8rem] font-bold opacity-08">
-          {{ data?.title }}
-        </span>
-      </div>
-      <ul class="space-y-6">
-        <li
-          v-for="post in data?.posts"
-          :key="post._path"
+    <ul class="space-y-6">
+      <li
+        v-for="post in data?.posts"
+        :key="post._path"
+      >
+        <NuxtLink
+          :to="post._path"
+          class="opacity-80 lg:opacity-60 transition-opacity duration-300 focus:opacity-100 hover:opacity-100 focus:outline-none "
         >
-          <NuxtLink
-            :to="post._path"
-            class="opacity-80 lg:opacity-60 transition-opacity duration-300 focus:opacity-100 hover:opacity-100 focus:outline-none "
-          >
-            <span class="text-lg w-fit">
-              {{ post.title }}
+          <span class="text-lg w-fit">
+            {{ post.title }}
+          </span>
+          <br>
+          <span class="text-sm opacity-70">
+            <time :datetime="post.created">
+              {{ format(post.created, { month: 'short', day: 'numeric' }) }}
+            </time>
+            •
+            <span>
+              {{ post.readingTime.text }}
             </span>
-            <br>
-            <span class="text-sm opacity-70">
-              <time :datetime="post.created">
-                {{ format(post.created, { month: 'short', day: 'numeric' }) }}
-              </time>
-              •
-              <span>
-                {{ post.readingTime.text }}
-              </span>
-            </span>
-          </NuxtLink>
-        </li>
-      </ul>
-    </div>
+          </span>
+        </NuxtLink>
+      </li>
+    </ul>
   </div>
 </template>
