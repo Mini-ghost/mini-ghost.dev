@@ -1,3 +1,5 @@
+import { hash } from 'ohash';
+
 interface Post {
   _path: string;
   title: string;
@@ -11,7 +13,9 @@ interface Post {
 export async function useTags(target: string) {
   const nuxtApp = useNuxtApp();
 
-  const { data } = await useAsyncData(`QUERY_TAGS:${target}`, async () => {
+  const key = `QUERY_TAGS:${hash(decodeURIComponent(target))}`;
+
+  const { data } = await useAsyncData(key, async () => {
     const list = await queryContent('/posts/')
       .where({ _partial: false })
       .only(['tags'])

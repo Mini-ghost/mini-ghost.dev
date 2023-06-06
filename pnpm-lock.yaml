@@ -18,10 +18,14 @@ specifiers:
   eslint-plugin-vue: ^9.14.1
   nuxt: ^3.5.2
   nuxt-simple-sitemap: ^2.6.1
+  ohash: ^1.1.2
   remark-reading-time: ^2.0.1
   sass: ^1.62.1
   typescript: ^5.0.4
   ufo: ^1.1.2
+
+dependencies:
+  ohash: 1.1.2
 
 devDependencies:
   '@nuxt/content': 2.6.0
@@ -5795,7 +5799,6 @@ packages:
 
   /ohash/1.1.2:
     resolution: {integrity: sha512-9CIOSq5945rI045GFtcO3uudyOkYVY1nyfFxVQp+9BRgslr8jPNiSSrsFGg/BNTUFOLqx0P5tng6G32brIPw0w==}
-    dev: true
 
   /on-finished/2.4.1:
     resolution: {integrity: sha512-oVlzkg3ENAhCk2zdv7IJwd/QUD4z2RxRwpkcGY8psCVcCYZNq4wYnVWALHM+brtuJjePWiYF/ClmuDr8Ch5+kg==}

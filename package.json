@@ -29,5 +29,8 @@
     "sass": "^1.62.1",
     "typescript": "^5.0.4",
     "ufo": "^1.1.2"
+  },
+  "dependencies": {
+    "ohash": "^1.1.2"
   }
 }
