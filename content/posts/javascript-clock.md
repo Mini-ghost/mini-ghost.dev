@@ -3,7 +3,6 @@ title: 新手 JS 地下城 - 2F 時鐘 Clock
 tags: 
   - JavaScript
   - Vanilla JS
-  - JS 地下城
 created: 2019-06-02T16:07:16Z
 image: /images/4yieHue.jpg
 image_caption: 新手 JS 地下城 - 2F 時鐘 Clock

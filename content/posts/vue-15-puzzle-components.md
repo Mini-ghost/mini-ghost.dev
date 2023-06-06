@@ -2,7 +2,6 @@
 title: 用 Vue.js 做 15 Puzzle 拼圖小遊戲（下）
 tags: 
   - Vue
-  - Vue 範例
   - 15-puzzle
 created: 2020-05-02T01:32:32.592Z
 image: /images/15-puzzle-congratulations.jpg

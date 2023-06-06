@@ -3,7 +3,6 @@ title: 新手 JS 地下城 - 1F 九九乘法表 Multiplication Chart
 tags: 
   - JavaScript
   - Vanilla JS
-  - JS 地下城
 created: 2019-05-28 22:32:58
 image: /images/5GtdHXF.jpg
 image_caption: 新手 JS 地下城 - 1F 九九乘法表 Multiplication Chart

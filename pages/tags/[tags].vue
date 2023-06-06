@@ -4,6 +4,10 @@ import format from '@/helper/format';
 const route = useRoute();
 const { data } = await useTags(route.params.tags as string);
 
+if (!data.value) {
+  navigateTo('/404');
+}
+
 const title = computed(() => `Tag：${data.value?.title}`);
 const description = computed(
   () => `共有 ${data.value?.posts.length} 篇與 ${data.value?.title} 相關的文章`
