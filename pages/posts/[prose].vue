@@ -259,9 +259,11 @@ useHead(() => {
   pre {
     @apply text-sm;
     @apply bg-[var(--bg-code-block)];
-    @apply border border-solid border-gray/10 hover:border-gray/30;
-    @apply p-4;
+    @apply ring-1 ring-gray/10 hover:ring-2 hover:ring-gray/30;
+    @apply p-6;
     @apply rounded-2 overflow-x-auto;
+    @apply opacity-75 hover:opacity-100;
+    @apply transition-all duration-300;
   }
 
   :not(pre) > code {

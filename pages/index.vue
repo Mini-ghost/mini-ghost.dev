@@ -45,11 +45,11 @@ const person = data.value!;
         <h2 class="text-2xl lg:text-3xl font-bold">
           Skills
         </h2>
-        <ul class="flex flex-wrap space-x-2 lg:space-x-3">
+        <ul class="flex flex-wrap gap-x-3">
           <li
             v-for="item in person.skills"
             :key="item"
-            class="inline-flex items-center before:content-[''] before:block first:before:hidden before:h-1/3 before:w-px before:bg-[#8A949E] before:mr-2 lg:before-mr-3"
+            class="inline-flex items-center"
           >
             <span>{{ item }}</span>
           </li>
@@ -64,19 +64,17 @@ const person = data.value!;
           <li
             v-for="item in person.experiences"
             :key="item.company"
-            class="relative flex ml-1 pt-0 pb-6 last:pb-2 before:content-[''] before:block before:absolute before:top-0 before:left-1 before:bottom-0 before:w-px before:bg-[#8A949E]"
+            class="relative flex ml-1 pt-0 pb-6 last:pb-2 before:content-[''] before:block before:absolute before:top-0 before:left-1 before:-translate-x-1/2 before:bottom-0 before:w-px before:bg-[#64696E]"
           >
             <span
               aria-hidden="true"
-              class="w-2 h-2 rounded-full bg-[#8A949E]"
+              class="w-2 h-2 rounded-full bg-[#64696E]"
             />
-            <div class="pl-4 group">
-              <p class="text-lg">
-                {{ item.company }}
-              </p>
-              <div class="text-sm opacity-60 mt-1">
+            <div class="flex flex-col gap-1 pl-4 group">
+              <strong class="text-lg">{{ item.company }}</strong>
+              <span class="text-sm opacity-60">
                 {{ item.title }} <i>/ {{ item.period }}</i>
-              </div>
+              </span>
             </div>
           </li>
         </ul>

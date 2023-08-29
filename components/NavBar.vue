@@ -29,17 +29,25 @@ watch(offset, (value, oldValue) => {
     <div class="flex items-center w-11/12 mx-auto py-4 lg:w-full lg:px-8 lg:py-6">
       <NuxtLink
         to="/"
-        class="text-lg font-bold"
+        class="text-xl lg:text-2xl font-bold"
       >
         Alex Liu
       </NuxtLink>
       <div class="grow" />
-      <nav>
+      <nav class="flex gap-x-3">
         <NuxtLink
           to="/posts"
-          class="transition-opacity duration-300 op-60 hover:op-100"
+          class="transition-opacity duration-300 op-80 hover:op-100"
+          active-class="font-bold !op-100"
         >
           Blog
+        </NuxtLink>
+        <NuxtLink
+          to="https://github.com/Mini-ghost"
+          class="transition-opacity duration-300 op-80 hover:op-100"
+          target="_blank"
+        >
+          GitHub
         </NuxtLink>
       </nav>
     </div>

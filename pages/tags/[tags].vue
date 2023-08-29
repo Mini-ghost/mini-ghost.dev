@@ -43,8 +43,8 @@ useHead(() => {
 </script>
 
 <template>
-  <div class="max-w-21cm w-11/12 mx-auto space-y-6 lg:pt-16 pb-16 lg:pb-32">
-    <h1 class="text-3xl font-bold">
+  <div class="max-w-21cm w-11/12 mx-auto space-y-4 lg:space-y-6 lg:pt-16 pb-16 lg:pb-32">
+    <h1 class="text-3xl lg:text-5xl font-bold">
       {{ title }}
     </h1>
 
