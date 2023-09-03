@@ -17,6 +17,11 @@ const fetchFn = () =>
 
 const { data } = await useAsyncData('HOME', fetchFn);
 const person = data.value!;
+
+useHead(() => ({
+  title: `Hello I'm ${person.name} - ${person.name}'s Personal Site`,
+  description: person.description,
+}));
 </script>
 
 <template>
