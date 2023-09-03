@@ -1,9 +1,6 @@
-# Redirect with a 301
-[[redirects]]
-from = "/blog"
-to = "/posts"
-status = 301
-force = true
+[build]
+publish = "dist"
+command = "npx pnpm run build"
 
 [[redirects]]
 from = "/blog/tags/*"
@@ -14,5 +11,11 @@ force = true
 [[redirects]]
 from = "/blog/*"
 to = "/posts/:splat"
+status = 301
+force = true
+
+[[redirects]]
+from = "/blog"
+to = "/posts"
 status = 301
 force = true
