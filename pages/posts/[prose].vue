@@ -158,8 +158,23 @@ useHead(() => {
           <p>{{ post.description }}</p>
         </header>
 
-
         <ContentRenderer :value="post" />
+
+        <h3>請我喝杯咖啡</h3>
+        <p>如果這裡的內容有幫助到你的話，一杯咖啡就是對我最大的鼓勵。</p>
+
+        <NuxtLink
+          href="https://www.buymeacoffee.com/alex_minighost"
+          target="_blank"
+        >
+          <NuxtImg
+            src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png"
+            alt="請我喝杯咖啡"
+            width="217"
+            height="60"
+            loading="lazy"
+          />
+        </NuxtLink>
       </div>
       <div class="max-w-21cm w-11/12 mx-auto mt-16 pb-16 lg:pb-32">
         <div class="grid grid-cols-2 gap-x-4 border-t border-white border-opacity-20 pt-8">
