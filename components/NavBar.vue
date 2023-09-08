@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import GithubIcon from '@/assets/icons/github.svg?component';
+import TwitterIcon from '@/assets/icons/twitter.svg?component';
+
 const enum DIRECTION {
   UP,
   DOWN,
@@ -34,21 +37,32 @@ watch(offset, (value, oldValue) => {
         Alex Liu
       </NuxtLink>
       <div class="grow" />
-      <nav class="flex gap-x-3">
+      <nav class="flex items-center gap-x-3">
         <NuxtLink
           to="/posts"
-          class="transition-opacity duration-300 op-80 hover:op-100"
-          active-class="font-bold !op-100"
+          class="transition-opacity duration-300 op-50 hover:op-100"
+          active-class="!op-100"
         >
           Blog
         </NuxtLink>
-        <NuxtLink
-          to="https://github.com/Mini-ghost"
-          class="transition-opacity duration-300 op-80 hover:op-100"
-          target="_blank"
-        >
-          GitHub
-        </NuxtLink>
+        <div class="flex gap-x-3 before:content-[''] before:bg-white/20 before:h-6 before:w-px before:ms-2">
+          <NuxtLink
+            to="https://twitter.com/Minighost_Alex"
+            class="transition-opacity duration-300 op-50 hover:op-100"
+            target="_blank"
+            aria-label="Follow on Twitter"
+          >
+            <TwitterIcon />
+          </NuxtLink>
+          <NuxtLink
+            to="https://github.com/Mini-ghost"
+            class="transition-opacity duration-300 op-50 hover:op-100"
+            target="_blank"
+            aria-label="Follow on GitHub"
+          >
+            <GithubIcon />
+          </NuxtLink>
+        </div>
       </nav>
     </div>
   </header>

@@ -1,3 +1,5 @@
+import SvgLoader from 'vite-svg-loader';
+
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 
 const title = 'Alex Liu';
@@ -62,6 +64,30 @@ export default defineNuxtConfig({
   },
 
   vite: {
+    plugins: [
+      SvgLoader({
+        svgoConfig: {
+          plugins: [
+            'removeXMLNS',
+            {
+              name: 'removeAttrs',
+              params: {
+                attrs: 'fill',
+              },
+            },
+            {
+              name: 'addAttributesToSVGElement',
+              params: {
+                attribute: {
+                  'aria-hidden': 'true',
+                  fill: 'currentColor',
+                },
+              },
+            },
+          ],
+        },
+      }),
+    ],
     build: {
       rollupOptions: {
         output: {
