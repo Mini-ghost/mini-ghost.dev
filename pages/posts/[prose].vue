@@ -277,19 +277,15 @@ useHead(() => {
     @apply ring-1 ring-gray/10 hover:ring-2 hover:ring-gray/30;
     @apply p-6;
     @apply rounded-2 overflow-x-auto;
-    @apply opacity-75 hover:opacity-100;
     @apply transition-all duration-300;
   }
 
-  :not(pre) > code {
+  code:not(pre > code) {
+    @apply text-[90%];
     @apply text-[var(--c-text-code)];
     @apply bg-[var(--bg-code-inline)];
-    @apply py-1 px-1.5;
+    @apply py-1 px-2.5;
     @apply rounded;
-  }
-
-  :not(pre, h1, h2, h3, h4, h5, h6) > code {
-    @apply text-[0.785rem];
   }
 
   ul,
