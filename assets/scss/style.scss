@@ -1,15 +1,17 @@
 .dark {
   --c-default: #D3D3D6;
+  --c-background: #121212;
   --c-link: #FFAC11;
   --c-text-code: #CBCBCB;
   --c-divider: #525259;
-  --bg-code-inline: #313136;
+  --bg-code-inline: #2A2A2A;
   --bg-code-block: #1A1A1ACC;
   --bg-soft: #2A2A2A;
 }
 
 .light {
   --c-default: #212121;
+  --c-background: #FFFFFF;
   --c-link: #FFAC11;
   --c-text-code: #5D6F5D;
   --c-divider: #525259;
@@ -20,11 +22,11 @@
 
 html.dark {
   color-scheme: dark;
-  background: #121212;
 }
 
 body {
   color: var(--c-default);
+  background: var(--c-background);
 }
 
 .before\:content-\[\'\'\]::before {
