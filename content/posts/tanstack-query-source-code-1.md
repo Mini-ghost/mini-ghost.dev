@@ -3,9 +3,10 @@ title: 深入淺出 TanStack Query（一）：在呼叫 useQuery 後發生了什
 tags:
   - Vue
   - Tanstack Query
+  - 觀察者模式
 
 created: 2023-09-30T13:45:16.002Z
-description: 你是怎麼管理專案的 server data 狀態呢？前端開發時不僅要處理 server data 的快取，還要讓它能盡可能的跨元件共用，最後又要在適當的時候清除或更新，阿哩阿雜的很煩人。TanStack Query 是一個可以很好的解決這些問題的工具。這個系列文章將從如何使用 TanStack Query 以及深入暸解它底層運作的原理與邏輯。
+description: 你是怎麼管理專案的 server data 狀態呢？前端開發時不僅要處理 server data 的快取，還要讓它能盡可能的跨元件共用，最後又要在適當的時候清除或更新，阿哩阿雜的真的很煩人。TanStack Query 是一個可以很好的解決這些問題的工具。這個系列文章將分享如何使用 TanStack Query 以及深入暸解它底層運作的原理與邏輯與架構。
 ---
 
 ## 前言
@@ -143,7 +144,9 @@ const { data, error, isFetching } = useTodo(1);
 
 ![Query 與 QueryObserver 結構圖 - by Alex Liu](/images/query-architecture.png){width=794 height=530}
 
-我們可以看到，每一個 `QueryObserver` 都會對應到一個存在 `QueryCache` 上的 `Query`。那 `QueryObserver` 拿什麼去找 `Query` 呢？那就是 `queryKey` 拉！
+我們可以看到，每一個 `QueryObserver` 都會對應到一個存在 `QueryCache` 上的 `Query`。那 `QueryObserver` 拿什麼去找 `Query` 呢？
+
+答案就是：`queryKey`。
 
 ```ts
 function useTodo(id: number) {
@@ -157,7 +160,7 @@ function useTodo(id: number) {
 
 每一個 `QueryObserver` instance 都只會對應到一個 `Query` instance。所以當程式更新，第三個 `useTodo` 呼叫的 `queryKey` 變成與第二次的相同，他的關係圖就會變成如下：
 
-![Query 與 QueryObserver 結構圖（2） - by Alex Liu](/images/query-architecture-2.png){width=794 height=530}
+![Query 與 QueryObserver 結構圖（2）- by Alex Liu](/images/query-architecture-2.png){width=794 height=530}
 
 此時 `queryKey` 相同的 `QueryObserver` 就會對應到同一個 `Query` instance 上面。
 
@@ -212,11 +215,11 @@ JSON.stringify(value [,replacer [, space]])
 
 看完這麼長一段我們知道一個重點：**傳入的 `replacer` 傳入 function 可以用來改變轉成字串這個過程的行為**。
 
-所以回頭看 `hashKey` 在做的事就是將陣列丟到 `JSON.stringify` 轉串成字串，在轉換的過程中遇到一個純物件，`hashKey` 的 `replacer` 會將原本物件（`val`）的 keys 重新排序並產生一個新的物件並會傳給 `JSON.stringify` 轉換成字串。
+所以回頭看 `hashKey` 做的事就是將陣列丟到 `JSON.stringify` 轉串成字串。在轉換的過程中如果遇到一個純物件，`hashKey` 的 `replacer` 會將原本物件（`val`）的 keys 重新排序並產生一個新的物件並會傳給 `JSON.stringify` 轉換成字串。
 
 轉換成字串的 `queryKey` 叫做 `queryHash`，有了 `queryHash` 就可以在 `QueryCache` 上的 `#queries` 找找有沒有存在的 `Query` instance 在裡面。有的話就重複使用，沒有的話就建立一個新的 `Query` instance。
 
-注意：因為 `queryKey` 轉換成 `queryHash` 的過程在實作上只針對物件的 keys 做排序，所以陣列裡面的順序不同是會視為不同的 `queryKey`。
+注意：因為 `queryKey` 轉換成 `queryHash` 的過程在實作上只針對物件的 keys 做排序，所以陣列裡面的順序不同會被視為不同的 `queryKey`。
 
 ```ts
 useQuery({ queryKey: ['TODOS', status, page], ... })
@@ -286,8 +289,6 @@ class QueryObserver extends Subscribable {
    protected onSubscribe(): void {
     if (this.listeners.size === 1) {
       // this.#currentQuery 是這個 QueryObserver 指向的 `Query` instance
-      // 當框架實作執行了 `observer.subscribe(callback)` 就會在這裡將當前的
-      // QueryObserver instance 加到 `Query` 的觀察者清單裡面。
       this.#currentQuery.addObserver(this)
 
       if (shouldFetchOnMount(this.#currentQuery, this.options)) {
