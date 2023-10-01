@@ -28,7 +28,7 @@ TanStack Query 有個更為人熟知的名稱叫：**React-Query**。而 TanStac
 
 ## 為何要使用 Tanstack Query
 
-Tanstack Query 不是一個 data fetching 的工具，它是一個 server data 的狀態管理工具？Tanstack Query 會幫我們快取來自 server 的資料，並且在適當的時間內盡可能使用快取或是在過期後背景重新去得資料。
+Tanstack Query 不是一個 data fetching 的工具，它是一個 server data 的狀態管理工具。Tanstack Query 會幫我們快取來自 server 的資料，並且在適當的時間內盡可能使用快取或是在過期後背景重新去得資料。
 
 在不使用 Tanstack Query 時我們需要手動的將這些狀態一個一個存起來自己管理：
 
@@ -231,7 +231,7 @@ useQuery({ queryKey: ['TODOS', undefined, page, status], ...})
 
 ## 建立雙向的關係
 
-每一個 `QueryObserver` 都會指向一個 `Query`，而 `Query` 掌管了 data fetching 跟狀態管理，當 `Query` instance 上的資料更新他也要通知所有 `QueryObserver` 更新資料，可是此時 `Query` 並不會知道有哪些 `QueryObserver` 指向（訂閱）他，所以 Tanstack Query 需要一個機制來讓 `Query` 收集有哪些 `QueryObserver` 指向自己。
+每一個 `QueryObserver` 都會指向一個 `Query`，而 `Query` 掌管了 data fetching 跟狀態管理，當 `Query` instance 上的資料更新他也要通知所有 `QueryObserver` 更新資料。可是此時 `Query` 並不會知道有哪些 `QueryObserver` 指向（訂閱）他，所以 Tanstack Query 需要一個機制來讓 `Query` 收集有哪些 `QueryObserver` 指向自己。
 
 為了說明 Tanstack Query 怎麼處理這件事情，我們先跳離核心（`query-core`），來看看 `vue-query` 跟 `react-query` 怎麼訂閱 `Query` 上的狀態更新。
 
@@ -281,7 +281,7 @@ React.useSyncExternalStore(
 )
 ```
 
-假設 `isRestoring` 一開始就是 `false`，這時會執行 `observer.subscribe(callback)`。這個 `subscribe` 是 `QueryObserver` 繼承的 `Subscribable` 類型上的實作方法，他又會呼叫 `QueryObserver` 上的 `onSubscribe`，如下：
+其實兩個框架的實作我們都只需要關注 `observer.subscribe(callback)` 這一段就好。假設這裡的 `isRestoring` 一開始就是 `false`，這時會馬上執行 `observer.subscribe(callback)`。這個 `subscribe` 是 `QueryObserver` 繼承的 `Subscribable` 類型上的實作方法，他內部又會呼叫 `QueryObserver` 上的 `onSubscribe`，如下：
 
 ```ts
 class QueryObserver extends Subscribable {
@@ -301,9 +301,13 @@ class QueryObserver extends Subscribable {
 }
 ```
 
-當 `onSubscribe` 被呼叫後，`QueryObserver` 就會將自己的 instance 添加到他所追蹤的 `Query` instance 上的觀察者清單，這樣 `Query` 就完成了訂閱的收集，接下來只要 `Query` 有任何狀態變更，像是開始請求、請求成功、請求失敗 … 等，`Query` 都可以把收集到的 `QueryObserver` 一個一個叫出來更新。
+從程式碼裡面可以發現，對框架實作來說 `QueryObserver` 提供了一個「訂閱」的方法。一但框架執行了訂閱，這時 `onSubscribe` 會被呼叫，接著 `QueryObserver` 就會將自己的 instance 加到他所追蹤的 `Query` instance 上的觀察者清單裏面，這樣 `Query` 就完成了訂閱者的收集。接下來只要 `Query` 有任何狀態變更，像是開始請求、請求成功、請求失敗 … 等，`Query` 都可以把收集到的 `QueryObserver` 一個一個叫出來更新。
 
-建立了雙向的關係，`QueryObserver` 可以知道要去那個一個 `Query` 上面找資料，而 `Query` 也會知道當自己狀態變化時要去叫哪些 `QueryObserver` 更新資料，這就是「觀察者模式」（Observer Pattern）又被稱為「發布-訂閱模式」（Publish-Subscribe Pattern）。
+我們複習一下上面出現過的關係圖：
+
+![Query 與 QueryObserver 結構圖（3）- by Alex Liu](/images/query-architecture-3.png){width=794 height=393}
+
+`QueryObserver` 與 `Query` 建立了雙向的關係，`QueryObserver` 可以知道要去那個一個 `Query` 上面找資料，而 `Query` 也會知道誰訂閱了自己的狀態，當自己狀態變化時要去叫哪些 `QueryObserver` 更新資料，這就是「觀察者模式」（Observer Pattern）又被稱為「發布-訂閱模式」（Publish-Subscribe Pattern）。
 
 ## 結語
 
