@@ -2,7 +2,7 @@
 title: 深入淺出 TanStack Query（一）：在呼叫 useQuery 後發生了什麼事
 tags:
   - Vue
-  - Tanstack Query
+  - TanStack Query
   - Observer Pattern
 
 created: 2023-09-30T13:45:16.002Z
@@ -26,11 +26,11 @@ TanStack Query 有個更為人熟知的名稱叫：**React-Query**。而 TanStac
 
 所以接下來的範例會用設計給 Vue 使用的 `@tanstack/vue-query` 撰寫，API 在使用上會與 React 版本的 `@tanstack/react-query` 有一丁點差異。在涉及核心實作時，基本上就如同前面提到的「**與框架無關**」所以就算是 React 的使用者也可以方心服用。
 
-## 為何要使用 Tanstack Query
+## 為何要使用 TanStack Query
 
-Tanstack Query 不是一個 data fetching 的工具，它是一個 server data 的狀態管理工具。Tanstack Query 會幫我們快取來自 server 的資料，並且在適當的時間內盡可能使用快取或是在過期後背景重新去得資料。
+TanStack Query 不是一個 data fetching 的工具，它是一個 server data 的狀態管理工具。TanStack Query 會幫我們快取來自 server 的資料，並且在適當的時間內盡可能使用快取或是在過期後背景重新去得資料。
 
-在不使用 Tanstack Query 時我們需要手動的將這些狀態一個一個存起來自己管理：
+在不使用 TanStack Query 時我們需要手動的將這些狀態一個一個存起來自己管理：
 
 ```vue
 <script lang="ts">
@@ -76,9 +76,9 @@ const { data, error, isFetching } = useTodo(props.id);
 </script>
 ```
 
-大費周章的寫了一個基本範例，但如果使用 Tanstack Query 寫會變成什麼樣子呢？
+大費周章的寫了一個基本範例，但如果使用 TanStack Query 寫會變成什麼樣子呢？
 
-在用 Tanstack Query 改寫前，我們必須在 Vue app instance 上面裝上 `VueQueryPlugin` 
+在用 TanStack Query 改寫前，我們必須在 Vue app instance 上面裝上 `VueQueryPlugin` 
 
 ```ts
 // main.ts
@@ -87,7 +87,7 @@ import { VueQueryPlugin } from "@tanstack/vue-query";
 app.use(VueQueryPlugin)
 ```
 
-這樣我們就可以將上面手動的版本改成使用 Tanstack Query 的版本：
+這樣我們就可以將上面手動的版本改成使用 TanStack Query 的版本：
 
 ```vue
 <script lang="ts">
@@ -116,7 +116,7 @@ const { data, error, isFetching } = useTodo(props.id);
 </script>
 ```
 
-是不是簡潔很多呢？而且 Tanstack Query 還可以依照設定，決定多久時間內重新呼叫 `useTodo` 不再重新發送請求，又或是畫面上兩個以上的地方都使用到 `useTodo` 他可以讓請求不重複並且共享相同的結果。
+是不是簡潔很多呢？而且 TanStack Query 還可以依照設定，決定多久時間內重新呼叫 `useTodo` 不再重新發送請求，又或是畫面上兩個以上的地方都使用到 `useTodo` 他可以讓請求不重複並且共享相同的結果。
 
 ```vue
 <script setup lang="ts">
@@ -134,11 +134,11 @@ const { data, error, isFetching } = useTodo(1);
 
 如果 A 元件與 B 元件同時出現在畫面上，則只會發出一個 data fetching，並且兩個元件共享同一個資料響應。
 
-感受到 Tanstack Query 的威力了嗎？當然他遠不止如此，其他的未來有機會再慢慢介紹，到這裡扣出了本篇想探討的主題：**在呼叫 `useQuery` 後發生了什麼事？**
+感受到 TanStack Query 的威力了嗎？當然他遠不止如此，其他的未來有機會再慢慢介紹，到這裡扣出了本篇想探討的主題：**在呼叫 `useQuery` 後發生了什麼事？**
 
 ## 在呼叫 useQuery 後發生了什麼事
 
-在我們每次呼叫 `useQuery` 後 Tanstack Query 會建立一個 `QueryObserver` 的 instance，這個 instance 紀錄著我們傳入的設定，並且他會拿著這個設定去一個叫 `QueryCache` 的 instance 上找有沒有符合條件的 `Query` instance 存在，有的話就取出使用，沒有的話 `QueryCache` 就會就建立一個新的 `Query` instance 返回並儲存。
+在我們每次呼叫 `useQuery` 後 TanStack Query 會建立一個 `QueryObserver` 的 instance，這個 instance 紀錄著我們傳入的設定，並且他會拿著這個設定去一個叫 `QueryCache` 的 instance 上找有沒有符合條件的 `Query` instance 存在，有的話就取出使用，沒有的話 `QueryCache` 就會就建立一個新的 `Query` instance 返回並儲存。
 
 所以如果當上面範例的 `useTodo` 分別傳入不同 `id` 呼叫了三次，他被後建立的結構圖如下：
 
@@ -166,9 +166,9 @@ function useTodo(id: number) {
 
 ## QueryCache 怎麼找到 Query
 
-不過我們傳如的 `queryKey` 是一個陣列，Tanstack Query 是如何儲存 `Query` 跟找到建立過的 `Query` 呢？
+不過我們傳如的 `queryKey` 是一個陣列，TanStack Query 是如何儲存 `Query` 跟找到建立過的 `Query` 呢？
 
-在 Tanstack Query 中 `queryKey` 扮演了很重要的角色，他牽起了 `QueryObserver` 與 `Query` 的關係，讓具有相同 `queryKey` 的不同 `QueryObserver` instance 可以找到同一個 `Query` instance。除此之外根據官方文件，`queryKey` 不但可以像上面傳入 `string` 與 `number` 還可以傳入物件、陣列等等。
+在 TanStack Query 中 `queryKey` 扮演了很重要的角色，他牽起了 `QueryObserver` 與 `Query` 的關係，讓具有相同 `queryKey` 的不同 `QueryObserver` instance 可以找到同一個 `Query` instance。除此之外根據官方文件，`queryKey` 不但可以像上面傳入 `string` 與 `number` 還可以傳入物件、陣列等等。
 
 ```ts
 useQuery({ queryKey: ['TODOS', { status: 'done', page: 1, perPage: 20 }], ... })
@@ -231,9 +231,9 @@ useQuery({ queryKey: ['TODOS', undefined, page, status], ...})
 
 ## 建立雙向的關係
 
-每一個 `QueryObserver` 都會指向一個 `Query`，而 `Query` 掌管了 data fetching 跟狀態管理，當 `Query` instance 上的資料更新他也要通知所有 `QueryObserver` 更新資料。可是此時 `Query` 並不會知道有哪些 `QueryObserver` 指向（訂閱）他，所以 Tanstack Query 需要一個機制來讓 `Query` 收集有哪些 `QueryObserver` 指向自己。
+每一個 `QueryObserver` 都會指向一個 `Query`，而 `Query` 掌管了 data fetching 跟狀態管理，當 `Query` instance 上的資料更新他也要通知所有 `QueryObserver` 更新資料。可是此時 `Query` 並不會知道有哪些 `QueryObserver` 指向（訂閱）他，所以 TanStack Query 需要一個機制來讓 `Query` 收集有哪些 `QueryObserver` 指向自己。
 
-為了說明 Tanstack Query 怎麼處理這件事情，我們先跳離核心（`query-core`），來看看 `vue-query` 跟 `react-query` 怎麼訂閱 `Query` 上的狀態更新。
+為了說明 TanStack Query 怎麼處理這件事情，我們先跳離核心（`query-core`），來看看 `vue-query` 跟 `react-query` 怎麼訂閱 `Query` 上的狀態更新。
 
 **vue-query**
 
@@ -319,9 +319,9 @@ class QueryObserver extends Subscribable {
 4. 有找到對應的 `Query` instance 就共用，沒有的的話就建立一個新的並回傳。
 5. 當開始訂閱 `QueryObserver` 時，`QueryObserver` 會將自己加到 `Query` instance 上的 observers 清單。當 `Query` 的資料有任何變化時，它就可以通知所有的 `QueryObserver` 做出相對應的更新。
 
-到這裡就是 Tanstack Query 的底層基本概念拉！之後還會慢慢推出更多探究 Tanstack Query 底層的分享，有任何想暸解或內容有誤的地方都歡迎跟我討論。
+到這裡就是 TanStack Query 的底層基本概念拉！之後還會慢慢推出更多探究 TanStack Query 底層的分享，有任何想暸解或內容有誤的地方都歡迎跟我討論。
 
-#### 參考資料
+### 參考資料
 
 - [Inside React Query](https://tkdodo.eu/blog/inside-react-query)
 - [JSON.stringify() - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
