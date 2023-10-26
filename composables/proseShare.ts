@@ -1,5 +1,6 @@
+import CopyIcon from '@/assets/icons/copy.svg?component';
 import FacebookIcon from '@/assets/icons/facebook.svg?component';
-import LinkIcon from '@/assets/icons/link.svg?component';
+import LinkedinIcon from '@/assets/icons/linkedin.svg?component';
 import TwitterIcon from '@/assets/icons/twitter.svg?component';
 
 export function useProseShare(options: {
@@ -17,7 +18,7 @@ export function useProseShare(options: {
     return [
       {
         label: 'Share Link',
-        icon: LinkIcon,
+        icon: CopyIcon,
         attrs: {
           onClick() {
             copy();
@@ -37,6 +38,16 @@ export function useProseShare(options: {
         icon: FacebookIcon,
         attrs: {
           to: `https://www.facebook.com/sharer/sharer.php?&t=${content}`,
+          target: '_blank',
+        },
+      },
+      {
+        label: 'Share on LinkedIn',
+        icon: LinkedinIcon,
+        attrs: {
+          to: `https://www.linkedin.com/shareArticle?mini=true&url=${path}&title=${encodeURIComponent(
+            title
+          )}`,
           target: '_blank',
         },
       },

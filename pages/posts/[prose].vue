@@ -146,8 +146,8 @@ useHead(() => {
           >
             <Component
               :is="item.icon"
-              width="22"
-              height="22"
+              width="20"
+              height="20"
             />
           </Component>
         </template>
