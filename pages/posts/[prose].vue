@@ -10,6 +10,14 @@ const { post, surround, fullPath } = await useProse(() =>
   withoutTrailingSlash(route.path)
 );
 
+const NuxtLink = resolveComponent('NuxtLink');
+const shares = useProseShare({
+  title: () => {
+    return post.value.title ? `${post.value.title} | Alex Liu` : '';
+  },
+  path: fullPath,
+});
+
 useHead(() => {
   const content = post.value;
   if (content == null) return {};
@@ -122,99 +130,121 @@ useHead(() => {
 </script>
 
 <template>
-  <div>
-    <template v-if="post">
-      <div class="prose max-w-21cm w-11/12 mx-auto">
-        <header>
-          <h1 class="mt-0 text-[1.75rem] lg:text-[2.25rem] leading-relaxed">
-            <NuxtLink :to="post._path">
-              {{ post.title }}
-            </NuxtLink>
-          </h1>
-          <div class="text-sm text-gray/60">
-            <time :datetime="post.created">
-              {{ format(post.created) }}
-            </time>
-            •
-            <span>
-              {{ post.readingTime.text }}
-            </span>
-          </div>
+  <template v-if="post">
+    <div class="flex w-fit mx-auto">
+      <div class="hidden lg:flex space-y-2 flex-col sticky top-20 self-start mt-50">
+        <template
+          v-for="item in shares"
+          :key="item.title"
+        >
+          <Component
+            :is="item.attrs.to ? NuxtLink : 'button'"
+            :type="item.attrs.to ? undefined : 'button'"
+            class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-[--bg-code-block] hover:text-[#FFAC11]"
+            :aria-label="item.label"
+            v-bind="item.attrs"
+          >
+            <Component
+              :is="item.icon"
+              width="20"
+              height="20"
+            />
+          </Component>
+        </template>
+      </div>
+      <div class="max-w-[calc(2rem+21cm)] px-8 pb-16 lg:pb-32">
+        <div class="prose">
+          <header>
+            <h1 class="mt-0 text-[1.75rem] lg:text-[2.25rem] leading-relaxed">
+              <NuxtLink :to="post._path">
+                {{ post.title }}
+              </NuxtLink>
+            </h1>
+            <div class="text-sm text-gray/60">
+              <time :datetime="post.created">
+                {{ format(post.created) }}
+              </time>
+              •
+              <span>
+                {{ post.readingTime.text }}
+              </span>
+            </div>
 
-          <div class="flex gap-3 my-6">
-            <template
-              v-for="tag in post.tags"
-              :key="tag"
-            >
-              <NuxtLink
-                :to="`/tags/${tag.replace(/\s/g, '-').toLowerCase()}`"
-                class="opacity-50 hover:opacity-100"
+            <div class="flex gap-3 my-6">
+              <template
+                v-for="tag in post.tags"
+                :key="tag"
               >
-                #{{ tag }}
+                <NuxtLink
+                  :to="`/tags/${tag.replace(/\s/g, '-').toLowerCase()}`"
+                  class="opacity-50 hover:opacity-100"
+                >
+                  #{{ tag }}
+                </NuxtLink>
+              </template>
+            </div>
+
+            <p>{{ post.description }}</p>
+          </header>
+
+          <ContentRenderer :value="post" />
+
+          <h3>請我喝杯咖啡</h3>
+          <p>如果這裡的內容有幫助到你的話，一杯咖啡就是對我最大的鼓勵。</p>
+
+          <NuxtLink
+            href="https://www.buymeacoffee.com/alex_minighost"
+            target="_blank"
+          >
+            <NuxtImg
+              src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png"
+              alt="請我喝杯咖啡"
+              width="217"
+              height="60"
+              loading="lazy"
+            />
+          </NuxtLink>
+        </div>
+        <div class="mt-16">
+          <div class="grid grid-cols-2 gap-x-4 border-t border-white border-opacity-20 pt-8">
+            <template v-if="surround && surround![0]">
+              <NuxtLink
+                :to="surround![0]._path"
+                class="text-start opacity-60 hover:opacity-100 transition-opacity"
+              >
+                <span class="opacity-60">previous</span><br>
+                {{ surround![0].title }}
+              </NuxtLink>
+            </template>
+
+
+            <template v-if="surround && surround![1]">
+              <NuxtLink
+                :to="surround![1]._path"
+                class="text-end opacity-60 hover:opacity-100 transition-opacity"
+              >
+                <span class="opacity-60">next</span><br>
+                {{ surround![1].title }}
               </NuxtLink>
             </template>
           </div>
-
-          <p>{{ post.description }}</p>
-        </header>
-
-        <ContentRenderer :value="post" />
-
-        <h3>請我喝杯咖啡</h3>
-        <p>如果這裡的內容有幫助到你的話，一杯咖啡就是對我最大的鼓勵。</p>
-
-        <NuxtLink
-          href="https://www.buymeacoffee.com/alex_minighost"
-          target="_blank"
-        >
-          <NuxtImg
-            src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png"
-            alt="請我喝杯咖啡"
-            width="217"
-            height="60"
-            loading="lazy"
-          />
-        </NuxtLink>
-      </div>
-      <div class="max-w-21cm w-11/12 mx-auto mt-16 pb-16 lg:pb-32">
-        <div class="grid grid-cols-2 gap-x-4 border-t border-white border-opacity-20 pt-8">
-          <template v-if="surround && surround![0]">
-            <NuxtLink
-              :to="surround![0]._path"
-              class="text-start opacity-60 hover:opacity-100 transition-opacity"
-            >
-              <span class="opacity-60">previous</span><br>
-              {{ surround![0].title }}
-            </NuxtLink>
-          </template>
-
-
-          <template v-if="surround && surround![1]">
-            <NuxtLink
-              :to="surround![1]._path"
-              class="text-end opacity-60 hover:opacity-100 transition-opacity"
-            >
-              <span class="opacity-60">next</span><br>
-              {{ surround![1].title }}
-            </NuxtLink>
-          </template>
         </div>
       </div>
-    </template>
-    <template v-else>
-      <div class="max-w-21cm w-11/12 mx-auto pb-16 lg:pb-32">
-        <span>
-          NOT FONT | 
-        </span>
-        <NuxtLink
-          to="/posts"
-          class="font-bold"
-        >
-          cd..
-        </NuxtLink>
-      </div>
-    </template>
-  </div>
+    </div>
+  </template>
+  <template v-else>
+    <div class="max-w-21cm w-11/12 mx-auto pb-16 lg:pb-32">
+      <span>
+        NOT FONT | 
+      </span>
+      <NuxtLink
+        to="/posts"
+        class="font-bold"
+      >
+        cd..
+      </NuxtLink>
+    </div>
+  </template>
 </template>
 
 <style lang="scss">
