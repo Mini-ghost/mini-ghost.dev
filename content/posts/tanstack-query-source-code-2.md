@@ -18,14 +18,14 @@ description: 你是怎麼管理專案的 server data 狀態呢？前端開發時
 1. [深入淺出 TanStack Query（一）：在呼叫 useQuery 後發生了什麼事](/posts/tanstack-query-source-code-1)
 1. [深入淺出 TanStack Query（二）：在呼叫 useMutation 後發生了什麼事](/posts/tanstack-query-source-code-2)
 
-## useMutation 與 useQuery 的有什麼不同
+## useMutation 與 useQuery 有什麼不同
 
-`useMutation` 與 `useQuery` 有什麼不同呢？我們可以參考 Tanner Linsley（TanStack Query 的作者）在這篇推文下面的[回答](https://twitter.com/tannerlinsley/status/1324384797939003393){target="_blank"}：
+`useMutation` 與 `useQuery` 有什麼不同呢？這個問題我們可以參考 Tanner Linsley（TanStack Query 的作者）在這篇推文下面的[回答](https://twitter.com/tannerlinsley/status/1324384797939003393){target="_blank"}：
 
-The difference is the flow of data. useQuery is used to query async data, useMutation is used to mutate it. Or in the traditional CRUD speak:<br />
-<br />
-Read: useQuery<br />
-Create/Update/Delete: useMutation
+>The difference is the flow of data. useQuery is used to query async data, >useMutation is used to mutate it. Or in the traditional CRUD speak:<br />
+><br />
+>Read: useQuery<br />
+>Create/Update/Delete: useMutation
 
 `useMutation` 主要使用在新增、修改、刪除，在設計上他是被動的，也就是說他不會自動觸發請求，而是要等到使用者調用 `mutate` 時才會發出相對應的請求；而 `useQuery` 是主動的，他會自動觸發請求，一但 `queryKey` 更新他也會自動重新發送請求。
 
@@ -65,6 +65,12 @@ const useQueryTodo = (id: MaybeRefOrGetter<number>) => {
 const { data } = useQueryTodo(() => router.params.id)
 ```
 
+在 Dominik Dorfmeister（TanStack Query 的維護者）的[這篇文章](https://tkdodo.eu/blog/mastering-mutations-in-react-query){target="_blank"}中也有提到：
+
+> useQuery is declarative, useMutation is imperative.
+
+中文翻譯成聲明式（declarative）跟是命令式（declarative），但在這裡使用主動跟被動去解釋可能會更好理解。
+
 另外如果同時調用多次相同 `useMutation` ，他們之間的狀態都是獨立，而多次調用相同的 `useQuery` ，他們之間的狀態則是共享的。
 
 **`useMutation`**
@@ -87,19 +93,21 @@ const query2 = useQueryTodo(1)
 const query3 = useQueryTodo(1)
 ```
 
-在理解了 `useMutation` 與 `useQuery` 的差異後，接下來我們來看看 `useMutation` 背後的邏輯。
+在理解了 `useMutation` 與 `useQuery` 的差異後，接下來我們來看看 `useMutation` 背後的實作邏輯。
 
 ### 在呼叫 useMutation 後發生了什麼事
 
 跟 `useQuery` 一樣，`useMutation` 背後與三個類（Class）密切相關：
 
-1. `MutationCache` - 儲存 `Mutation` 的快取。
+1. `MutationCache` - 儲存 `Mutation` 的地方。
 1. `MutationObserver` - 訂閱 `Mutation` 的狀態。
-1. `Mutation` - 管理請求與請求的狀態。
+1. `Mutation` - 管理請求與請求狀態的地方。
 
 但就如同前面提到到的，`useMutation` 在設計上是被動的，所以在呼叫 `useMutation` 時並不會像是 `useQuery` 會去建立對應 `Query`，而是直到調用 `mutate` 時才會建立 `Mutation`。
 
-而 `mutate` 的實作如下：
+所以或許標題應該寫：在呼叫 `mutate` 後發生了什麼事。
+
+`mutate` 的實作如下：
 
 ```ts
 class MutationObserver {
