@@ -5,7 +5,7 @@ tags:
   - TanStack Query
   - Observer Pattern
 
-created: 2023-11-04T17:07:00Z
+created: 2023-11-04T09:00:00Z
 description: 你是怎麼管理專案的 server data 狀態呢？前端開發時不僅要處理 server data 的快取，還要讓它能盡可能的跨元件共用，最後又要在適當的時候清除或更新，阿哩阿雜的真的很煩人。TanStack Query 是一個可以很好的解決這些問題的工具。這個系列文章將分享如何使用 TanStack Query 以及深入暸解它底層運作的原理與邏輯與架構。
 ---
 
