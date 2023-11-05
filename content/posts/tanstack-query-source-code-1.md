@@ -16,6 +16,9 @@ description: 你是怎麼管理專案的 server data 狀態呢？前端開發時
 我也還不知道這系列會有多少文章，但有更新的話會一一的列在這裡：
 
 1. [深入淺出 TanStack Query（一）：在呼叫 useQuery 後發生了什麼事](/posts/tanstack-query-source-code-1)
+1. [深入淺出 TanStack Query（二）：在呼叫 useMutation 後發生了什麼事](/posts/tanstack-query-source-code-2)
+
+## TanStack Query 是什麼？
 
 TanStack Query 有個更為人熟知的名稱叫：**React-Query**。而 TanStack Query 在 v4 的時候將核心獨立分離出來，分離出來的 `query-core` 本身與框架無關所以可再依照不同的框架特性分別封裝成專屬特定框架使用的 package，像是目前TanStack Query 就提供以下 npm package 給不同框架的使用者使用：
 
@@ -140,9 +143,9 @@ const { data, error, isFetching } = useTodo(1);
 
 在我們每次呼叫 `useQuery` 後 TanStack Query 會建立一個 `QueryObserver` 的 instance，這個 instance 紀錄著我們傳入的設定，並且他會拿著這個設定去一個叫 `QueryCache` 的 instance 上找有沒有符合條件的 `Query` instance 存在，有的話就取出使用，沒有的話 `QueryCache` 就會就建立一個新的 `Query` instance 返回並儲存。
 
-所以如果當上面範例的 `useTodo` 分別傳入不同 `id` 呼叫了三次，他被後建立的結構圖如下：
+所以如果當上面範例的 `useTodo` 分別傳入不同 `id` 呼叫了三次，他被後建立的關係圖如下：
 
-![Query 與 QueryObserver 結構圖 - by Alex Liu](/images/query-architecture.png){width=794 height=530}
+![Query 與 QueryObserver 關係圖 - by Alex Liu](/images/query-architecture.png){width=794 height=530}
 
 我們可以看到，每一個 `QueryObserver` 都會對應到一個存在 `QueryCache` 上的 `Query`。那 `QueryObserver` 拿什麼去找 `Query` 呢？
 
@@ -160,7 +163,7 @@ function useTodo(id: number) {
 
 每一個 `QueryObserver` instance 都只會對應到一個 `Query` instance。所以當程式更新，第三個 `useTodo` 呼叫的 `queryKey` 變成與第二次的相同，他的關係圖就會變成如下：
 
-![Query 與 QueryObserver 結構圖（2）- by Alex Liu](/images/query-architecture-2.png){width=794 height=530}
+![Query 與 QueryObserver 關係圖（2）- by Alex Liu](/images/query-architecture-2.png){width=794 height=530}
 
 此時 `queryKey` 相同的 `QueryObserver` 就會對應到同一個 `Query` instance 上面。
 
@@ -305,7 +308,7 @@ class QueryObserver extends Subscribable {
 
 我們複習一下上面出現過的關係圖：
 
-![Query 與 QueryObserver 結構圖（3）- by Alex Liu](/images/query-architecture-3.png){width=794 height=393}
+![Query 與 QueryObserver 關係圖（3）- by Alex Liu](/images/query-architecture-3.png){width=794 height=393}
 
 `QueryObserver` 與 `Query` 建立了雙向的關係，`QueryObserver` 可以知道要去那個一個 `Query` 上面找資料，而 `Query` 也會知道誰訂閱了自己的狀態，當自己狀態變化時要去叫哪些 `QueryObserver` 更新資料，這就是「觀察者模式」（Observer Pattern）又被稱為「發布-訂閱模式」（Publish-Subscribe Pattern）。
 
@@ -314,16 +317,17 @@ class QueryObserver extends Subscribable {
 綜合以上內容我們可以整理出：在呼叫 useQuery 後發生了什麼事？
 
 1. 建立 `QueryObserver` instance
-2. 在 `QueryCache` 取的需要的 `Query` instance。
-3. `QueryCache` 會依照 `QueryObserver` 提供的 `queryKey` 轉換成 `queryHash` 並找看看有沒有對應的 `Query` 存放在 `#queries` 裏面。
-4. 有找到對應的 `Query` instance 就共用，沒有的的話就建立一個新的並回傳。
-5. 當開始訂閱 `QueryObserver` 時，`QueryObserver` 會將自己加到 `Query` instance 上的 observers 清單。當 `Query` 的資料有任何變化時，它就可以通知所有的 `QueryObserver` 做出相對應的更新。
+1. 在 `QueryCache` 取的需要的 `Query` instance。`QueryCache` 會依照 `QueryObserver` 提供的 `queryKey` 轉換成 `queryHash` 並找看看有沒有對應的 `Query` 已經被建立。
+1. 有找到對應的 `Query` instance 就共用，沒有的的話就建立一個新的並回傳。
+1. 當開始訂閱 `QueryObserver` 時，`QueryObserver` 會將自己加到 `Query` instance 上的 observers 清單。當 `Query` 的資料有任何變化時，它就可以通知所有的 `QueryObserver` 做出相對應的更新。
 
-到這裡就是 TanStack Query 的底層基本概念拉！之後還會慢慢推出更多探究 TanStack Query 底層的分享，有任何想暸解或內容有誤的地方都歡迎跟我討論。
+![useQuery Flow Chart - by Alex Liu](/images/query-flow-chart.png){width=794 height=1210.86}
+
+到這裡就是 TanStack Query 的 `useQuery` 底層基本概念拉！之後還會慢慢推出更多探究 TanStack Query 底層的分享，有任何想暸解或內容有誤的地方都歡迎跟我討論。
 
 ### 參考資料
 
-- [Inside React Query](https://tkdodo.eu/blog/inside-react-query)
+- [Inside React Query | TkDodo's blog](https://tkdodo.eu/blog/inside-react-query)
 - [JSON.stringify() - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)
 - [Observer Pattern | Patterns](https://www.patterns.dev/posts/observer-pattern)
 - [觀察者模式 | Rock070](https://rock070.me/notes/designpattern/22_pattern/observer-pattern)
