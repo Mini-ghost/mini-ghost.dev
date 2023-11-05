@@ -8,7 +8,7 @@ const description =
 
 export default defineNuxtConfig({
   modules: [
-    '@nuxt/image-edge',
+    '@nuxt/image',
     '@nuxt/content',
     '@unocss/nuxt',
     '@nuxtjs/color-mode',
