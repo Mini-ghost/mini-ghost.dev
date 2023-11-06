@@ -131,7 +131,7 @@ useHead(() => {
 
 <template>
   <template v-if="post">
-    <div class="flex w-fit mx-auto">
+    <div class="lg:flex lg:w-fit w-11/12 mx-auto">
       <div class="hidden lg:flex space-y-2 flex-col sticky top-20 self-start mt-50">
         <template
           v-for="item in shares"
@@ -152,7 +152,7 @@ useHead(() => {
           </Component>
         </template>
       </div>
-      <div class="max-w-[calc(2rem+21cm)] px-8 pb-16 lg:pb-32">
+      <div class="lg:max-w-[calc(2rem+21cm)] lg:px-8 pb-16 lg:pb-32">
         <div class="prose">
           <header>
             <h1 class="mt-0 text-[1.75rem] lg:text-[2.25rem] leading-relaxed">
