@@ -69,7 +69,7 @@ const { data } = useQueryTodo(() => router.params.id)
 
 > useQuery is declarative, useMutation is imperative.
 
-中文翻譯成聲明式（declarative）跟是命令式（declarative），但在這裡使用主動跟被動去解釋可能會更好理解。
+中文翻譯成聲明式（declarative）跟是命令式（imperative），但在這裡使用主動跟被動去解釋可能會更好理解。
 
 另外如果同時調用多次相同 `useMutation` ，他們之間的狀態都是獨立，而多次調用相同的 `useQuery` ，他們之間的狀態則是共享的。
 
