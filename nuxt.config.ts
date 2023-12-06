@@ -106,9 +106,7 @@ export default defineNuxtConfig({
     },
   },
 
-  sitemap: {
-    trailingSlash: true,
-  },
+  sitemap: {},
 
   experimental: { componentIslands: true },
 });
