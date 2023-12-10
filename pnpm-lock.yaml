@@ -76,6 +76,9 @@ devDependencies:
   ufo:
     specifier: ^1.3.2
     version: 1.3.2
+  vite-plugin-clean-css:
+    specifier: ^0.0.2
+    version: 0.0.2
   vite-svg-loader:
     specifier: ^5.1.0
     version: 5.1.0(vue@3.3.10)
@@ -10353,6 +10356,12 @@ packages:
       vscode-languageserver: 7.0.0
       vscode-languageserver-textdocument: 1.0.11
       vscode-uri: 3.0.8
+    dev: true
+
+  /vite-plugin-clean-css@0.0.2:
+    resolution: {integrity: sha512-+CtPpDxXimbWRr9kayWeFY1ae932pHPY3cb0d3W+PHQNmhefA2yVHoz2jjmH/nOXwiNHhSyxFxiqzDD/L/YPjw==}
+    dependencies:
+      clean-css: 5.3.3
     dev: true
 
   /vite-plugin-inspect@0.7.42(@nuxt/kit@3.8.2)(vite@5.0.6):
