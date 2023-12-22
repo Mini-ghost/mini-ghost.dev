@@ -1,5 +1,4 @@
 import CleanCss from 'vite-plugin-clean-css';
-import SvgLoader from 'vite-svg-loader';
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 
@@ -15,6 +14,7 @@ export default defineNuxtConfig({
     '@nuxtjs/color-mode',
     '@vueuse/nuxt',
     'nuxt-simple-sitemap',
+    'nuxt-svgo-loader',
   ],
 
   content: {
@@ -66,28 +66,6 @@ export default defineNuxtConfig({
 
   vite: {
     plugins: [
-      SvgLoader({
-        svgoConfig: {
-          plugins: [
-            'removeXMLNS',
-            {
-              name: 'removeAttrs',
-              params: {
-                attrs: 'fill',
-              },
-            },
-            {
-              name: 'addAttributesToSVGElement',
-              params: {
-                attribute: {
-                  'aria-hidden': 'true',
-                  fill: 'currentColor',
-                },
-              },
-            },
-          ],
-        },
-      }),
       CleanCss({
         level: {
           2: {
@@ -116,6 +94,29 @@ export default defineNuxtConfig({
   },
 
   sitemap: {},
+
+  svgoLoader: {
+    svgoConfig: {
+      plugins: [
+        'removeXMLNS',
+        {
+          name: 'removeAttrs',
+          params: {
+            attrs: 'fill',
+          },
+        },
+        {
+          name: 'addAttributesToSVGElement',
+          params: {
+            attribute: {
+              'aria-hidden': 'true',
+              fill: 'currentColor',
+            },
+          },
+        },
+      ],
+    },
+  },
 
   experimental: { componentIslands: true },
 });
