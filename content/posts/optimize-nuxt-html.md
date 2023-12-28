@@ -141,24 +141,24 @@ HTML 明顯變得更緊密了！少了很多換行，CSS 也被壓成了一行�
 水合失敗是因為我們壓縮了 `<body>` 裡面的內容，要解決這個問題，我們只需要避免去壓縮 `html.body` 即可。
 
 ```diff
- import { minify } from 'html-minifier-terser';
+import { minify } from 'html-minifier-terser';
 
- export default defineNitroPlugin(nitroApp => {
-   nitroApp.hooks.hook('render:html', async html => {
--    const [head, bodyPrepend, body, bodyAppend] = await Promise.all([
-+    const [head, bodyPrepend, bodyAppend] = await Promise.all([
-       handleMinify(html.head),
-       handleMinify(html.bodyPrepend),
--      handleMinify(html.body),
-       handleMinify(html.bodyAppend),
-     ]);
+export default defineNitroPlugin(nitroApp => {
+  nitroApp.hooks.hook('render:html', async html => {
+-   const [head, bodyPrepend, body, bodyAppend] = await Promise.all([
++   const [head, bodyPrepend, bodyAppend] = await Promise.all([
+      handleMinify(html.head),
+      handleMinify(html.bodyPrepend),
+-     handleMinify(html.body),
+      handleMinify(html.bodyAppend),
+    ]);
 
-     html.head = head;
-     html.bodyPrepend = bodyPrepend;
--    html.body = body;
-     html.bodyAppend = bodyAppend;
-   });
- });
+    html.head = head;
+    html.bodyPrepend = bodyPrepend;
+-   html.body = body;
+    html.bodyAppend = bodyAppend;
+  });
+});
 ```
 
 但要解決前其他兩個問題就沒那麼容易了。為什麼 `<!DOCTYPE html>` 跟 `<html>` 以及 `<head>` 之間有個換行？為什麼 `<html  lang="zh-TW">` 跟 `<body >` 都多了一個空白？
