@@ -114,7 +114,7 @@ function handleMinify(contents: string[]) {
 下面這個是 `html` 的型別定義：
 
 ```ts
-interface interface NuxtRenderHTMLContext {
+interface NuxtRenderHTMLContext {
   htmlAttrs: string[]
   head: string[]
   bodyAttrs: string[]
