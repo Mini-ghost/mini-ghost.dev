@@ -1,12 +1,12 @@
 ---
-title: 最大化前端效能：在 Nuxt 中使用 html-minifier-terser 進行 HTML 壓縮
+title: Nuxt 進階應用：HTML 壓縮技巧全解析
 tags: 
   - Vue
   - Nuxt
   - HTML Compression
 
 created: 2023-12-24T17:30:53.162Z
-description: 在這個追求極致網頁效能的時代，我們總是不斷追求如何讓網頁更輕量且高效。在這篇文章中，我將分享如何在 Nuxt 中使用 html-minifier-terser 處理 HTML 壓縮，盡可能的提升網頁加載速度。如果你也正在使用 Nuxt 架設網站，相信這篇內容會讓你很有收穫，那就讓我們一起看下去吧！
+description: 在網頁開發的過程中，如何在讓網站的效能有更多的提升一直都是個非常深的學問。在這篇文章中，我將分享如何在 Nuxt 中使用 html-minifier-terser 處理 HTML 壓縮，盡可能的提升網頁加載速度。如果你也正在使用 Nuxt 架設網站，相信這篇內容會讓你很有收穫，那就讓我們一起看下去吧！
 ---
 
 ## 前言
