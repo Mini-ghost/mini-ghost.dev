@@ -90,7 +90,7 @@ useHead(() => {
         content: 'summary_large_image',
       },
       {
-        name: 'twitter:image:src',
+        name: 'twitter:image',
         content: image,
       },
       {
