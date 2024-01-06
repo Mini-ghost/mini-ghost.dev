@@ -54,6 +54,10 @@ export default defineNuxtConfig({
           content: process.env.NUXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
         },
       ],
+      link: [
+        // rss
+        { rel: 'alternate', type: 'application/rss+xml', href: '/rss.xml' },
+      ],
     },
   },
 
@@ -90,6 +94,12 @@ export default defineNuxtConfig({
     public: {
       siteURL: process.env.NUXT_PUBLIC_SITE_URL,
       googleTagId: process.env.NUXT_PUBLIC_GOOGLE_TAG_ID,
+    },
+  },
+
+  nitro: {
+    prerender: {
+      routes: ['/rss.xml'],
     },
   },
 
