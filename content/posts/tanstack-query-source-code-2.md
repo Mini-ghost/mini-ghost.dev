@@ -148,7 +148,7 @@ class MutationObserver {
 1. 當使用者調用 `mutate` 時，檢查使否有舊有的 `Mutation` instance，如果有則先移除該 instance 上面的 `MutationObserver` instance，最後建立 `Mutation` instance。
 1. 呼叫 `Mutation` instance 發送請求。
 
-![useMutation Flow Chart - by Alex Liu](/images/mutation-flow-chart.png){width=794 height=1210.86}
+![useMutation Flow Chart - by Alex Liu](/images/mutation-flow-chart.png){width=794 height=1211}
 
 `useMutation` 與 `useQuery`  都是基於 Observer Pattern，所以實作上都是非常相似的。關於如何將 `query-core` 的 `mutationObserver` 整合到 `vue-query` 或是 `react-query` 中的方法其實跟 `queryObserver` 類似，所以這篇就沒有再重複提及了。
 

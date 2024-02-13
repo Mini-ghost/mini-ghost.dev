@@ -321,7 +321,7 @@ class QueryObserver extends Subscribable {
 1. 有找到對應的 `Query` instance 就共用，沒有的的話就建立一個新的並回傳。
 1. 當開始訂閱 `QueryObserver` 時，`QueryObserver` 會將自己加到 `Query` instance 上的 observers 清單。當 `Query` 的資料有任何變化時，它就可以通知所有的 `QueryObserver` 做出相對應的更新。
 
-![useQuery Flow Chart - by Alex Liu](/images/query-flow-chart.png){width=794 height=1210.86}
+![useQuery Flow Chart - by Alex Liu](/images/query-flow-chart.png){width=794 height=1211}
 
 到這裡就是 TanStack Query 的 `useQuery` 底層基本概念拉！之後還會慢慢推出更多探究 TanStack Query 底層的分享，有任何想暸解或內容有誤的地方都歡迎跟我討論。
 
