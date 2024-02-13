@@ -29,17 +29,13 @@ export default defineEventHandler(async event => {
   });
 
   for (const slug in metadata) {
-    const { title, description, tags, created, image, html } = metadata[slug];
+    const { title, description, tags, created, image } = metadata[slug];
 
     feed.addItem({
       title,
       link: `https://mini-ghost.dev/posts/${slug}`,
       description: description,
       category: tags.map((tag: string) => ({ name: tag })),
-      content: html.replace(
-        /<img src="\/images\//g,
-        '<img src="https://mini-ghost.dev/'
-      ),
       author: [
         {
           name: 'Alex Liu',

@@ -31,8 +31,6 @@
     "nuxt-simple-sitemap": "^4.3.0",
     "nuxt-svgo-loader": "^0.3.0",
     "pathe": "^1.1.1",
-    "remark": "^14.0.3",
-    "remark-html": "^15.0.2",
     "remark-reading-time": "^2.0.1",
     "sass": "^1.69.7",
     "typescript": "^5.3.3",

@@ -3,8 +3,6 @@ import { globby } from 'globby';
 import grayMatter from 'gray-matter';
 import { readFile } from 'node:fs/promises';
 import { filename } from 'pathe/utils';
-import { remark } from 'remark';
-import remarkHtml from 'remark-html';
 
 export default defineNuxtModule({
   meta: {
@@ -16,7 +14,6 @@ export default defineNuxtModule({
     const files = await globby(resolve('../../content/posts'));
 
     const metadata: Record<string, any> = {};
-    const md = remark().use(remarkHtml);
 
     for (const path of files) {
       const contents = await readFile(path, 'utf-8');
@@ -29,13 +26,8 @@ export default defineNuxtModule({
       const titleEncoded = encodeURIComponent(title);
       const create = `${+new Date(created)}`;
       const query = new URLSearchParams({
-        // read: content.readingTime.text,
         create,
       });
-
-      const html = await md
-        .process(contents.replace(/---[\s\S]*---/m, ''))
-        .then(r => r.value);
 
       metadata[slug] = {
         title,
@@ -43,7 +35,6 @@ export default defineNuxtModule({
         created,
         tags,
         image: `https://og-image-mini-ghost.vercel.app/${titleEncoded}?${query}`,
-        html,
       };
     }
 
