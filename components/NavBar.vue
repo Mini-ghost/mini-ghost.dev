@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import GithubIcon from '@/assets/icons/github.svg?component';
+import RssIcon from '@/assets/icons/rss.svg?component';
 import TwitterIcon from '@/assets/icons/twitter.svg?component';
 
 const enum DIRECTION {
@@ -52,7 +53,10 @@ watch(offset, (value, oldValue) => {
             target="_blank"
             aria-label="Follow on Twitter"
           >
-            <TwitterIcon />
+            <TwitterIcon 
+              width="24"
+              height="24"
+            />
           </NuxtLink>
           <NuxtLink
             to="https://github.com/Mini-ghost"
@@ -60,7 +64,21 @@ watch(offset, (value, oldValue) => {
             target="_blank"
             aria-label="Follow on GitHub"
           >
-            <GithubIcon />
+            <GithubIcon 
+              width="24"
+              height="24"
+            />
+          </NuxtLink>
+          <NuxtLink
+            to="/rss.xml"
+            class="transition-opacity duration-300 op-50 hover:op-100"
+            target="_blank"
+            aria-label="Visit Blog RSS Feed"
+          >
+            <RssIcon
+              width="24"
+              height="24"
+            />
           </NuxtLink>
         </div>
       </nav>
