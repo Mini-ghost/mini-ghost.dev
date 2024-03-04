@@ -312,7 +312,7 @@ export default {
 
 好險 CSS Variables 可以有效的破解者個問題，CSS Variables 一出現就席捲整個前端圈（因為支援度問題所以並沒有），依照上面色彩模式的設定，我只要在 `:root` 中定義我的變數，接下來在之後的其他地方就可以盡情使用了！
 
-```scss
+```css
 :root[data-theme="dark"] {
   --color-text: #efefef;
   --color-background: #18202a;

@@ -27,6 +27,25 @@ export default defineNuxtConfig({
         dark: 'vitesse-dark',
         default: 'vitesse-light',
       },
+      // @see https://github.com/nuxt-modules/mdc/blob/v0.5.0/src/module.ts#L10-L24
+      langs: [
+        'js',
+        'jsx',
+        'json',
+        'ts',
+        'tsx',
+        'vue',
+        'css',
+        'html',
+        'vue',
+        'bash',
+        'md',
+        'mdc',
+        'yaml',
+
+        // custom
+        'diff',
+      ],
     },
   },
 
