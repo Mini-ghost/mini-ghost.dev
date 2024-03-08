@@ -13,7 +13,7 @@ export default defineNuxtConfig({
     '@unocss/nuxt',
     '@nuxtjs/color-mode',
     '@vueuse/nuxt',
-    'nuxt-simple-sitemap',
+    '@nuxtjs/sitemap',
     'nuxt-svgo-loader',
   ],
 
@@ -121,8 +121,6 @@ export default defineNuxtConfig({
       routes: ['/rss.xml'],
     },
   },
-
-  sitemap: {},
 
   svgoLoader: {
     svgoConfig: {
