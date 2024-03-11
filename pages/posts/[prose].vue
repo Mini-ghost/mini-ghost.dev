@@ -196,12 +196,13 @@ useHead(() => {
             href="https://www.buymeacoffee.com/alex_minighost"
             target="_blank"
           >
-            <NuxtImg
+            <ProseImg
               src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png"
               alt="請我喝杯咖啡"
               width="217"
               height="60"
               loading="lazy"
+              decoding="async"
             />
           </NuxtLink>
         </div>
