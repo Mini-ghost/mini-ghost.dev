@@ -46,6 +46,13 @@ watch(offset, (value, oldValue) => {
         >
           Blog
         </NuxtLink>
+        <NuxtLink
+          to="/talks"
+          class="transition-opacity duration-300 op-50 hover:op-100"
+          active-class="!op-100"
+        >
+          Talks
+        </NuxtLink>
         <div class="flex gap-x-3 before:content-[''] before:bg-white/20 before:h-6 before:w-px before:ms-2">
           <NuxtLink
             to="https://twitter.com/Minighost_Alex"
