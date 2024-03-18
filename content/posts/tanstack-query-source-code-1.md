@@ -31,7 +31,7 @@ TanStack Query 有個更為人熟知的名稱叫：**React-Query**。而 TanStac
 
 ## 為何要使用 TanStack Query
 
-TanStack Query 不是一個 data fetching 的工具，它是一個 server data 的狀態管理工具。TanStack Query 會幫我們快取來自 server 的資料，並且在適當的時間內盡可能使用快取或是在過期後背景重新去得資料。
+TanStack Query 不是一個 data fetching 的工具，它是一個 server data 的狀態管理工具。TanStack Query 會幫我們快取來自 server 的資料，並且在適當的時間內盡可能使用快取或是在過期後背景重新取得資料。
 
 在不使用 TanStack Query 時我們需要手動的將這些狀態一個一個存起來自己管理：
 
@@ -169,7 +169,7 @@ function useTodo(id: number) {
 
 ## QueryCache 怎麼找到 Query
 
-不過我們傳如的 `queryKey` 是一個陣列，TanStack Query 是如何儲存 `Query` 跟找到建立過的 `Query` 呢？
+不過我們傳入的 `queryKey` 是一個陣列，TanStack Query 是如何儲存 `Query` 跟找到建立過的 `Query` 呢？
 
 在 TanStack Query 中 `queryKey` 扮演了很重要的角色，他牽起了 `QueryObserver` 與 `Query` 的關係，讓具有相同 `queryKey` 的不同 `QueryObserver` instance 可以找到同一個 `Query` instance。除此之外根據官方文件，`queryKey` 不但可以像上面傳入 `string` 與 `number` 還可以傳入物件、陣列等等。
 
@@ -208,7 +208,7 @@ export function hashKey(queryKey: QueryKey | MutationKey): string {
 }
 ```
 
-我們可以看到 `hashKey` 其實就是用 `JSON.stringify` 將傳入的 `queryKey` 轉換成字串，但在這罕見地看到他用了 `JSON.stringify` 的第二個參數 `replacer`，我們可以看看關用 MDN 上怎麼解釋 `replacer` 如何使用
+我們可以看到 `hashKey` 其實就是用 `JSON.stringify` 將傳入的 `queryKey` 轉換成字串，但在這罕見地看到他用了 `JSON.stringify` 的第二個參數 `replacer`，我們可以看看 MDN 上怎麼解釋 `replacer` 如何使用
 
 ```
 JSON.stringify(value [,replacer [, space]])
@@ -218,7 +218,7 @@ JSON.stringify(value [,replacer [, space]])
 
 看完這麼長一段我們知道一個重點：**傳入的 `replacer` 傳入 function 可以用來改變轉成字串這個過程的行為**。
 
-所以回頭看 `hashKey` 做的事就是將陣列丟到 `JSON.stringify` 轉串成字串。在轉換的過程中如果遇到一個純物件，`hashKey` 的 `replacer` 會將原本物件（`val`）的 keys 重新排序並產生一個新的物件並會傳給 `JSON.stringify` 轉換成字串。
+所以回頭看 `hashKey` 做的事就是將陣列丟到 `JSON.stringify` 轉換成字串。在轉換的過程中如果遇到一個純物件，`hashKey` 的 `replacer` 會將原本物件（`val`）的 keys 重新排序並產生一個新的物件並會傳給 `JSON.stringify` 轉換成字串。
 
 轉換成字串的 `queryKey` 叫做 `queryHash`，有了 `queryHash` 就可以在 `QueryCache` 上的 `#queries` 找找有沒有存在的 `Query` instance 在裡面。有的話就重複使用，沒有的話就建立一個新的 `Query` instance。
 
