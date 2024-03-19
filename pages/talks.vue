@@ -21,7 +21,7 @@ useHead(() => {
       :key="group.year"
     >
       <div class="relative h-20 pointer-events-none select-none">
-        <span class="absolute -top-5 -left-5 text-[8rem] font-bold opacity-5">
+        <span class="absolute -top-5 -left-5 text-[8rem] font-bold opacity-8">
           {{ group.year }}
         </span>
       </div>
