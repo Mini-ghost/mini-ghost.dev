@@ -137,9 +137,9 @@ const { data, error, isFetching } = useTodo(1);
 
 如果 A 元件與 B 元件同時出現在畫面上，則只會發出一個 data fetching，並且兩個元件共享同一個資料響應。
 
-感受到 TanStack Query 的威力了嗎？當然他遠不止如此，其他的未來有機會再慢慢介紹，到這裡扣出了本篇想探討的主題：**在呼叫 `useQuery` 後發生了什麼事？**
+感受到 TanStack Query 的厲害了嗎？為了暸解**在呼叫 `useQuery` 後發生了什麼事？**，我們必須先暸解 TanStack Query 的核心架構。
 
-## 在呼叫 useQuery 後發生了什麼事
+## TansStack Query 的核心架構
 
 在我們每次呼叫 `useQuery` 後 TanStack Query 會建立一個 `QueryObserver` 的 instance，這個 instance 紀錄著我們傳入的設定，並且他會拿著這個設定去一個叫 `QueryCache` 的 instance 上找有沒有符合條件的 `Query` instance 存在，有的話就取出使用，沒有的話 `QueryCache` 就會就建立一個新的 `Query` instance 返回並儲存。
 
