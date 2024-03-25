@@ -22,7 +22,7 @@ description: 在網頁開發的過程中，如何在讓網站的效能有更多�
 
 > 為了有個明確的比較基準，我們以目前最長的文章：「深入淺出 axios（二）：XMLHttpRequest、CancelToken」為例。
 
-![Nuxt Content 壓縮前的 HTML - by Alex Liu](/images/optimize-nuxt-html-original.png){width=761, height=484}
+![Nuxt Content 壓縮前的 HTML - by Alex Liu](/images/optimize-nuxt-html-original.png){width=761 height=484}
 
 不難看出一些可以改善的方向，像是：
 
