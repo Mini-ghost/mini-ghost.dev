@@ -31,13 +31,6 @@ useHead(() => {
   return {
     title,
 
-    link: [
-      {
-        rel: 'canonical',
-        href: `${siteURL.value}/posts/`,
-      },
-    ],
-
     meta: [
       {
         name: 'description',

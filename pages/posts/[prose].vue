@@ -41,13 +41,6 @@ useHead(() => {
   return {
     title: content.title,
 
-    link: [
-      {
-        rel: 'canonical',
-        href: fullPath.value,
-      },
-    ],
-
     meta: [
       {
         name: 'description',
