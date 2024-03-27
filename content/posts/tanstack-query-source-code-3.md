@@ -4,7 +4,7 @@ tags:
   - TanStack Query
 
 created: 2024-03-27T04:17:24.680Z
-description: 在使用 TanStack Query 時，我們經常需要手動的讓某些或是特定的 query 重新發送請求來取得最新的資料，這時我們可以使用 invalidateQueries 這個方法。這篇文章將深入暸解在呼叫 invalidateQueries 後 TanStack Query 做了什麼事以及 invalidateQueries 與 refetch 的使用比較。
+description: 在使用 TanStack Query 時，我們經常需要手動地讓某些或是特定的 query 重新發送請求來取得最新的資料，此時，我們可以使用 invalidateQueries 方法。這篇文章將深入了解在調用 invalidateQueries 後 TanStack Query 做了什麼事，以及 invalidateQueries 與 refetch 的使用比較。
 ---
 
 ## 前言
@@ -23,7 +23,7 @@ description: 在使用 TanStack Query 時，我們經常需要手動的讓某些
 
 > The `invalidateQueries` method can be used to invalidate and refetch single or multiple queries in the cache based on their query keys or any other functionally accessible property/state of the query. By default, all matching queries are immediately marked as invalid and active queries are refetched in the background.
 
-根據文件我們可以間單理解 `invalidateQueries` 是 `queryClient` 上的一個方法，這個方法可以讓我們依照需求，手動的讓某些或是特定的 query 重新發送請求。像是下列兩種情境就很適合使用 `invalidateQueries`。
+根據文件我們可以簡單理解 `invalidateQueries` 是 `queryClient` 上的一個方法，這個方法可以讓我們依照需求，手動的讓某些或是特定的 query 重新發送請求。像是下列兩種情境就很適合使用 `invalidateQueries`。
 
 情境一：當使用 `useMutation` 新增一筆資料後，我們可能會想要讓 `useQuery` 重新取得最新的結果，這時我們可以這樣做。
 
@@ -96,13 +96,13 @@ class QueryClient {
 根據程式碼我們知道在呼叫 `invalidateQueries` 後，TanStack Query 需要執行下列兩件事情：
 
 1. 依照傳入的 `filters` 找出所有的 query，並呼叫 query 上的 `invalidate` 方法。
-1. 確認 `filters.refetchType` 是否為 `none`，如果是則表示不需要重新發送請求。反之則呼叫 `refetchQueries` 方法重新發送請求。
+1. 確認 `filters.refetchType` 是否為 `none`，如果是則表示不需要重新發送請求。反之則呼叫 `refetchQueries`。
 
 接著嘗試更近一步的拆解這兩個步驟。
 
 ### Query 上的 `invalidate` 做了什麼事情
 
-要暸解 `invalidate` 做了什麼我們可以到 Query 這個類別中找到他的實作。
+要了解 `invalidate` 做了什麼我們可以到 Query 這個類別中找到他的實作。
 
 ```ts
 class Query extends Removable {
@@ -140,14 +140,14 @@ class Query extends Removable {
 }
 ```
 
-雖然程式碼看起來很多，但他只做了兩件事情：
+雖然程式碼看起來很多，但其實只做了兩件事情：
 
 1. 將態上的 `isInvalidated` 設定為 `true`。
 1. 通知所有的 observer 跟 cache 這個 query 已經被更新。
 
 ### 在呼叫 `refetchQueries` 後發生了什麼事
 
-我們一樣來看看 `queryClient` 上的 `refetchQueries` 實作。
+接著我們來看看 `queryClient` 上的 `refetchQueries` 實作。
 
 ```ts
 class QueryClient {
@@ -179,7 +179,9 @@ class QueryClient {
 }
 ```
 
-`refetchQueries` 一樣會根據傳入的 `filters` 來決定要重新發送哪些 query，不一樣的是這個方法會過濾掉所有 `isDisabled()` 為 `true` 的 query。接著會呼叫 query 上的 `fetch` 方法重新發送請求。
+1. 依照傳入的 `filters` 找出所有的 query。
+1. 過濾掉所有 `isDisabled()` 為 `true` 的 query。
+1. 調用剩下的 query 上的 `fetch` 方法重新發送請求。
 
 `isDisabled` 是一個 query 上的方法，這個方法依照兩件事情來判斷是否為 `false`：
 
@@ -197,8 +199,6 @@ class Query extends Removable {
 }
 ```
 
-首先是 query 本身有沒有被任何 observer 訂閱（如果不熟悉 query 與 observer 之間的關係可以先看過[第一篇](/posts/tanstack-query-source-code-1)文章），如果沒有責 `isDisabled()` 的結果為 `false`。反之則會檢查 query 是否有任何 observer 的 `enabled` 不為 `false`，如果有則 `isDisabled()` 的結果一樣為 `false`。
-
 這裡的程式碼邏輯有點繞，簡單列點說明：
 
 1. 如果 query 沒有被任何 observer 訂閱則為 `false`。
@@ -206,7 +206,7 @@ class Query extends Removable {
 
 經過上述重重的判斷條件
 
-看完了這個段落關於 `refetchQueries` 的實作，結合上一段的內容我們可以完整拼湊出在呼叫 `invalidateQueries` 後發生了什麼事情。
+看完了這個段落關於 `refetchQueries` 的實作分析，結合上一段的內容我們可以完整拼湊出在呼叫 `invalidateQueries` 後發生了什麼事情。
 
 ## invalidateQueries vs refetch
 
@@ -244,13 +244,13 @@ const { mutate } = useMutation({
 
 ## 結語
 
-在這篇文章中，我們暸解了 `invalidateQueries` 的功能與使用場景，接著深入剖析了在呼叫 `invalidateQueries` 後發生了什麼事。最後也比較了 `invalidateQueries` 和 `refetch` 兩種方法的差異跟官方推薦的使用方式。
+在這篇文章中，我們了解了 `invalidateQueries` 的功能與使用場景，接著深入剖析了在呼叫 `invalidateQueries` 後發生了什麼事。最後也比較了 `invalidateQueries` 和 `refetch` 兩種方法的差異跟官方推薦的使用方式。
 
 ![useMutation Flow Chart - by Alex Liu](/images/invalidate-queries-flow-chart.png){width=794 height=887}
 
-深入暸解 `invalidateQueries` 後發現整體實作真的比想像的簡單非常多。除了原始碼外，會特別挑 `invalidateQueries` 出來寫的另一個原因是在工作上蠻常遇到選用 `invalidateQueries` 與 `refetch` 的討論。很顯然的 `refetch` 不論在使用上跟命名上都比 `invalidateQueries` 更直覺，如果想要說服團隊選用 `invalidateQueries` 就需要更完整的論述。
+深入了解 `invalidateQueries` 之後，我們發現其整體實作遠比預期的要簡單。除了原始碼外，會特別挑 `invalidateQueries` 出來寫的另一個原因是在工作上蠻常遇到選用 `invalidateQueries` 與 `refetch` 的討論。很顯然地 `refetch` 不論在使用上跟命名上都比 `invalidateQueries` 更直覺，如果想要說服團隊選用 `invalidateQueries` 就需要更完整的論述。
 
-到這裡就是關於 TanStack Query 的 `invalidateQueries` 的完整探討拉！文章中有任何想進一步暸解或內容有誤的地方都歡迎跟我討論。
+到這裡就是關於 TanStack Query 的 `invalidateQueries` 的完整探討拉！文章中有任何想進一步了解或內容有誤的地方都歡迎跟我討論。
 
 ### 參考資料
 
