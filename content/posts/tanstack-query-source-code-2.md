@@ -20,12 +20,11 @@ description: 你是怎麼管理專案的 server data 狀態呢？前端開發時
 
 ## useMutation 與 useQuery 有什麼不同
 
-`useMutation` 與 `useQuery` 有什麼不同呢？這個問題我們可以參考 Tanner Linsley（TanStack Query 的作者）在這篇推文下面的[回答](https://twitter.com/tannerlinsley/status/1324384797939003393){target="_blank"}：
+`useMutation` 與 `useQuery` 有什麼不同呢？這個問題我們可以參考 [@tannerlinsley](https://twitter.com/tannerlinsley)（TanStack Query 的作者）的回答：
 
->The difference is the flow of data. useQuery is used to query async data, >useMutation is used to mutate it. Or in the traditional CRUD speak:<br />
-><br />
->Read: useQuery<br />
->Create/Update/Delete: useMutation
+::tweet
+<p lang="en" dir="ltr">The difference is the flow of data. useQuery is used to query async data, useMutation is used to mutate it. Or in the traditional CRUD speak:<br><br>Read: useQuery<br>Create/Update/Delete: useMutation</p>&mdash; Tanner Linsley (@tannerlinsley) <a href="https://twitter.com/tannerlinsley/status/1324384797939003393?ref_src=twsrc%5Etfw">November 5, 2020</a></blockquote>
+::
 
 `useMutation` 主要使用在新增、修改、刪除，在設計上他是被動的，也就是說他不會自動觸發請求，而是要等到使用者調用 `mutate` 時才會發出相對應的請求；而 `useQuery` 是主動的，他會自動觸發請求，一但 `queryKey` 更新他也會自動重新發送請求。
 
