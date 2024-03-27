@@ -1,7 +1,6 @@
 ---
 title: 深入淺出 TanStack Query（二）：在呼叫 useMutation 後發生了什麼事
 tags:
-  - Vue
   - TanStack Query
   - Observer Pattern
 
@@ -13,10 +12,11 @@ description: 你是怎麼管理專案的 server data 狀態呢？前端開發時
 
 > 本篇的 TanStack Query 版本為 5.4.3
 
-我也還不知道這系列會有多少文章，但有更新的話會一一的列在這裡：
+這是一個跟 TanStack Query 相關的深入原始碼系列文章，TanStack Query 的架構龐大且迭代快速，所以這個系列會不定期更新，下列是目前已經發布的文章：
 
 1. [深入淺出 TanStack Query（一）：在呼叫 useQuery 後發生了什麼事](/posts/tanstack-query-source-code-1)
 1. [深入淺出 TanStack Query（二）：在呼叫 useMutation 後發生了什麼事](/posts/tanstack-query-source-code-2)
+1. [深入淺出 TanStack Query（三）：在呼叫 invalidateQueries 後發生了什麼事](/posts/tanstack-query-source-code-3)
 
 ## useMutation 與 useQuery 有什麼不同
 
