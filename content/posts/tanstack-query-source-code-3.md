@@ -179,7 +179,9 @@ class QueryClient {
 }
 ```
 
-1. 依照傳入的 `filters` 找出所有的 query。
+一個步步說明這段程式碼做了那些事情：
+
+1. 依照傳入的 `filters` 找出所有的 query（這裡找到的會跟 `invalidateQueries` 裡面的一樣）。
 1. 過濾掉所有 `isDisabled()` 為 `true` 的 query。
 1. 調用剩下的 query 上的 `fetch` 方法重新發送請求。
 
