@@ -179,7 +179,7 @@ class QueryClient {
 }
 ```
 
-一個步步說明這段程式碼做了那些事情：
+一步步說明這段程式碼做了那些事情：
 
 1. 依照傳入的 `filters` 找出所有的 query（這裡找到的會跟 `invalidateQueries` 裡面的一樣）。
 1. 過濾掉所有 `isDisabled()` 為 `true` 的 query。
@@ -242,7 +242,7 @@ const { mutate } = useMutation({
 <p lang="en" dir="ltr">I&#39;d say yes. `refetch` only targets the specific query, while invalidation matches fuzzily. This is important if you have multiple list, e.g. when having filters.<br><br>Also, most often you don&#39;t have access to `refetch` returned from useQuery where your mutation lives</p>&mdash; Dominik 🔮 (@TkDodo) <a href="https://twitter.com/TkDodo/status/1635663049452404736?ref_src=twsrc%5Etfw">March 14, 2023</a></blockquote>
 ::
 
-另外，如果我們回顧前面的內容會發現，如果我們要 `invalidate` 的 query 是禁用狀態的話，TanStack Query 只會把這個 query 標記為無效，不會重新發送請求。這個細節 `refetch` 就不容易做到，如果選用 `refetch`，就算對應到的 query 是禁用狀態也會重新發送請求。這個行為不算是錯誤，這個行為被認定為只是為了繞過 `disabled` 的一種手段。
+另外，如果我們回顧前面的內容會發現，如果我們要 `invalidate` 的 query 是禁用狀態的話，TanStack Query 只會把這個 query 標記為無效，不會重新發送請求。這個細節 `refetch` 就不容易做到，如果選用 `refetch`，就算對應到的 query 是禁用狀態也會重新發送請求。這個行為不算是錯誤，這個行為被認定為只是為了繞過 `enabled` 的一種手段。
 
 ## 結語
 
