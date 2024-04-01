@@ -627,7 +627,7 @@ const store = reactive({
 但問題又來了！<br>
 但問題又來了！<br>
 
-現在的程式碼在這個時候會出問題（可搭配重現範例：[Pinia #1129 重現](https://stackblitz.com/edit/vitejs-vite-vuof7u?file=src%2FApp.vue){ target="_blank" }）：
+現在的程式碼在這個時候會出問題（可搭配重現範例：[Pinia #1129 重現](https://stackblitz.com/edit/vitejs-vite-vuof7u?file=src%2FApp.vue)）：
 
 ```ts
 store.$patch({ count: 2 })
@@ -998,7 +998,7 @@ export function createPinia(): Pinia {
 
 ### 參考資料
 
-- [Pinia | The intuitive store for Vue.js](https://pinia.vuejs.org){ target="_blank" }
-- [RFC - Reactivity Effect Scope](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md){ target="_blank" }
-- [$subscribe handler invoked twice for single $patch operation #1129](https://github.com/vuejs/pinia/issues/1129){ target="_blank" }
+- [Pinia | The intuitive store for Vue.js](https://pinia.vuejs.org)
+- [RFC - Reactivity Effect Scope](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md)
+- [$subscribe handler invoked twice for single $patch operation #1129](https://github.com/vuejs/pinia/issues/1129)
 

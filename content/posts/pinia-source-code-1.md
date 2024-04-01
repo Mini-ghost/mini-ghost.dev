@@ -190,7 +190,7 @@ Effect Scope 是 Vue 3.2 之後新增的 API。
 
 另外，Effect Scope 也有類似元件的樹狀結構設計，當父層的 Effect Scope 被銷毀時，收集到的子層的 Effect Scope 也會一起被銷毀。但我們也可以透過 `effectScope(true)` 來建立一個獨立的 Effect Scope，這個 Effect Scope 不會被建立當下的父層收集，所以不會跟著父層被銷毀。
 
-更詳細的介紹可以參考這篇 RFC：[RFC - Reactivity Effect Scope](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md){ target="_blank" }。
+更詳細的介紹可以參考這篇 RFC：[RFC - Reactivity Effect Scope](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md)。
 
 **為什麼這裡要使用 Effect Scope？**
 
@@ -266,7 +266,7 @@ export function defineStore(idOrOptions, setup, setupOptions) {
 
 ### 單例模式 Singleton
 
-以下內容擷取自 [Patterns.dev - Singleton Pattern](https://www.patterns.dev/posts/singleton-pattern){ target="_blank" } 這篇文章。
+以下內容擷取自 [Patterns.dev - Singleton Pattern](https://www.patterns.dev/posts/singleton-pattern) 這篇文章。
 
 > Singletons are classes which can be instantiated once, and can be accessed globally. This single instance can be shared throughout our application, which makes Singletons great for managing global state in an application.
 
@@ -411,7 +411,7 @@ router.beforeEach((to) => {
 
 ### 參考資料
 
-- [Pinia | The intuitive store for Vue.js](https://pinia.vuejs.org){ target="_blank" }
-- [RFC - Reactivity Effect Scope](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md){ target="_blank" }
-- [Patterns.dev - Singleton Pattern](https://www.patterns.dev/posts/singleton-pattern){ target="_blank" }
-- [Server-Side Rendering (SSR) | Vue.js #Cross-Request State Pollution](https://vuejs.org/guide/scaling-up/ssr.html#cross-request-state-pollution){ target="_blank" }
+- [Pinia | The intuitive store for Vue.js](https://pinia.vuejs.org)
+- [RFC - Reactivity Effect Scope](https://github.com/vuejs/rfcs/blob/master/active-rfcs/0041-reactivity-effect-scope.md)
+- [Patterns.dev - Singleton Pattern](https://www.patterns.dev/posts/singleton-pattern)
+- [Server-Side Rendering (SSR) | Vue.js #Cross-Request State Pollution](https://vuejs.org/guide/scaling-up/ssr.html#cross-request-state-pollution)
