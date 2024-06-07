@@ -8,8 +8,8 @@ const isExternal = computed(() => props.href.startsWith('http'));
 
 <template>
   <NuxtLink
-    :to="props.href"
     :target="isExternal ? '_blank' : undefined"
+    :to="props.href"
     v-bind="$attrs"
   >
     <slot />

@@ -58,8 +58,8 @@ useHead(() => {
         :key="post._path"
       >
         <NuxtLink
-          :to="post._path"
           class="opacity-80 lg:opacity-60 transition-opacity duration-300 focus:opacity-100 hover:opacity-100 focus:outline-none "
+          :to="post._path"
         >
           <span class="text-lg w-fit">
             {{ post.title }}

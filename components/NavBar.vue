@@ -32,59 +32,59 @@ watch(offset, (value, oldValue) => {
   >
     <div class="flex items-center w-11/12 mx-auto py-4 lg:w-full lg:px-8 lg:py-6">
       <NuxtLink
-        to="/"
         class="text-xl lg:text-2xl font-bold"
+        to="/"
       >
         Alex Liu
       </NuxtLink>
       <div class="grow" />
       <nav class="flex items-center gap-x-3">
         <NuxtLink
-          to="/posts"
-          class="transition-opacity duration-300 op-50 hover:op-100"
           active-class="!op-100"
+          class="transition-opacity duration-300 op-50 hover:op-100"
+          to="/posts"
         >
           Blog
         </NuxtLink>
         <NuxtLink
-          to="/talks"
-          class="transition-opacity duration-300 op-50 hover:op-100"
           active-class="!op-100"
+          class="transition-opacity duration-300 op-50 hover:op-100"
+          to="/talks"
         >
           Talks
         </NuxtLink>
         <div class="flex gap-x-3 before:content-[''] before:bg-white/20 before:h-6 before:w-px before:ms-2">
           <NuxtLink
-            to="https://twitter.com/Minighost_Alex"
+            aria-label="Follow on Twitter"
             class="transition-opacity duration-300 op-50 hover:op-100"
             target="_blank"
-            aria-label="Follow on Twitter"
+            to="https://twitter.com/Minighost_Alex"
           >
             <TwitterIcon 
-              width="24"
               height="24"
+              width="24"
             />
           </NuxtLink>
           <NuxtLink
-            to="https://github.com/Mini-ghost"
+            aria-label="Follow on GitHub"
             class="transition-opacity duration-300 op-50 hover:op-100"
             target="_blank"
-            aria-label="Follow on GitHub"
+            to="https://github.com/Mini-ghost"
           >
             <GithubIcon 
-              width="24"
               height="24"
+              width="24"
             />
           </NuxtLink>
           <NuxtLink
-            to="/rss.xml"
+            aria-label="Visit Blog RSS Feed"
             class="transition-opacity duration-300 op-50 hover:op-100"
             target="_blank"
-            aria-label="Visit Blog RSS Feed"
+            to="/rss.xml"
           >
             <RssIcon
-              width="24"
               height="24"
+              width="24"
             />
           </NuxtLink>
         </div>

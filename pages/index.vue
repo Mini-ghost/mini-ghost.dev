@@ -29,11 +29,11 @@ useHead(() => ({
     <div class="hidden md:block">
       <div class="relative w-fit rounded-xl overflow-hidden opacity-80 transition-opacity duration-500 hover:opacity-100 after:content-[''] after:block after:bg-gradient-to-br after:absolute after:top-0 after:w-full after:h-full after:block after:from-[#ABC74A] after:to-[#2F993A] after:opacity-30 after:transition-opacity after:duration-500 hover:after:opacity-20">
         <img
-          src="https://avatars.githubusercontent.com/u/39984251"
-          width="450"
-          height="450"
           :alt="person.name"
           decoding="async"
+          height="450"
+          src="https://avatars.githubusercontent.com/u/39984251"
+          width="450"
         >
       </div>
     </div>

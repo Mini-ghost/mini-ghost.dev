@@ -38,8 +38,8 @@ onMounted(() => {
     <blockquote
       ref="tweet"
       class="twitter-tweet"
-      data-theme="dark"
       data-conversation="none"
+      data-theme="dark"
     >
       <slot />
     </blockquote>

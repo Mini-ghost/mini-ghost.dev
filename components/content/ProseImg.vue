@@ -31,20 +31,20 @@ const isExternal = computed(() => {
 <template>
   <NuxtImg
     v-if="!isExternal"
-    :src="withBase(src, app.baseURL)"
     :alt="alt"
-    :width="width"
+    :decoding="decoding"
     :height="height"
     :loading="loading"
-    :decoding="decoding"
+    :src="withBase(src, app.baseURL)"
+    :width="width"
   />
   <img
     v-else
-    :src="src"
     :alt="alt"
-    :width="width"
+    :decoding="decoding"
     :height="height"
     :loading="loading"
-    :decoding="decoding"
+    :src="src"
+    :width="width"
   >
 </template>

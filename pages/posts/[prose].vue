@@ -132,15 +132,15 @@ useHead(() => {
         >
           <Component
             :is="item.attrs.to ? NuxtLink : 'button'"
-            :type="item.attrs.to ? undefined : 'button'"
-            class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-[--bg-code-block] hover:text-[#FFAC11]"
             :aria-label="item.label"
+            class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-[--bg-code-block] hover:text-[#FFAC11]"
+            :type="item.attrs.to ? undefined : 'button'"
             v-bind="item.attrs"
           >
             <Component
               :is="item.icon"
-              width="20"
               height="20"
+              width="20"
             />
           </Component>
         </template>
@@ -169,8 +169,8 @@ useHead(() => {
                 :key="tag"
               >
                 <NuxtLink
-                  :to="`/tags/${tag.replace(/\s/g, '-').toLowerCase()}`"
                   class="opacity-50 hover:opacity-100"
+                  :to="`/tags/${tag.replace(/\s/g, '-').toLowerCase()}`"
                 >
                   #{{ tag }}
                 </NuxtLink>
@@ -190,12 +190,12 @@ useHead(() => {
             target="_blank"
           >
             <ProseImg
-              src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png"
               alt="請我喝杯咖啡"
-              width="217"
+              decoding="async"
               height="60"
               loading="lazy"
-              decoding="async"
+              src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png"
+              width="217"
             />
           </NuxtLink>
         </div>
@@ -203,8 +203,8 @@ useHead(() => {
           <div class="grid grid-cols-2 gap-x-4 border-t border-white border-opacity-20 pt-8">
             <template v-if="surround && surround![0]">
               <NuxtLink
-                :to="surround![0]._path"
                 class="text-start opacity-60 hover:opacity-100 transition-opacity"
+                :to="surround![0]._path"
               >
                 <span class="opacity-60">previous</span><br>
                 {{ surround![0].title }}
@@ -214,8 +214,8 @@ useHead(() => {
 
             <template v-if="surround && surround![1]">
               <NuxtLink
-                :to="surround![1]._path"
                 class="text-end opacity-60 hover:opacity-100 transition-opacity"
+                :to="surround![1]._path"
               >
                 <span class="opacity-60">next</span><br>
                 {{ surround![1].title }}
@@ -232,8 +232,8 @@ useHead(() => {
         NOT FONT | 
       </span>
       <NuxtLink
-        to="/posts"
         class="font-bold"
+        to="/posts"
       >
         cd..
       </NuxtLink>
