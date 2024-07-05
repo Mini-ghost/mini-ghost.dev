@@ -75,7 +75,7 @@ useHead(() => ({
               aria-hidden="true"
               class="w-2 h-2 rounded-full bg-[#64696E]"
             />
-            <div class="flex flex-col gap-1 pl-4 group">
+            <div class="flex flex-col gap-1 pl-4">
               <strong class="text-lg">{{ item.company }}</strong>
               <span class="text-sm opacity-60">
                 {{ item.title }} <i>/ {{ item.period }}</i>

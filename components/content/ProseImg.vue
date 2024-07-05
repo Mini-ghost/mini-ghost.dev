@@ -1,5 +1,3 @@
-
-
 <script setup lang="ts">
 import { hasProtocol, withBase } from 'ufo';
 
@@ -9,9 +7,9 @@ const props = withDefaults(
   defineProps<{
     src: string;
     alt: string;
-    width: string | number;
-    height: string | number;
-    loading?: string;
+    width: `${number}` | number;
+    height: `${number}` | number;
+    loading?: 'lazy' | 'eager';
     decoding?: 'async' | 'auto' | 'sync';
   }>(),
   {

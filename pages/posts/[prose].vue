@@ -308,7 +308,7 @@ useHead(() => {
     @apply text-[90%];
     @apply text-[var(--c-text-code)];
     @apply bg-[var(--bg-code-inline)];
-    @apply py-1 px-2.5;
+    @apply py-1 px-1.5;
     @apply rounded;
   }
 
