@@ -7,6 +7,7 @@ const description =
   'Front-end Web Developer from Taiwan | Work with Vue, Nuxt and React | Author of Vorms | Super fan for TypeScript';
 
 export default defineNuxtConfig({
+  compatibilityDate: '2024-07-22',
   modules: [
     '@nuxt/image',
     '@nuxt/content',
