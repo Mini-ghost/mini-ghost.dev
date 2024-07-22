@@ -155,7 +155,7 @@ useHead(() => {
             </h1>
             <div class="text-sm text-gray/60">
               <time :datetime="post.created">
-                {{ format(post.created) }}
+                {{ format(post.created, { timeZone: 'Asia/Taipei', year: 'numeric', month: 'short', day: 'numeric' }) }}
               </time>
               •
               <span>

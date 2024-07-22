@@ -1,5 +1,5 @@
 const defaultOptions: Intl.DateTimeFormatOptions = {
-  year: 'numeric',
+  timeZone: 'Asia/Taipei',
   month: 'short',
   day: 'numeric',
 };

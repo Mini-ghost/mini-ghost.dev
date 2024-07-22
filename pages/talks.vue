@@ -40,7 +40,7 @@ useHead(() => {
             </span>
             <br>
             <span class="text-sm opacity-70">
-              {{ format(talk.date, { month: 'short', day: 'numeric' }) }} • {{ talk.place }}
+              {{ format(talk.date) }} • {{ talk.place }}
             </span>
           </NuxtLink>
         </li>

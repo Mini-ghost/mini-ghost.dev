@@ -67,7 +67,7 @@ useHead(() => {
           <br>
           <span class="text-sm opacity-70">
             <time :datetime="post.created">
-              {{ format(post.created, { month: 'short', day: 'numeric' }) }}
+              {{ format(post.created) }}
             </time>
             •
             <span>
