@@ -27,7 +27,7 @@ useHead(() => ({
 <template>
   <div class="grid lg:grid-cols-[450px_minmax(0,1fr)] md:grid-cols-[320px_minmax(0,1fr)] gap-[calc(1.25rem+2vw)] w-11/12 max-w-[1366px] mx-auto lg:py-16 py-5">
     <div class="hidden md:block">
-      <div class="relative w-fit rounded-xl overflow-hidden opacity-80 transition-opacity duration-500 hover:opacity-100 after:content-[''] after:block after:bg-gradient-to-br after:absolute after:top-0 after:w-full after:h-full after:block after:from-[#ABC74A] after:to-[#2F993A] after:opacity-30 after:transition-opacity after:duration-500 hover:after:opacity-20">
+      <div class="relative w-fit rounded-xl overflow-hidden opacity-80 transition-opacity duration-500 hover:opacity-100 after:content-empty after:block after:bg-gradient-to-br after:absolute after:top-0 after:w-full after:h-full after:block after:from-[#ABC74A] after:to-[#2F993A] after:opacity-30 after:transition-opacity after:duration-500 hover:after:opacity-20">
         <img
           :alt="person.name"
           decoding="async"

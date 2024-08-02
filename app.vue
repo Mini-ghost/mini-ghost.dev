@@ -15,7 +15,7 @@ useHead(() => ({
 </script>
 
 <template>
-  <NavBar />
+  <LayoutNavigation />
   <main>
     <NuxtPage />
   </main>
