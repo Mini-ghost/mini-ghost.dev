@@ -2,6 +2,7 @@
 import GithubIcon from '@/assets/icons/github.svg?component';
 import RssIcon from '@/assets/icons/rss.svg?component';
 import TwitterIcon from '@/assets/icons/twitter.svg?component';
+import isSafari from '@/utils/isSafari';
 
 const enum DIRECTION {
   UP,
@@ -11,24 +12,30 @@ const enum DIRECTION {
 const offset = ref(0);
 const direction = ref<DIRECTION>();
 
-const onScroll = () => (offset.value = window.scrollY);
 
-useEventListener('scroll', onScroll, {
-  capture: false,
-  passive: true,
-});
+let safari: boolean
+if (import.meta.client && !(safari = isSafari())) {
+  const onScroll = () => (offset.value = window.scrollY);
 
-watch(offset, (value, oldValue) => {
-  direction.value = value > oldValue ? DIRECTION.DOWN : DIRECTION.UP;
-});
+  useEventListener('scroll', onScroll, {
+    capture: false,
+    passive: true,
+  });
+
+  watch(offset, (value, oldValue) => {
+    direction.value = value > oldValue ? DIRECTION.DOWN : DIRECTION.UP;
+  });
+}
 </script>
 
 <template>
   <header
     class="sticky top-0 transition-transform duration-700 backdrop-blur-sm"
-    :class="{
-      '-translate-y-full': direction === DIRECTION.DOWN
-    }"
+    :class="!safari 
+      ? {
+        '-translate-y-full': direction === DIRECTION.DOWN
+      } 
+      : undefined"
   >
     <div class="flex items-center w-11/12 mx-auto py-4 lg:w-full lg:px-8 lg:py-6">
       <NuxtLink
@@ -60,7 +67,7 @@ watch(offset, (value, oldValue) => {
             target="_blank"
             to="https://twitter.com/Minighost_Alex"
           >
-            <TwitterIcon 
+            <TwitterIcon
               height="24"
               width="24"
             />
@@ -71,7 +78,7 @@ watch(offset, (value, oldValue) => {
             target="_blank"
             to="https://github.com/Mini-ghost"
           >
-            <GithubIcon 
+            <GithubIcon
               height="24"
               width="24"
             />
