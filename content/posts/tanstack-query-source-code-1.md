@@ -20,7 +20,7 @@ description: 你是怎麼管理專案的 server data 狀態呢？前端開發時
 
 ## TanStack Query 是什麼？
 
-TanStack Query 有個更為人熟知的名稱叫：**React-Query**。而 TanStack Query 在 v4 的時候將核心獨立分離出來，分離出來的 `query-core` 本身與框架無關所以可再依照不同的框架特性分別封裝成專屬特定框架使用的 package，像是目前TanStack Query 就提供以下 npm package 給不同框架的使用者使用：
+TanStack Query 有個更為人熟知的名稱叫：**React-Query**。而 TanStack Query 在 v4 這個版本時將核心獨立分離出來，分離出來的 `query-core` 本身與框架無關所以可再依照不同的框架特性分別封裝成專屬特定框架使用的 package，像是目前TanStack Query 就提供以下 npm package 給不同框架的使用者使用：
 
 - Vue：`@tanstack/vue-query`
 - React：`@tanstack/react-query`
@@ -79,9 +79,9 @@ const { data, error, isFetching } = useTodo(props.id);
 </script>
 ```
 
-大費周章的寫了一個基本範例，但如果使用 TanStack Query 寫會變成什麼樣子呢？
+大費周章的寫了一個基本範例，但如果使用 TanStack Query 改寫會變成什麼樣子呢？
 
-在用 TanStack Query 改寫前，我們必須在 Vue app instance 上面裝上 `VueQueryPlugin` 
+要在 Vue 專案中使用 TanStack Query，我們必須在 Vue app 的 instance 上面裝上 `VueQueryPlugin` 
 
 ```ts
 // main.ts
@@ -90,7 +90,7 @@ import { VueQueryPlugin } from "@tanstack/vue-query";
 app.use(VueQueryPlugin)
 ```
 
-這樣我們就可以將上面手動的版本改成使用 TanStack Query 的版本：
+接著我們將上面手動觀禮狀態的版本改成使用 TanStack Query 的版本：
 
 ```vue
 <script lang="ts">
@@ -135,7 +135,7 @@ const { data, error, isFetching } = useTodo(1);
 </script>
 ```
 
-如果 A 元件與 B 元件同時出現在畫面上，則只會發出一個 data fetching，並且兩個元件共享同一個資料響應。
+如果 A 元件與 B 元件同時出現在畫面上，最終只會發出一個 data fetching，並且兩個元件共享同一個資料響應。
 
 感受到 TanStack Query 的厲害了嗎？為了暸解**在呼叫 `useQuery` 後發生了什麼事？**，我們必須先暸解 TanStack Query 的核心架構。
 
@@ -143,13 +143,19 @@ const { data, error, isFetching } = useTodo(1);
 
 在我們每次呼叫 `useQuery` 後 TanStack Query 會建立一個 `QueryObserver` 的 instance，這個 instance 紀錄著我們傳入的設定，並且他會拿著這個設定去一個叫 `QueryCache` 的 instance 上找有沒有符合條件的 `Query` instance 存在，有的話就取出使用，沒有的話 `QueryCache` 就會就建立一個新的 `Query` instance 返回並儲存。
 
-所以如果當上面範例的 `useTodo` 分別傳入不同 `id` 呼叫了三次，他被後建立的關係圖如下：
+所以如果當上面範例中的 `useTodo` 分別傳入三個不同 `id` 呼叫，他被後建立的關係圖如下：
+
+```ts
+useTodo(1);
+useTodo(2);
+useTodo(3);
+```
 
 ![Query 與 QueryObserver 關係圖 - by Alex Liu](/images/query-architecture.png){width=794 height=530}
 
 我們可以看到，每一個 `QueryObserver` 都會對應到一個存在 `QueryCache` 上的 `Query`。那 `QueryObserver` 拿什麼去找 `Query` 呢？
 
-答案就是：`queryKey`。
+是的！就是：`queryKey`。
 
 ```ts
 function useTodo(id: number) {
@@ -161,7 +167,16 @@ function useTodo(id: number) {
 }
 ```
 
-每一個 `QueryObserver` instance 都只會對應到一個 `Query` instance。所以當程式更新，第三個 `useTodo` 呼叫的 `queryKey` 變成與第二次的相同，他的關係圖就會變成如下：
+在這裏，每一個 `QueryObserver` instance 都只會對應到一個 `Query` instance。所以當城市更新，第三個 `useTodo` 傳入的 `queryKey` 發生變化，變成與第二個的相同，他的關係圖就會變成如下：
+
+```ts
+useTodo(1);
+useTodo(2);
+
+// 從 3 變成 2
+useTodo(2);
+```
+
 
 ![Query 與 QueryObserver 關係圖（2）- by Alex Liu](/images/query-architecture-2.png){width=794 height=530}
 
@@ -187,7 +202,7 @@ useQuery({ queryKey: ['TODOS', { perPage: 20, page: 1, status: 'done' }], ... })
 
 這是怎麼做到的呢？
 
-其實很簡單，`QueryCache` 在查找 `QueryObserver` 需要的 `Query` 時會先將 `queryKey` 使用內部一個叫 `hashKey` 的 function 轉換成字串，我們可以看看他是怎麼實作的：
+其實很簡單，`QueryCache` 在查找 `QueryObserver` 需要的 `Query` 時會先將 `queryKey` 使用內部一個叫 `hashKey` 的 function 轉換成字串，我們可以看看核心是怎麼實作的：
 
 ```ts
 /**
@@ -208,7 +223,7 @@ export function hashKey(queryKey: QueryKey | MutationKey): string {
 }
 ```
 
-我們可以看到 `hashKey` 其實就是用 `JSON.stringify` 將傳入的 `queryKey` 轉換成字串，但在這罕見地看到他用了 `JSON.stringify` 的第二個參數 `replacer`，我們可以看看 MDN 上怎麼解釋 `replacer` 如何使用
+`hashKey` 這個 function 其實就是用 `JSON.stringify` 將傳入的 `queryKey` 轉換成字串，在這裡使用了 `JSON.stringify` 比較罕見地第二個參數：`replacer`，我們可以看看 MDN 上怎麼解釋 `replacer` 的使用方式與功能：
 
 ```
 JSON.stringify(value [,replacer [, space]])
@@ -218,9 +233,9 @@ JSON.stringify(value [,replacer [, space]])
 
 看完這麼長一段我們知道一個重點：**傳入的 `replacer` 傳入 function 可以用來改變轉成字串這個過程的行為**。
 
-所以回頭看 `hashKey` 做的事就是將陣列丟到 `JSON.stringify` 轉換成字串。在轉換的過程中如果遇到一個純物件，`hashKey` 的 `replacer` 會將原本物件（`val`）的 keys 重新排序並產生一個新的物件並會傳給 `JSON.stringify` 轉換成字串。
+所以回頭看 `hashKey` 在處理的就是將陣列丟到 `JSON.stringify` 轉換成字串。在轉換的過程中如果遇到一個純物件， `replacer` function 就會將原本物件（`val`）的 keys 重新排序並產生一個新的物件並會傳給 `JSON.stringify` 轉換成字串。
 
-轉換成字串的 `queryKey` 叫做 `queryHash`，有了 `queryHash` 就可以在 `QueryCache` 上的 `#queries` 找找有沒有存在的 `Query` instance 在裡面。有的話就重複使用，沒有的話就建立一個新的 `Query` instance。
+轉換成字串的 `queryKey` 叫做 `queryHash`。有了 `queryHash` 就可以在 `QueryCache` 上的 `#queries` 找找有沒有已經存在的 `Query` instance 存放在裡面。有的話就重複使用，沒有的話就建立一個新的 `Query` instance。
 
 注意：因為 `queryKey` 轉換成 `queryHash` 的過程在實作上只針對物件的 keys 做排序，所以陣列裡面的順序不同會被視為不同的 `queryKey`。
 
