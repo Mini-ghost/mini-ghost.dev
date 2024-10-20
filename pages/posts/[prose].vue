@@ -134,7 +134,6 @@ useHead(() => {
             :is="item.attrs.to ? NuxtLink : 'button'"
             :aria-label="item.label"
             class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-[--bg-code-block] hover:text-[#FFAC11]"
-            :type="item.attrs.to ? undefined : 'button'"
             v-bind="item.attrs"
           >
             <Component

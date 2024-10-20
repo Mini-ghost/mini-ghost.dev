@@ -1,4 +1,4 @@
-import CopyIcon from '@/assets/icons/copy.svg?component';
+import LinkIcon from '@/assets/icons/link.svg?component';
 import FacebookIcon from '@/assets/icons/facebook.svg?component';
 import LinkedinIcon from '@/assets/icons/linkedin.svg?component';
 import TwitterIcon from '@/assets/icons/twitter.svg?component';
@@ -18,8 +18,9 @@ export function useProseShare(options: {
     return [
       {
         label: 'Share Link',
-        icon: CopyIcon,
+        icon: LinkIcon,
         attrs: {
+          type: 'button',
           onClick() {
             copy();
           },

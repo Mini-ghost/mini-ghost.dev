@@ -5,7 +5,7 @@
   --c-text-code: #CBCBCB;
   --c-divider: #525259;
   --bg-code-inline: #282A36;
-  --bg-code-block: #121212;
+  --bg-code-block: #242930;
   --bg-soft: #2A2A2A;
 }
 
@@ -29,10 +29,7 @@ body {
   background: var(--c-background);
 }
 
+.after\:content-\[\'\'\]::after,
 .before\:content-\[\'\'\]::before {
-  content: '';
-}
-
-.after\:content-\[\'\'\]::after {
   content: '';
 }
