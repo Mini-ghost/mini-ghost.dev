@@ -1,18 +1,34 @@
 import pluginVue from 'eslint-plugin-vue'
 import parserVue from 'vue-eslint-parser'
 import typeScriptParser from '@typescript-eslint/parser'
+import tseslint from 'typescript-eslint';
+
 
 /**
  * @type {import('eslint').Linter.Config}
  */
 export default [
+  ...tseslint.configs.recommended,
   {
-    plugins: {
-      vue: pluginVue
+    ignores: ['node_modules', '.nuxt', '.output'],
+  },
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/naming-convention': [
+        'error',
+        {
+          'selector': 'typeLike',
+          'format': ['PascalCase'],
+        }
+      ]
     }
   },
   {
     files: ['**/*.vue'],
+    plugins: {
+      vue: pluginVue
+    },
     languageOptions: {
       parser: parserVue,
       parserOptions: {

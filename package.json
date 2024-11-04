@@ -36,6 +36,7 @@
     "remark-reading-time": "^2.0.1",
     "sass": "^1.77.8",
     "typescript": "^5.5.4",
+    "typescript-eslint": "^8.12.2",
     "ufo": "^1.5.4",
     "vite-plugin-clean-css": "^0.0.3"
   },
