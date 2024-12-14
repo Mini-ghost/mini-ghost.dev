@@ -191,6 +191,7 @@ useHead(() => {
             <ProseImg
               alt="請我喝杯咖啡"
               decoding="async"
+              fetchpriority="low"
               height="60"
               loading="lazy"
               src="https://cdn.buymeacoffee.com/buttons/v2/default-green.png"
