@@ -1,4 +1,4 @@
-import type { MaybeRefOrGetter } from '@vueuse/core';
+import type { MaybeRefOrGetter } from 'vue';
 
 export async function useProse(_path: MaybeRefOrGetter<string>) {
   const path = toRef(_path);
