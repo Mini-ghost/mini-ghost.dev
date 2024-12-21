@@ -1,6 +1,11 @@
 ---
 title: Talks
 talks:
+  - title: 快速認識 TanStack Query
+    place: 曜比科技科技研發團隊讀書會
+    date: 2024-10-30
+    slide: https://talks.mini-ghost.dev/2024/qlieer-book-club-october
+
   - title: 非同步程式設計模式
     place: JavaScript Patterns 讀書會
     date: 2024-03-19
