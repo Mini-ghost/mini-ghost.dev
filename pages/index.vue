@@ -12,6 +12,8 @@ interface Experience {
   period: string;
 }
 
+const AVATAR_URL = 'https://avatars.githubusercontent.com/u/39984251';
+
 const fetchFn = () =>
   queryContent('/').without(['_']).findOne() as any as Promise<Person>;
 
@@ -22,6 +24,17 @@ useHead(() => ({
   title: `Hello I'm ${person.name}`,
   description: person.description,
 }));
+
+if (import.meta.server) {
+  useHead({
+    link: [{
+      rel: 'preload',
+      as: 'image',
+      href: AVATAR_URL,
+      fetchpriority: 'high',
+    }]
+  })
+}
 </script>
 
 <template>
@@ -32,7 +45,7 @@ useHead(() => ({
           :alt="person.name"
           decoding="async"
           height="450"
-          src="https://avatars.githubusercontent.com/u/39984251"
+          :src="AVATAR_URL"
           width="450"
         >
       </div>
