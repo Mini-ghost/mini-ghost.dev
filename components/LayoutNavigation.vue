@@ -15,9 +15,7 @@ const direction = ref<DIRECTION>();
 
 let safari: boolean
 if (import.meta.client && !(safari = isSafari())) {
-  const onScroll = () => (offset.value = window.scrollY);
-
-  useEventListener('scroll', onScroll, {
+  useEventListener('scroll', () => (offset.value = window.scrollY), {
     capture: false,
     passive: true,
   });
@@ -86,6 +84,7 @@ if (import.meta.client && !(safari = isSafari())) {
           <NuxtLink
             aria-label="Visit Blog RSS Feed"
             class="transition-opacity duration-300 op-50 hover:op-100"
+            external
             target="_blank"
             to="/rss.xml"
           >
