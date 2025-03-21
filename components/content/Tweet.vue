@@ -4,7 +4,7 @@
  * @see https://developer.twitter.com/en/docs/twitter-for-websites/javascript-api/overview
  */
 
-const tweet = ref<HTMLElement>();
+const tweet = useTemplateRef<HTMLElement>('tweet');
 
 onMounted(() => {
   // @ts-expect-error cdn

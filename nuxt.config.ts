@@ -7,7 +7,8 @@ const description =
   'Front-end Web Developer from Taiwan | Work with Vue, Nuxt and React | Author of Vorms | Super fan for TypeScript';
 
 export default defineNuxtConfig({
-  compatibilityDate: '2024-07-22',
+  compatibilityDate: '2025-03-21',
+
   modules: [
     '@nuxt/image',
     '@nuxt/content',
@@ -86,6 +87,10 @@ export default defineNuxtConfig({
   colorMode: {
     classSuffix: '',
     preference: 'dark',
+  },
+
+  site: {
+    url: 'https://mini-ghost.dev',
   },
 
   vite: {

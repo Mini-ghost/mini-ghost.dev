@@ -15,7 +15,7 @@ useHead(() => ({
 </script>
 
 <template>
-  <LayoutNavigation />
+  <LazyLayoutNavigation hydrate-on-idle />
   <main>
     <NuxtPage />
   </main>

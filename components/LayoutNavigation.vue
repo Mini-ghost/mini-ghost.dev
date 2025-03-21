@@ -9,12 +9,12 @@ const enum DIRECTION {
   DOWN,
 }
 
-const offset = ref(0);
-const direction = ref<DIRECTION>();
-
+const direction = shallowRef<DIRECTION>();
 
 let safari: boolean
 if (import.meta.client && !(safari = isSafari())) {
+  const offset = shallowRef(0);
+
   useEventListener('scroll', () => (offset.value = window.scrollY), {
     capture: false,
     passive: true,
@@ -29,11 +29,9 @@ if (import.meta.client && !(safari = isSafari())) {
 <template>
   <header
     class="sticky top-0 transition-transform duration-700 backdrop-blur-sm"
-    :class="!safari 
-      ? {
-        '-translate-y-full': direction === DIRECTION.DOWN
-      } 
-      : undefined"
+    :class="!safari && {
+      '-translate-y-full': direction === DIRECTION.DOWN
+    }"
   >
     <div class="flex items-center w-11/12 mx-auto py-4 lg:w-full lg:px-8 lg:py-6">
       <NuxtLink
