@@ -1,5 +1,5 @@
-function gtag(..._args: any[]) {
-  window.dataLayer.push(arguments);
+function gtag(...args: any[]) {
+  window.dataLayer.push(args);
 }
 
 const INITIAL_EVENT = [

@@ -38,9 +38,9 @@ export default [
       }
     },
     rules: {
-      ...pluginVue.configs['vue3-essential'].rules,
-      ...pluginVue.configs['vue3-strongly-recommended'].rules,
-      ...pluginVue.configs['vue3-recommended'].rules,
+      ...pluginVue.configs['vue3-essential'],
+      ...pluginVue.configs['vue3-strongly-recommended'],
+      ...pluginVue.configs['vue3-recommended'],
 
       'vue/multi-word-component-names': 'off',
 
