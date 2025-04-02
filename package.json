@@ -14,14 +14,14 @@
     "@nuxtjs/color-mode": "^3.5.2",
     "@nuxtjs/sitemap": "6.0.0-beta.4",
     "@types/html-minifier-terser": "^7.0.2",
-    "@types/node": "^22.13.10",
-    "@typescript-eslint/eslint-plugin": "^8.27.0",
-    "@typescript-eslint/parser": "^8.27.0",
+    "@types/node": "^22.13.17",
+    "@typescript-eslint/eslint-plugin": "^8.29.0",
+    "@typescript-eslint/parser": "^8.29.0",
     "@unocss/nuxt": "0.62.3",
     "@unocss/reset": "0.62.3",
     "@vueuse/core": "^13.0.0",
     "@vueuse/nuxt": "^13.0.0",
-    "eslint": "^9.22.0",
+    "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier-vue": "^5.0.0",
@@ -30,17 +30,23 @@
     "globby": "^14.1.0",
     "gray-matter": "^4.0.3",
     "html-minifier-terser": "^7.2.0",
-    "nuxt": "^3.16.1",
+    "nuxt": "^3.16.2",
     "nuxt-svgo-loader": "^0.5.0",
     "pathe": "^2.0.3",
     "remark-reading-time": "^2.0.1",
-    "sass": "^1.86.0",
+    "sass": "^1.86.1",
     "typescript": "^5.8.2",
-    "typescript-eslint": "^8.27.0",
+    "typescript-eslint": "^8.29.0",
     "ufo": "^1.5.4",
     "vite-plugin-clean-css": "^0.0.3"
   },
   "dependencies": {
     "ohash": "^2.0.11"
+  },
+  "pnpm": {
+    "overrides": {
+      "@unhead/vue": "^2.0.2",
+      "unhead": "^2.0.2"
+    }
   }
 }

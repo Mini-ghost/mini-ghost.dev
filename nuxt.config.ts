@@ -14,6 +14,7 @@ export default defineNuxtConfig({
   },
 
   experimental: {
+    componentIslands: true,
     defaults: {
       useAsyncData: {
         deep: false
@@ -162,6 +163,4 @@ export default defineNuxtConfig({
       ],
     },
   },
-
-  experimental: { componentIslands: true },
 });
