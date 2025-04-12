@@ -45,6 +45,7 @@
   },
   "pnpm": {
     "overrides": {
+      "@nuxt/kit": "^3.16.2",
       "@unhead/vue": "^2.0.2",
       "unhead": "^2.0.2"
     }
