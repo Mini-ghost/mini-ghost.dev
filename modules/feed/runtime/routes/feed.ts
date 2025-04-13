@@ -14,8 +14,8 @@ export default defineEventHandler(async event => {
     id: 'https://mini-ghost.dev/',
     link: 'https://mini-ghost.dev/posts/',
     language: 'zh-TW',
-    image: 'https://mini-ghost.dev/og/og.jpg',
-    favicon: 'https://mini-ghost.dev/favicon.svg',
+    image: 'https://avatars.githubusercontent.com/u/39984251',
+    favicon: 'https://mini-ghost.dev/favicon.ico',
     copyright: `© 2019-${new Date().getFullYear()} Alex Liu. All rights reserved.`,
     feedLinks: {
       json: 'https://mini-ghost.dev/feed/json',
