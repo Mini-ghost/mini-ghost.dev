@@ -27,12 +27,19 @@ useHead(() => ({
 
 if (import.meta.server) {
   useHead({
-    link: [{
-      rel: 'preload',
-      as: 'image',
-      href: AVATAR_URL,
-      fetchpriority: 'high',
-    }]
+    link: [
+      {
+        rel: 'preconnect',
+        href: 'https://avatars.githubusercontent.com',
+        crossorigin: '',
+      },
+      {
+        rel: 'preload',
+        as: 'image',
+        href: AVATAR_URL,
+        fetchpriority: 'high',
+      }
+  ]
   })
 }
 </script>
