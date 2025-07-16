@@ -33,34 +33,43 @@ export default defineNuxtConfig({
   ],
 
   content: {
-    markdown: {
-      // https://github.com/nuxt/content/issues/1231#issuecomment-1149871306
-      remarkPlugins: ['remark-reading-time'],
-    },
-    highlight: {
-      theme: {
-        dark: 'vitesse-dark',
-        default: 'vitesse-light',
-      },
-      // @see https://github.com/nuxt-modules/mdc/blob/v0.5.0/src/module.ts#L10-L24
-      langs: [
-        'js',
-        'jsx',
-        'json',
-        'ts',
-        'tsx',
-        'vue',
-        'css',
-        'html',
-        'vue',
-        'bash',
-        'md',
-        'mdc',
-        'yaml',
+    build: {
+      markdown: {
+        // https://github.com/nuxt/content/issues/1231#issuecomment-1149871306
+        remarkPlugins: {
+          'remark-reading-time': {
+            // 
+          },
+        },
 
-        // custom
-        'diff',
-      ],
+        highlight: {
+          theme: {
+            dark: 'vitesse-dark',
+            default: 'vitesse-light',
+          },
+          // @see https://github.com/nuxt-modules/mdc/blob/v0.5.0/src/module.ts#L10-L24
+          langs: [
+            'js',
+            'jsx',
+            'json',
+            'ts',
+            'tsx',
+            'vue',
+            'css',
+            'html',
+            'vue',
+            'bash',
+            'md',
+            'mdc',
+            'yaml',
+
+            // custom
+            'diff',
+          ],
+        },
+      },
+
+
     },
   },
 

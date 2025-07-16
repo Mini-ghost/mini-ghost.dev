@@ -1,28 +1,23 @@
-interface Talk {
-  title: string;
-  place: string;
-  date: string;
-  slide: string;
-}
-
 export function useTalks() {
   return useAsyncData(
     'QUERY_TALKS',
     () => {
-      return queryContent('/talks')
-        .without(['_'])
-        .only(['title', 'talks'])
-        .findOne();
+      return queryCollection('talks')
+        .select('talks')
+        .first();
+
     },
     {
       transform(result) {
         const talks: { year: string; content: any[] }[] = [];
+        if(!result || !result.talks?.length) return talks;
 
         let group: any[] = [];
         let year: string | null = null;
         // console.log(typeof result.talks);
 
-        result.talks.forEach((talk: Talk) => {
+
+        result.talks?.forEach((talk) => {
           let current: string;
           if (
             (current = talk.date.slice(0, 4)) !== year &&

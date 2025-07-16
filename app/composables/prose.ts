@@ -5,15 +5,19 @@ export async function useProse(_path: MaybeRefOrGetter<string>) {
   const fullPath = useSiteURL(path);
 
   const queryPost = useAsyncData<any>(`POST_CONTENT:${path.value}`, () => {
-    return queryContent(path.value).where({ _partial: false }).findOne();
+    return queryCollection('posts')
+      .path(path.value)
+      .first();
   });
 
   const querySurround = useAsyncData(`POST_SURROUND:${path.value}`, () => {
-    return queryContent('/posts/')
-      .where({ _partial: false })
-      .only(['_path', 'title'])
-      .sort({ created: 1 })
-      .findSurround(path.value);
+    return queryCollectionItemSurroundings(
+      'posts', 
+      '/posts/',
+      {
+        fields: ['path', 'title'],
+      }
+    )
   });
 
   await Promise.all([queryPost, querySurround]);

@@ -1,21 +1,10 @@
 <script setup lang="ts">
-interface Person {
-  description: string;
-  name: string;
-  experiences: Experience[];
-  skills: string[];
-}
-
-interface Experience {
-  title: string;
-  company: string;
-  period: string;
-}
-
 const AVATAR_URL = 'https://avatars.githubusercontent.com/u/39984251';
 
-const fetchFn = () =>
-  queryContent('/').without(['_']).findOne() as any as Promise<Person>;
+const fetchFn = () => queryCollection('home')
+  .select('meta')
+  .first()
+  .then(result => result!.meta)
 
 const { data } = await useAsyncData('HOME', fetchFn);
 const person = data.value!;

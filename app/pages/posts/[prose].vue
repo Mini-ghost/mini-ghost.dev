@@ -148,7 +148,7 @@ useHead(() => {
         <div class="prose">
           <header>
             <h1 class="mt-0 text-[1.75rem] lg:text-[2.25rem] leading-relaxed">
-              <NuxtLink :to="post._path">
+              <NuxtLink :to="post.path">
                 {{ post.title }}
               </NuxtLink>
             </h1>
@@ -204,7 +204,7 @@ useHead(() => {
             <template v-if="surround && surround![0]">
               <NuxtLink
                 class="text-start opacity-60 hover:opacity-100 transition-opacity"
-                :to="surround![0]._path"
+                :to="surround![0].path"
               >
                 <span class="opacity-60">previous</span><br>
                 {{ surround![0].title }}
@@ -215,7 +215,7 @@ useHead(() => {
             <template v-if="surround && surround![1]">
               <NuxtLink
                 class="text-end opacity-60 hover:opacity-100 transition-opacity"
-                :to="surround![1]._path"
+                :to="surround![1].path"
               >
                 <span class="opacity-60">next</span><br>
                 {{ surround![1].title }}

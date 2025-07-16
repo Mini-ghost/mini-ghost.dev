@@ -1,5 +1,5 @@
 interface Post {
-  _path: string;
+  path: string;
   title: string;
   description: string;
   created: string;
@@ -12,11 +12,10 @@ export async function usePosts() {
   const { data: posts } = await useAsyncData(
     'QUERY_POSTS',
     () =>
-      queryContent('/posts/')
-        .where({ _partial: false })
-        .only(['_path', 'title', 'description', 'created', 'readingTime'])
-        .sort({ created: -1 })
-        .find() as Promise<Post[]>,
+      queryCollection('posts')
+        .select('path', 'title', 'description', 'created', 'readingTime')
+        .order('created', 'DESC')
+        .all(),
     {
       transform(result) {
         const posts: { year: string; posts: Post[] }[] = [];

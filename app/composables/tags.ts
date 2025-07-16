@@ -1,50 +1,29 @@
 import { hash } from 'ohash';
 
-interface Post {
-  _path: string;
-  title: string;
-  description: string;
-  created: string;
-  readingTime: {
-    text: string;
-  };
-}
+export function useTags(target: string) {
+  return useAsyncData(`QUERY_TAGS:${hash(decodeURIComponent(target))}`, async () => {
+    
+    const list = await queryCollection('posts')
+      .select('path', 'title', 'description', 'tags', 'created', 'readingTime')
+      .order('created', 'DESC')
+      .all()
 
-export async function useTags(target: string) {
-  const nuxtApp = useNuxtApp();
+    const posts = []
+    const tags = [...new Set(list.map(post => post.tags).flat())]
+    const name =
+      tags.find(tag => toLowerCase(tag).replace(/\s/, '-') === target) ?? '';
 
-  const key = `QUERY_TAGS:${hash(decodeURIComponent(target))}`;
+    if (!name) return null;
 
-  const { data } = await useAsyncData(key, async () => {
-    const list = await queryContent('/posts/')
-      .where({ _partial: false })
-      .only(['tags'])
-      .find();
-
-    const tags = [...new Set(list.map(post => post.tags as string).flat())];
-    const title =
-      tags.find(tag => tag.replace(/\s/, '-').toLowerCase() === target) ?? '';
-
-    if (!title) return null;
-
-    const posts = await nuxtApp.runWithContext(async () => {
-      const posts = await queryContent('/posts/')
-        .where({ _partial: false })
-        .where({ tags: { $contains: title } })
-        .only(['_path', 'title', 'description', 'created', 'readingTime'])
-        .sort({ created: -1 })
-        .find();
-
-      return posts as Post[];
-    });
+    for (const post of list) {
+      if (post.tags.some(tag => tag === name)) {
+        posts.push(post);
+      }
+    }
 
     return {
-      title,
+      name,
       posts,
     };
   });
-
-  return {
-    data,
-  };
 }

@@ -77,7 +77,7 @@ useHead(() => {
             publisher: person,
             mainEntityOfPage: {
               '@type': 'WebPage',
-              '@id': `${siteURL.value}${post._path}`,
+              '@id': `${siteURL.value}${post.path}`,
             },
           })),
         }),
@@ -109,11 +109,11 @@ useHead(() => {
       <ul class="space-y-6">
         <li
           v-for="post in group.posts"
-          :key="post._path"
+          :key="post.path"
         >
           <NuxtLink
             class="opacity-80 lg:opacity-60 transition-opacity duration-300 focus:opacity-100 hover:opacity-100 focus:outline-none "
-            :to="post._path"
+            :to="post.path"
           >
             <span class="text-lg w-fit">
               {{ post.title }}
