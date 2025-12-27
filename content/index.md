@@ -35,4 +35,5 @@ skills:
 publications:
   - title: 為你寫的 Vue Components
     link: https://www.tenlong.com.tw/products/9786264143011
+    isbn: '9786264143011'
 ---

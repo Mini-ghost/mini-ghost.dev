@@ -9,9 +9,77 @@ const fetchFn = () => queryCollection('home')
 const { data } = await useAsyncData('HOME', fetchFn);
 const person = data.value!;
 
+const siteURL = useSiteURL();
+
 useHead(() => ({
   title: `Hello I'm ${person.name}`,
   description: person.description,
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'Person',
+            '@id': `${siteURL.value}#alex`,
+            'name': person.name,
+            'alternateName': 'Mini-ghost',
+            'jobTitle': person.experiences[0].title,
+            'description': person.description,
+            'image': AVATAR_URL,
+            'url': siteURL.value,
+            'nationality': 'TW',
+            'sameAs': [
+              'https://twitter.com/Minighost_Alex',
+              'https://github.com/Mini-ghost',
+              'https://www.tenlong.com.tw/products/9786264143011',
+            ],
+            'knowsAbout': person.skills,
+            'worksFor': {
+              '@type': 'Organization',
+              'name': person.experiences[0].company,
+            },
+          },
+          {
+            '@type': 'WebSite',
+            '@id': `${siteURL.value}#website`,
+            'url': siteURL.value,
+            'name': 'Alex Liu - Front-end Web Developer',
+            'description': person.description,
+            'publisher': {
+              '@id': `${siteURL.value}#alex`,
+            },
+            'inLanguage': 'zh-TW',
+          },
+          {
+            '@type': 'ProfilePage',
+            '@id': `${siteURL.value}#webpage`,
+            'url': siteURL.value,
+            'name': `Hello I'm ${person.name} | Alex Liu`,
+            'isPartOf': {
+              '@id': `${siteURL.value}#website`,
+            },
+            'about': {
+              '@id': `${siteURL.value}#alex`,
+            },
+            'mainEntity': {
+              '@id': `${siteURL.value}#alex`,
+            },
+          },
+          ...person.publications.map(publication => ({
+            '@type': 'Book',
+            'name': publication.title,
+            'author': {
+              '@id': `${siteURL.value}#alex`,
+            },
+            'url': publication.link,
+            'isbn': publication.isbn,
+          })),
+        ],
+      }),
+    },
+  ],
 }));
 
 if (import.meta.server) {
@@ -85,7 +153,7 @@ if (import.meta.server) {
               rel="noopener noreferrer"
               target="_blank"
             >
-              <SvgoIcon aria-hidden="true" fill="currentColor" height="20" name="book-open" width="20" />
+              <SvgoIcon aria-hidden="true" class="shrink-0" fill="currentColor" height="20" name="book-open" width="20" />
               <span>{{ publication.title }}</span>
             </a>
           </li>
