@@ -36,7 +36,7 @@ if (import.meta.server) {
 <template>
   <div class="grid md:grid-cols-[clamp(280px,32vw,450px)_minmax(0,1fr)] gap-[calc(1.25rem+2vw)] w-11/12 max-w-[1366px] mx-auto lg:py-16 py-5">
     <div class="hidden md:block">
-      <div class="relative w-fit rounded-xl overflow-hidden opacity-80 transition-opacity duration-500 hover:opacity-100 after:content-empty after:block after:bg-gradient-to-br after:absolute after:top-0 after:w-full after:h-full after:block after:from-[#ABC74A] after:to-[#2F993A] after:opacity-30 after:transition-opacity after:duration-500 hover:after:opacity-20">
+      <div class="sticky top-10 relative w-fit rounded-xl overflow-hidden opacity-80 transition-opacity duration-500 hover:opacity-100 after:content-empty after:block after:bg-gradient-to-br after:absolute after:top-0 after:w-full after:h-full after:block after:from-[#ABC74A] after:to-[#2F993A] after:opacity-30 after:transition-opacity after:duration-500 hover:after:opacity-20">
         <img
           :alt="person.name"
           decoding="async"
@@ -59,7 +59,7 @@ if (import.meta.server) {
         <h2 class="text-2xl lg:text-3xl font-bold">
           Skills
         </h2>
-        <ul class="flex flex-wrap gap-x-3">
+        <ul class="flex flex-wrap gap-x-3 pl-4">
           <li
             v-for="item in person.skills"
             :key="item"
@@ -72,9 +72,31 @@ if (import.meta.server) {
 
       <section class="space-y-5">
         <h2 class="text-2xl lg:text-3xl font-bold">
+          Publications
+        </h2>
+        <ul class="pl-4">
+          <li 
+            v-for="publication in person.publications" 
+            :key="publication.title"
+          >
+            <a
+              class="inline-flex items-center gap-3 p-2 rounded-md -ml-2 hover:text-orange"
+              :href="publication.link"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <SvgoIcon aria-hidden="true" fill="currentColor" height="20" name="book-open" width="20" />
+              <span>{{ publication.title }}</span>
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <section class="space-y-5">
+        <h2 class="text-2xl lg:text-3xl font-bold">
           Work Experience
         </h2>
-        <ul>
+        <ul class="pl-4">
           <li
             v-for="item in person.experiences"
             :key="item.company"
@@ -82,12 +104,12 @@ if (import.meta.server) {
           >
             <span
               aria-hidden="true"
-              class="w-2 h-2 rounded-full bg-[#64696E]"
+              class="transform size-2 rounded-full bg-[#64696E]"
             />
             <div class="flex flex-col gap-1 pl-4">
               <strong class="text-lg">{{ item.company }}</strong>
               <span class="text-sm opacity-60">
-                {{ item.title }} <i>/ {{ item.period }}</i>
+                {{ item.title }} <span class="italic">/ {{ item.period }}</span>
               </span>
             </div>
           </li>
