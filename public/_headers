@@ -1,2 +1,9 @@
 /*
   Permissions-Policy: accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), usb=(), web-share=(), xr-spatial-tracking=()
+
+/
+  Link: </sitemap.xml>; rel="sitemap"; type="application/xml", </rss.xml>; rel="alternate"; type="application/rss+xml"; title="RSS Feed", </.well-known/agent-skills/index.json>; rel="service-desc"; type="application/json"
+
+/posts/*
+  Vary: Accept
+  Link: </.well-known/agent-skills/index.json>; rel="service-desc"; type="application/json"

@@ -1,3 +1,38 @@
 User-agent: *
 Allow: /
+
+# AI crawlers — allow indexing and real-time grounding
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Content Signals (https://contentsignals.org)
+# search=yes:    allow traditional search indexing
+# ai-input=yes:  allow use as grounding / retrieval for AI real-time answers
+# ai-train=no:   do not allow as model training data
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
 Sitemap: https://mini-ghost.dev/sitemap.xml
