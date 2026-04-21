@@ -27,10 +27,16 @@ export default async (request: Request): Promise<Response | undefined> => {
   });
   if (!upstream.ok) return;
 
-  return new Response(await upstream.arrayBuffer(), {
+  const text = await upstream.text();
+  // Rough token estimate (~4 chars/token); matches Cloudflare's optional
+  // x-markdown-tokens header so agents can plan context window usage.
+  const tokens = Math.ceil(text.length / 4);
+
+  return new Response(text, {
     status: 200,
     headers: {
       'Content-Type': 'text/markdown; charset=utf-8',
+      'x-markdown-tokens': `${tokens}`,
       Vary: 'Accept',
       'Cache-Control': 'public, max-age=300, s-maxage=3600',
       Link:
