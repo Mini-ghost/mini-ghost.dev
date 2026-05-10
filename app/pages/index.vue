@@ -23,10 +23,7 @@ interface Person {
 
 const AVATAR_URL = 'https://avatars.githubusercontent.com/u/39984251?s=450';
 
-const fetchFn = () => queryCollection('home')
-  .select('meta')
-  .first()
-  .then(result => result!.meta)
+const fetchFn = () => queryCollection('home').first()
 
 const { data } = await useAsyncData('HOME', fetchFn);
 const person = data.value! as unknown as Person;
