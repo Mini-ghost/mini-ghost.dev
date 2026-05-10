@@ -141,6 +141,10 @@ export default defineNuxtConfig({
     },
   },
 
+  sitemap: {
+    discoverImages: false,
+  },
+
   nitro: {
     prerender: {
       routes: ['/rss.xml'],
