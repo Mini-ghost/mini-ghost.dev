@@ -2,10 +2,49 @@
 import format from '@/helper/format';
 
 const { data: talks } = await useTalks();
+const siteURL = useSiteURL();
 
 useHead(() => {
+  const data = talks.value as { title?: string; talks?: { year: string; content: any[] }[] } | undefined;
+  const groups = data?.talks ?? [];
+  const flat = groups.flatMap(group => group.content);
+
   return {
-    title: talks.value!.title,
+    title: data?.title,
+    script: [
+      {
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'CollectionPage',
+          '@id': `${siteURL.value}talks#collection`,
+          name: `${data?.title ?? 'Talks'} | Alex Liu`,
+          inLanguage: 'zh-TW',
+          isPartOf: { '@id': `${siteURL.value}#website` },
+          about: { '@id': `${siteURL.value}#alex` },
+          mainEntity: {
+            '@type': 'ItemList',
+            itemListElement: flat.map((talk: any, index: number) => ({
+              '@type': 'ListItem',
+              position: index + 1,
+              item: {
+                '@type': 'Event',
+                name: talk.title,
+                startDate: talk.date,
+                eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+                eventStatus: 'https://schema.org/EventScheduled',
+                location: {
+                  '@type': 'Place',
+                  name: talk.place,
+                },
+                performer: { '@id': `${siteURL.value}#alex` },
+                url: talk.slide,
+              },
+            })),
+          },
+        }),
+      },
+    ],
   };
 });
 </script>

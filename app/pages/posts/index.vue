@@ -58,10 +58,12 @@ useHead(() => {
       {
         type: 'application/ld+json',
         innerHTML: JSON.stringify({
-          '@context': 'http://schema.org',
+          '@context': 'https://schema.org',
           '@type': 'Blog',
+          inLanguage: 'zh-TW',
           blogPost: items.map(post => ({
             '@type': 'BlogPosting',
+            inLanguage: 'zh-TW',
             headline: post.title,
             description: post.description,
 
@@ -72,7 +74,7 @@ useHead(() => {
             ),
 
             datePublished: post.created,
-            dateModified: post.created,
+            dateModified: post.updated ?? post.created,
             author: person,
             publisher: person,
             mainEntityOfPage: {

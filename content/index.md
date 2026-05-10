@@ -36,4 +36,9 @@ publications:
   - title: 為你寫的 Vue Components
     link: https://www.tenlong.com.tw/products/9786264143011
     isbn: '9786264143011'
+    datePublished: '2025-11-03'
+    publisher:
+      '@type': Organization
+      name: 博碩文化
+      url: https://www.drmaster.com.tw
 ---

@@ -6,7 +6,25 @@ export default defineContentConfig({
       type: 'data',
       source: 'index.md',
       schema: z.object({
-        // 
+        name: z.string(),
+        description: z.string(),
+        skills: z.array(z.string()),
+        experiences: z.array(z.object({
+          title: z.string(),
+          company: z.string(),
+          period: z.string(),
+        })),
+        publications: z.array(z.object({
+          title: z.string(),
+          link: z.string(),
+          isbn: z.string(),
+          datePublished: z.string().optional(),
+          publisher: z.object({
+            '@type': z.string().optional(),
+            name: z.string(),
+            url: z.string().optional(),
+          }).optional(),
+        })),
       })
     }),
 
@@ -16,6 +34,7 @@ export default defineContentConfig({
       schema: z.object({
         tags: z.array(z.string()),
         created: z.string().datetime(),
+        updated: z.string().datetime().optional(),
         image: z.string().optional(),
         image_caption: z.string().optional(),
         readingTime: z.object({

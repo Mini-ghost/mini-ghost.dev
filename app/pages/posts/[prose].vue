@@ -95,11 +95,12 @@ useHead(() => {
       {
         type: 'application/ld+json',
         innerHTML: JSON.stringify({
-          '@context': 'http://schema.org',
+          '@context': 'https://schema.org',
           '@type': 'BlogPosting',
+          inLanguage: 'zh-TW',
           description: content.description,
           datePublished: content.created,
-          dateModified: content.created,
+          dateModified: content.updated ?? content.created,
           author: {
             '@type': 'Person',
             name: 'Alex Liu',

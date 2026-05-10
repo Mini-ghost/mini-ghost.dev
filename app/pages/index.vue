@@ -1,5 +1,27 @@
 <script setup lang="ts">
-const AVATAR_URL = 'https://avatars.githubusercontent.com/u/39984251';
+interface Publication {
+  title: string;
+  link: string;
+  isbn: string;
+  datePublished?: string;
+  publisher?: { '@type'?: string; name: string; url?: string };
+}
+
+interface Experience {
+  title: string;
+  company: string;
+  period: string;
+}
+
+interface Person {
+  name: string;
+  description: string;
+  skills: string[];
+  experiences: Experience[];
+  publications: Publication[];
+}
+
+const AVATAR_URL = 'https://avatars.githubusercontent.com/u/39984251?s=450';
 
 const fetchFn = () => queryCollection('home')
   .select('meta')
@@ -7,7 +29,7 @@ const fetchFn = () => queryCollection('home')
   .then(result => result!.meta)
 
 const { data } = await useAsyncData('HOME', fetchFn);
-const person = data.value!;
+const person = data.value! as unknown as Person;
 
 const siteURL = useSiteURL();
 
@@ -25,7 +47,7 @@ useHead(() => ({
             '@id': `${siteURL.value}#alex`,
             'name': person.name,
             'alternateName': 'Mini-ghost',
-            'jobTitle': person.experiences[0].title,
+            'jobTitle': person.experiences[0]!.title,
             'description': person.description,
             'image': AVATAR_URL,
             'url': siteURL.value,
@@ -38,7 +60,7 @@ useHead(() => ({
             'knowsAbout': person.skills,
             'worksFor': {
               '@type': 'Organization',
-              'name': person.experiences[0].company,
+              'name': person.experiences[0]!.company,
             },
           },
           {
@@ -69,12 +91,16 @@ useHead(() => ({
           },
           ...person.publications.map(publication => ({
             '@type': 'Book',
+            '@id': `${siteURL.value}#book-${publication.isbn}`,
             'name': publication.title,
+            'inLanguage': 'zh-TW',
             'author': {
               '@id': `${siteURL.value}#alex`,
             },
             'url': publication.link,
             'isbn': publication.isbn,
+            ...(publication.datePublished && { datePublished: publication.datePublished }),
+            ...(publication.publisher && { publisher: publication.publisher }),
           })),
         ],
       }),
@@ -95,6 +121,7 @@ if (import.meta.server) {
         as: 'image',
         href: AVATAR_URL,
         fetchpriority: 'high',
+        media: '(min-width: 768px)',
       }
   ]
   })

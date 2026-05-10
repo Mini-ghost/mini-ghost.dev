@@ -3,6 +3,7 @@ interface Post {
   title: string;
   description: string;
   created: string;
+  updated?: string;
   readingTime: {
     text: string;
   };
@@ -13,7 +14,7 @@ export async function usePosts() {
     'QUERY_POSTS',
     () =>
       queryCollection('posts')
-        .select('path', 'title', 'description', 'created', 'readingTime')
+        .select('path', 'title', 'description', 'created', 'updated', 'readingTime')
         .order('created', 'DESC')
         .all(),
     {
