@@ -1,0 +1,41 @@
+# Alex Liu — mini-ghost.dev
+
+> Senior Front-End Developer based in Taiwan, specializing in Vue and Nuxt.
+> Author of "為你寫的 Vue Components" (ISBN 9786264143011).
+> Creator of Vorms, an open-source Vue form-handling library.
+> Technical blog covers Vue/Nuxt internals, source-code deep-dives, and front-end architecture.
+
+## About
+
+- Name: Alex Liu (alternate: Mini-ghost)
+- Role: Senior Front-End Developer
+- Location: Taiwan
+- Skills: TypeScript, Vue, Nuxt, React, HTML, CSS
+- Primary blog language: Traditional Chinese (zh-TW)
+
+## Book
+
+- 為你寫的 Vue Components — https://www.tenlong.com.tw/products/9786264143011 (ISBN 9786264143011)
+
+## Open Source
+
+- Vorms — Vue form library — https://github.com/Mini-ghost/vorms
+
+## Content
+
+- Article index (RSS): https://mini-ghost.dev/rss.xml
+- Article index (sitemap): https://mini-ghost.dev/sitemap.xml
+- Markdown access: GET /posts/<slug> with `Accept: text/markdown` (or `?format=md`)
+- Talks index: https://mini-ghost.dev/talks
+
+## Social / Entity Links
+
+- GitHub: https://github.com/Mini-ghost
+- Twitter/X: https://twitter.com/Minighost_Alex
+- Buy Me a Coffee: https://www.buymeacoffee.com/alex_minighost
+
+## Licensing
+
+Content is provided for search grounding and AI retrieval (ai-input=yes).
+Model training use is not permitted (ai-train=no).
+See: https://mini-ghost.dev/robots.txt
